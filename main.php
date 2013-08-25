@@ -165,6 +165,68 @@ function grep_logline($line)
 	}
 }
 
+function decode($line)
+{
+	if($temp = grep_logline($line))
+	{
+		$time	= $temp[1];
+		$cmd	= $temp[2];
+		if(isset($temp[3]))
+			$args	= $temp[3];
+		
+		switch($cmd)
+		{
+			#case "ClientConnect:":
+			#	c_connect($time, $args);
+			#	break;
+			#case "ClientUserinfo:":
+			#	c_info($time, $args);
+			#	break;
+			#case "ClientUserinfoChanged:":
+			#	c_changed($time, $args);
+			#	break;
+			#case "ClientBegin:":
+			#	c_begin($time, $args);
+			#	break;
+			#case "ClientDisconnect:":
+			#	c_disconnect($time, $args);
+			#	break;
+			#case "ShutdownGame:":
+			#	g_shutdown($time);
+			#	break;
+			#case "SurvivorWinner:":
+			#	g_winner($time, $args);
+			#	break;
+			#case "Warmup:":
+			#	g_warmup($time);
+			#	break;
+			#case "InitAuth:":
+			#	a_init($time, $args);
+			#	break;
+			#case "InitGame:":
+			#	g_init($time, $args);
+			#	break;
+			#case "InitRound:":
+			#	r_init($time, $args);
+			#	break;
+			#case "say:":
+			#	c_say($time, $args);
+			#	break;
+			#case "sayteam:":
+			#	c_sayteam($time, $args);
+			#	break;
+			#case "Hit:":
+			#	c_hit($time, $args);
+			#	break;
+			#case "Kill:":
+			#	c_kill($time, $args);
+			#	break;
+			default:
+				break;
+		}
+	}
+}
+
 #### Main Functions // END ####
 
 ?>
