@@ -15,11 +15,6 @@ if ( !file_exists($config) ):
 require_once($config);
 unset($config);
 
-// Include all other configs
-foreach (glob("cfg/*.php") as $file)
-	require_once $file;
-unset($file);
-
 // This must always work
 if ( !isset($log) or empty($log) )
 	die("\$log file is not set.\r\n");
