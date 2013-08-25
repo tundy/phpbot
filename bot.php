@@ -2,10 +2,6 @@
 
 error_reporting(E_ALL);
 
-//// Vstup z klavesnice
-//$stdin = fopen ("php://stdin","r");
-//$input = fgets($stdin);
-
 #### STARTUP // START ####
 
 // Check if this script is runned from CLI
@@ -13,15 +9,11 @@ if (PHP_SAPI !== 'cli')
 	die("Start this script from console !\r\n");
 
 // Check main bot configuration
-if ( !file_exists($config)):
-	$config = "cfg/".$config;
-	if ( !file_exists($config)):
-		$config = "cfg/config.php";
-		if ( !file_exists($config)):
-			die("\$config file not found.\r\n");
-	endif;
-endif;
+$config = "cfg/config.php";
+if ( !file_exists($config) ):
+	die("'$config' file not found.\r\n");
 require_once($config);
+unset($config);
 
 // Include all other configs
 foreach (glob("cfg/*.php") as $file)
@@ -228,5 +220,17 @@ function decode($line)
 }
 
 #### Main Functions // END ####
+
+// Check main functions list
+$file = "cmd/main.php";
+if ( !file_exists($file) ):
+	die("'$file' file not found.\r\n");
+require_once($file);
+unset($file);
+
+// Include all other functions
+foreach (glob("cmd/*.php") as $file)
+	require_once $file;
+unset($file);
 
 ?>
