@@ -16,7 +16,6 @@ if (PHP_SAPI !== 'cli')
 if ( !file_exists($config)):
 	$config = "cfg/".$config;
 	if ( !file_exists($config)):
-
 		$config = "cfg/config.php";
 		if ( !file_exists($config)):
 			die("\$config file not found.\r\n");
@@ -57,6 +56,48 @@ if ( !isset($prefix) or empty($prefix) ):
 endif;
 	
 #### STARTUP // END ####
+
+#### LOOP // START ####
+	
+function loop()
+{
+	global $log, $loop;
+
+	$file = new SplFileObject($log);
+	$lines = 0;
+	$loop = 1;
+	$first = 1;
+
+	// Loop that will scan log file forever
+	while ($loop) 
+	{
+		$file->seek($lines);
+		while (!$file->eof())
+		{
+			$lines = $file->key();
+			$line = $file->current();
+			if($file->valid())
+				$file->next();
+			else
+				$last_line = $file->key();
+				
+			if( isset($first) )	// Do not decode old logs
+				unset($first);
+			elseif($last_line != $lines)
+				decode($line);
+		}
+		$last_line = -1;
+		
+		$log = get_object_vars($this);
+		$fh = fopen("./logfile.log", 'w');
+		fwrite($fh, print_r($log, TRUE));
+		fclose($fh);
+			$this->flush();
+		$this->wait();
+	}
+}
+
+#### LOOP // END ####
 
 #### Main Functions // START ####
 
