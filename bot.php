@@ -10,7 +10,7 @@ if (PHP_SAPI !== 'cli')
 	die("Start this script from console !\r\n");
 
 // Check main bot configuration
-$file = "cfg/config.cfg";
+$file = "cfg/config.php";
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
@@ -81,13 +81,9 @@ function loop()
 				decode($line);
 		}
 		$last_line = -1;
-		
-		$log = get_object_vars($this);
-		$fh = fopen("./logfile.log", 'w');
-		fwrite($fh, print_r($log, TRUE));
-		fclose($fh);
-			$this->flush();
-		$this->wait();
+
+		/*	flush();
+		wait();*/
 	}
 }
 
@@ -105,14 +101,14 @@ function out($cmd)
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");
-	socket_set_timeout ($this->server, 1, 0);
+	socket_set_timeout ($server, 1, 0);
 	fwrite ($server, $cmd);
 	$input = '';
-	while ($temp = fread ($this->server, 10000))
+	while ($temp = fread ($server, 10000))
 	{
 		$input .= $temp;
 	}
-	fclose ($this->server);
+	fclose ($server);
 	return $input;
 }
 

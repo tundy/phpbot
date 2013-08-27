@@ -2,7 +2,7 @@
 
 // Killing Spree
 
-$file = "cfg/spree.cfg";
+$file = "cfg/spree.php";
 if ( !file_exists($file) ):
 	die("'$file' file not found.\r\n");
 require_once($file);
