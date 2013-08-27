@@ -10,7 +10,7 @@ if (PHP_SAPI !== 'cli')
 	die("Start this script from console !\r\n");
 
 // Check main bot configuration
-$file = "cfg/config.php";
+$file = "cfg/config.cfg";
 if ( !file_exists($file) ):
 	die("'$file' file not found.\r\n");
 require_once($file);

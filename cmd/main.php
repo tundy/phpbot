@@ -15,6 +15,12 @@ function c_begin($time, $args)
 	players[$args]->flags		= 0;
 }
 
+// what to do if player disconnect ?
+function c_disconnect($time, $args)
+{
+	unset($this->players[$args]);
+}
+
 function c_info($time, $args)
 {
 	if($temp = $this->grep_user($args))
@@ -37,11 +43,13 @@ function c_info($time, $args)
 		unset($var);
 	}
 }
-
-// what to do if player disconnect ?
-function c_disconnect($time, $args)
+	
+function grep_kill ($line)	// [1]Killer, [2]Target, [3]Weapon
 {
-	unset($this->players[$args]);
+	$pattern=("/([0-9]+) ([0-9]+) ([0-9]+):(.*)/");
+	if(preg_match($pattern, $line, $temp))
+		return $temp;
+	return false;
 }
 
 ?>
