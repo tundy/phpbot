@@ -11,13 +11,13 @@ if (PHP_SAPI !== 'cli')
 
 // Check main bot configuration
 $file = "cfg/config.cfg";
-if ( !file_exists($file) ):
+if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
 unset($file);
 
 $file = "games/index.php";
-if ( !file_exists($file) ):
+if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
 unset($file);
@@ -225,7 +225,7 @@ function decode($line)
 
 // Check main functions list
 $file = "cmd/main.php";
-if ( !file_exists($file) ):
+if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
 unset($file);
