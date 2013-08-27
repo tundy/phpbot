@@ -1,10 +1,12 @@
 ﻿<?php
 
+define('WORLD', 1022);
+
 // kill_mode
 define('MOD_UNKNOWN', 0);
 define('MOD_WATER', 1);
-define('MOD_LAVA', 2);	// One of this two
-define('MOD_LAVA', 3);	// is wrong
+define('MOD_SLIMED', 2);
+define('MOD_LAVA', 3);
 define('MOD_CRUSHED', 4);
 define('MOD_TELEFRAG', 5);
 define('MOD_FALLING', 6);
@@ -41,6 +43,47 @@ define('UT_MOD_COLT1911', 40);
 define('UT_MOD_MAC', 41);
 define('UT_MOD_FLAG', 42);
 define('UT_MOD_GOOMBA', 43);
+
+$WEAPON_KILL[0] = "Unknown";
+$WEAPON_KILL[1] = "Drowning";
+$WEAPON_KILL[2] = "Got Slimed";
+$WEAPON_KILL[3] = "Meltdown";
+$WEAPON_KILL[4] = "Crushed";
+$WEAPON_KILL[5] = "Telefragged";
+$WEAPON_KILL[6] = "Doing the Lemming thing";
+$WEAPON_KILL[7] = "Suicide";
+$WEAPON_KILL[8] = "Laser Target";
+$WEAPON_KILL[9] = "Damage by triggers";
+$WEAPON_KILL[10] = "Changing Team";
+$WEAPON_KILL[12] = "Cut by Knife";
+$WEAPON_KILL[13] = "Thrown Knife";
+$WEAPON_KILL[14] = "Beretta";
+$WEAPON_KILL[15] = "Desert Eagle";
+$WEAPON_KILL[16] = "Spas 12";
+$WEAPON_KILL[17] = "UMP 45";
+$WEAPON_KILL[18] = "MP5K";
+$WEAPON_KILL[19] = "LR300";
+$WEAPON_KILL[20] = "G36";
+$WEAPON_KILL[21] = "PSG1";
+$WEAPON_KILL[22] = "HK 69";
+$WEAPON_KILL[23] = "Excessive Bloodloss";
+$WEAPON_KILL[24] = "Got kicked";
+$WEAPON_KILL[25] = "High Explosive Grenade";
+$WEAPON_KILL[26] = "Flash Grenade";
+$WEAPON_KILL[27] = "Smoke Grenade";
+$WEAPON_KILL[28] = "SR8";
+$WEAPON_KILL[29] = "Sacrificed his life";
+$WEAPON_KILL[30] = "AK 103";
+$WEAPON_KILL[31] = "Exploded";
+$WEAPON_KILL[32] = "Bitchslapped";
+$WEAPON_KILL[35] = "Negev";
+$WEAPON_KILL[37] = "HK 69 hit";
+$WEAPON_KILL[38] = "M4";
+$WEAPON_KILL[39] = "Glock";
+$WEAPON_KILL[40] = "Colt 1911";
+$WEAPON_KILL[41] = "Mac";
+$WEAPON_KILL[42] = "Exploding flag";
+$WEAPON_KILL[43] = "Curb Stomped";
 
 // hit_weapon
 define('HIT_KNIFE',1);
