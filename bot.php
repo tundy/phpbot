@@ -10,11 +10,17 @@ if (PHP_SAPI !== 'cli')
 	die("Start this script from console !\r\n");
 
 // Check main bot configuration
-$config = "cfg/config.php";
-if ( !file_exists($config) ):
-	die("'$config' file not found.\r\n");
-require_once($config);
-unset($config);
+$file = "cfg/config.php";
+if ( !file_exists($file) ):
+	die("'$file' file not found.\r\n");
+require_once($file);
+unset($file);
+
+$file = "games/index.php";
+if ( !file_exists($file) ):
+	die("'$file' file not found.\r\n");
+require_once($file);
+unset($file);
 
 // This must always work
 if ( !isset($log) or empty($log) )
