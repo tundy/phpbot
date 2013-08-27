@@ -1,29 +1,29 @@
 ﻿<?php
 
 // what to do if player connect ?
-function c_connect($time, $args)
+function c_connect ($time, $args)
 {
-	players[$args] = (new player);
+	$players[$args] = (new player);
 }	
 
 // Player enter the game	
-function c_begin($time, $args)
+function c_begin ($time, $args)
 {
-	if ( !empty(players[$args]->info["name"]) )
-		say("Welcome ".players[$args]->info["name"]);
-	players[$args]->spree		= 0;
-	players[$args]->flags		= 0;
+	if ( !empty($players[$args]->info["name"]) )
+		say("Welcome ".$players[$args]->info["name"]);
+	$players[$args]->spree		= 0;
+	$players[$args]->flags		= 0;
 }
 
 // what to do if player disconnect ?
-function c_disconnect($time, $args)
+function c_disconnect ($time, $args)
 {
-	unset($this->players[$args]);
+	unset($players[$args]);
 }
 
-function c_info($time, $args)
+function c_info ($time, $args)
 {
-	if($temp = $this->grep_user($args))
+	if($temp = grep_user($args))
 	{
 		unset($arg);
 		$id = $temp[1];
@@ -33,7 +33,7 @@ function c_info($time, $args)
 		$i = 1;
 		while ($i < $vars)											// new $var's "KEY" is equal to old $var[$i]
 		{
-			$this->players[$id]->info["$var[$i]"] = $var[$i + 1];	// new info["KEY"]'s VALUE is equal to old $var[$i+1]
+			$players[$id]->info["$var[$i]"] = $var[$i + 1];	// new info["KEY"]'s VALUE is equal to old $var[$i+1]
 			unset($var[$i]);										// After setting new KEY old one will be unset
 			unset($var[$i + 1]);									// After setting new VALUE old one will be unset
 			$i += 2;
