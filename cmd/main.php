@@ -7,15 +7,17 @@ function c_connect($time, $args)
 }	
 
 // Player enter the game	
-function c_begin($time, $arg)
+function c_begin($time, $args)
 {
-	players[$arg]->spree		= 0;
-	players[$arg]->flags		= 0;
+	if ( !empty(players[$args]->info["name"]) )
+		say("Welcome ".players[$args]->info["name"]);
+	players[$args]->spree		= 0;
+	players[$args]->flags		= 0;
 }
 
-function c_info($time, $arg)
+function c_info($time, $args)
 {
-	if($temp = $this->grep_user($arg))
+	if($temp = $this->grep_user($args))
 	{
 		unset($arg);
 		$id = $temp[1];
