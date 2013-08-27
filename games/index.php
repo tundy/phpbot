@@ -1,6 +1,6 @@
 ﻿<?php
 
-$status = out('getstatus\n');							// Ask for server status
+$status = out("getstatus\n");							// Ask for server status
 $data = explode("\n", $status);							// split answer, datas and players
 $cvars = explode('//', $data[1]);						// explode cvars
 $key = array_search('g_modversion', $cvars);			// search for mod version
