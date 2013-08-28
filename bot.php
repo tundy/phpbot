@@ -49,6 +49,9 @@ if ( !isset($prefix) or empty($prefix) ):
 	$prefix = '^3';
 endif;
 	
+// Start loop
+loop();
+
 #### STARTUP // END ####
 
 #### LOOP // START ####
@@ -81,9 +84,6 @@ function loop()
 				decode($line);
 		}
 		$last_line = -1;
-
-		/*	flush();
-		wait();*/
 	}
 }
 
@@ -166,24 +166,24 @@ function decode($line)
 		
 		switch($cmd)
 		{
-			#case "ClientConnect:":
-			#	c_connect($time, $args);
-			#	break;
-			#case "ClientUserinfo:":
-			#	c_info($time, $args);
-			#	break;
-			#case "ClientUserinfoChanged:":
-			#	c_info($time, $args);
-			#	break;
-			#case "ClientBegin:":
-			#	c_begin($time, $args);
-			#	break;
-			#case "ClientDisconnect:":
-			#	c_disconnect($time, $args);
-			#	break;
-			#case "ShutdownGame:":
-			#	g_shutdown($time);
-			#	break;
+			case "ClientConnect:":
+				c_connect($time, $args);
+				break;
+			case "ClientUserinfo:":
+				c_info($time, $args);
+				break;
+			case "ClientUserinfoChanged:":
+				c_info($time, $args);
+				break;
+			case "ClientBegin:":
+				c_begin($time, $args);
+				break;
+			case "ClientDisconnect:":
+				c_disconnect($time, $args);
+				break;
+			case "ShutdownGame:":
+				g_shutdown($time);
+				break;
 			#case "SurvivorWinner:":
 			#	g_winner($time, $args);
 			#	break;
@@ -205,12 +205,12 @@ function decode($line)
 			#case "sayteam:":
 			#	c_sayteam($time, $args);
 			#	break;
-			#case "Hit:":
-			#	c_hit($time, $args);
-			#	break;
-			#case "Kill:":
-			#	c_kill($time, $args);
-			#	break;
+			case "Hit:":
+				c_hit($time, $args);
+				break;
+			case "Kill:":
+				c_kill($time, $args);
+				break;
 			default:
 				break;
 		}
