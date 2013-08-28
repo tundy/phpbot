@@ -34,7 +34,7 @@ function c_disconnect ($time, $args)
 function g_shutdown ($time)
 {
 	global $players;
-	foreach($players as $player)
+	foreach(array_keys($players) as $player)
 		c_disconnect($time, $player);
 }
 
