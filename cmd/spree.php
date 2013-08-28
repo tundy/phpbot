@@ -49,7 +49,7 @@ function spree ($time, $args)
 			$players[$killer]->spree->kill->last = 0;
 		}
 		// Normal Kill
-		elseif ($players[$killer]->info["team"] == 0 or $players[$killer]->info["team"] != $players[$target]->info["team"])
+		elseif ($players[$killer]->info["team"] == TEAM_FFA or $players[$killer]->info["team"] != $players[$target]->info["team"])
 		{
 			$players[$target]->spree->dead->last++;
 			$players[$killer]->spree->kill->last++;

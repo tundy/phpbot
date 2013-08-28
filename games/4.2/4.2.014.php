@@ -339,6 +339,6 @@ $WEAPON_DAMAGE[HIT_MAC][HIT_RIGHT_FOOT]				= 11;
 define('TEAM_FFA', 0);
 define('TEAM_RED', 1);
 define('TEAM_BLUE', 2);
-define('TEAM_SPECTATOR', 3);
+define('TEAM_SPEC', 3);
 
 ?>

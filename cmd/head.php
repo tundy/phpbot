@@ -14,7 +14,7 @@ function headshot ($time, $args)
 		unset($grep);
 		
 		// Enemy hit
-		if ($players[$shooter]->info["team"] == 0 or $players[$shooter]->info["team"] != $players[$target]->info["team"])
+		if ($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"])
 		{
 			if ($part == HIT_HEAD or $part == HIT_HELMET)
 			{
