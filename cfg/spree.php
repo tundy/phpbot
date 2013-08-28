@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $spree_start	= 5;
 $spree_tk		= 2;
 // 0 = don't count

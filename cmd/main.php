@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 // what to do if player connect ?
 function c_connect ($time, $args)

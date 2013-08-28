@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $status = out("getstatus\n");							// Ask for server status
 $data = explode("\n", $status);							// split answer, datas and players

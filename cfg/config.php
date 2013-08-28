@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $ip			= 'localhost';
 $port		= 27960;
 $prefix		= '^7';

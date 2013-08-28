@@ -1,4 +1,4 @@
-ï»¿<?php
+<?php
 
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
@@ -97,7 +97,7 @@ function out($cmd)
 	global $server, $ip, $port;
 	$errno = null;
 	$errstr = null;
-	$cmd = "Ë™Ë™Ë™Ë™" . $cmd;
+	$cmd = "ÿÿÿÿ" . $cmd;
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 define('WORLD', 1022);
 
