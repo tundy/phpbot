@@ -40,7 +40,7 @@ function spree ($time, $args)
 			$killer = $target;
 			
 		// Self Kill
-		if($killer == $target)
+		if($killer == $target && $weapon != UT_MOD_FLAG)
 		{
 			if ( $players[$target]->spree->kill->last >= $spree_start)
 				say($players[$target]->info["name"]."^3 stopped his/her killing spree.");
