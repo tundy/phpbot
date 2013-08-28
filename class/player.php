@@ -1,16 +1,5 @@
 <?php
 
-class gothit
-{
-	public $got, $hit;
-	
-	function gothit ()
-	{
-		$this->got	= 0;
-		$this->hit	= 0;
-	}
-}
-
 class player
 {
 	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $spree, $flags, $headshots;
@@ -67,19 +56,19 @@ class hits
 
 	function hits ()
 	{
-		$this->enemy		= (new gothit);
+		$this->enemy		= new stdClass();
 		$this->enemy->got	= 0;		// How many times was hit by enemy
 		$this->enemy->hit	= 0;		// How many times hit enemy
-		$this->team			= (new gothit);
+		$this->team			= new stdClass();
 		$this->team->got	= 0;		// How many times was hit by team mate
 		$this->team->hit	= 0;		// How many times hit team mate
-		$this->target		= (new gothit);
+		$this->target		= new stdClass();
 		$this->target->got	= array();	// Hit by specific player
 		$this->target->hit	= array();	// Hit specific player
-		$this->weapon		= (new gothit);
+		$this->weapon		= new stdClass();
 		$this->weapon->got	= array();	// Hit by specific weapon
 		$this->weapon->hit	= array();	// Hit with specific weapon
-		$this->part			= (new gothit);
+		$this->part			= new stdClass();
 		$this->part->got	= array();	// Was hit to specific part of body
 		$this->part->hit	= array();	// Hit to specific part of body
 	}
@@ -91,10 +80,13 @@ class spree
 		
 	function spree ()
 	{
+		$this->kill				= new stdClass();
 		$this->kill->last		= 0;			// Killing spree
 		$this->kill->high		= 0;			// Killing best
+		$this->dead				= new stdClass();
 		$this->dead->last		= 0;			// Dead spree (longest)
 		$this->dead->high		= 0;			// Dead spree worst (longest)
+		$this->flag				= new stdClass();
 		$this->flag->save		= 0;			// Saved Flags without dead
 		$this->flag->capture	= 0;			// Captured Flags without dead
 	}

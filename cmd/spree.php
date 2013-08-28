@@ -10,6 +10,8 @@ unset($file);
 
 function higest_spree ($killer, $target)
 {
+	global $players;
+	
 	if ( !isset($players[$killer]->spree->kill->high) )
 		$players[$killer]->spree->kill->high = $players[$killer]->spree->kill->last;
 	elseif ($players[$killer]->spree->kill->last > $players[$killer]->spree->kill->high)
