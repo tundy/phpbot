@@ -2,7 +2,9 @@
 
 function headshot ($time, $args)
 {
-	if($grep = $this->grep_hit($args))
+	global $players;
+
+	if($grep = grep_hit($args))
 	{
 		unset($arg);
 		$target		= $grep[1];

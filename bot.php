@@ -16,12 +16,6 @@ if ( !file_exists($file) )
 require_once($file);
 unset($file);
 
-$file = "games/index.php";
-if ( !file_exists($file) )
-	die("'$file' file not found.\r\n");
-require_once($file);
-unset($file);
-
 // This must always work
 if ( !isset($log) or empty($log) )
 	die("\$log file is not set.\r\n");
@@ -49,6 +43,29 @@ if ( !isset($prefix) or empty($prefix) ):
 	$prefix = '^3';
 endif;
 	
+$file = "games/index.php";
+if ( !file_exists($file) )
+	die("'$file' file not found.\r\n");
+require_once($file);
+unset($file);
+
+// Check main functions list
+$file = "cmd/main.php";
+if ( !file_exists($file) )
+	die("'$file' file not found.\r\n");
+require_once($file);
+unset($file);
+
+// Include all other functions
+foreach (glob("cmd/*.php") as $file)
+	require_once $file;
+unset($file);
+
+// Include all classes
+foreach (glob("class/*.php") as $file)
+	require_once $file;
+unset($file);
+	
 // Start loop
 loop();
 
@@ -68,6 +85,7 @@ function loop()
 	// Loop that will scan log file forever
 	while ($loop) 
 	{
+		$last_line = -1;
 		$file->seek($lines);
 		while (!$file->eof())
 		{
@@ -79,11 +97,11 @@ function loop()
 				$last_line = $file->key();
 				
 			if( isset($first) )	// Do not decode old logs
-				unset($first);
+				{}
 			elseif($last_line != $lines)
 				decode($line);
 		}
-		$last_line = -1;
+		unset($first);
 	}
 }
 
@@ -218,17 +236,4 @@ function decode($line)
 }
 
 #### Main Functions // END ####
-
-// Check main functions list
-$file = "cmd/main.php";
-if ( !file_exists($file) )
-	die("'$file' file not found.\r\n");
-require_once($file);
-unset($file);
-
-// Include all other functions
-foreach (glob("cmd/*.php") as $file)
-	require_once $file;
-unset($file);
-
 ?>

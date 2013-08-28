@@ -18,11 +18,11 @@ function higest_spree ($killer, $target)
 
 function spree ($time, $args)
 {
-	global $spree_start, $spree_tk;
+	global $players, $spree_start, $spree_tk;
 
-	if($grep = $this->grep_kill($arg))
+	if($grep = grep_kill($args))
 	{
-		unset($arg);
+		unset($args);
 		$killer =	$grep[1];
 		$target =	$grep[2];
 		$weapon =	$grep[3];

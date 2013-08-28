@@ -1,5 +1,16 @@
 <?php
 
+class gothit
+{
+	public $got, $hit;
+	
+	function gothit ()
+	{
+		$this->got	= 0;
+		$this->hit	= 0;
+	}
+}
+
 class player
 {
 	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $spree, $flags, $headshots;
@@ -56,14 +67,19 @@ class hits
 
 	function hits ()
 	{
+		$this->enemy		= (new gothit);
 		$this->enemy->got	= 0;		// How many times was hit by enemy
 		$this->enemy->hit	= 0;		// How many times hit enemy
+		$this->team			= (new gothit);
 		$this->team->got	= 0;		// How many times was hit by team mate
 		$this->team->hit	= 0;		// How many times hit team mate
+		$this->target		= (new gothit);
 		$this->target->got	= array();	// Hit by specific player
 		$this->target->hit	= array();	// Hit specific player
+		$this->weapon		= (new gothit);
 		$this->weapon->got	= array();	// Hit by specific weapon
 		$this->weapon->hit	= array();	// Hit with specific weapon
+		$this->part			= (new gothit);
 		$this->part->got	= array();	// Was hit to specific part of body
 		$this->part->hit	= array();	// Hit to specific part of body
 	}
@@ -104,6 +120,7 @@ class rounds
 		$this->won		= 0;			// Won games
 		$this->lost		= 0;			// Lost games
 		$this->draw		= 0;			// Draw games
+	}
 }
 
 ?>
