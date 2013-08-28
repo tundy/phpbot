@@ -10,9 +10,14 @@ unset($file);
 
 function higest_spree ($killer, $target)
 {
-	if ($players[$killer]->spree->kill->last > $players[$killer]->spree->kill->high)
+	if ( !isset($players[$killer]->spree->kill->high) )
 		$players[$killer]->spree->kill->high = $players[$killer]->spree->kill->last;
-	if ($players[$target]->spree->dead->last > $players[$target]->spree->dead->high)
+	elseif ($players[$killer]->spree->kill->last > $players[$killer]->spree->kill->high)
+		$players[$killer]->spree->kill->high = $players[$killer]->spree->kill->last;
+		
+	if ( !isset($players[$target]->spree->dead->high) )
+		$players[$target]->spree->dead->high = $players[$target]->spree->dead->last;
+	elseif ($players[$target]->spree->dead->last > $players[$target]->spree->dead->high)
 		$players[$target]->spree->dead->high = $players[$target]->spree->dead->last;
 }
 
@@ -46,6 +51,7 @@ function spree ($time, $args)
 		{
 			$players[$target]->spree->dead->last++;
 			$players[$killer]->spree->kill->last++;
+			$players[$killer]->spree->dead->last = 0;
 			higest_spree($killer, $target);
 		}
 		// TeamKill

@@ -89,7 +89,7 @@ class spree
 {
 	public $kill, $dead, $flag;
 		
-	function deads ()
+	function spree ()
 	{
 		$this->kill->last		= 0;			// Killing spree
 		$this->kill->high		= 0;			// Killing best
