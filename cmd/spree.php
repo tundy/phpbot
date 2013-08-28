@@ -66,18 +66,18 @@ function spree ($time, $args)
 				case 2:		if ( $players[$killer]->spree->kill->last > 0)
 							{
 								$players[$killer]->spree->kill->last--;
-								$players[$target]->spree->dead->last++;
-								higest_spree($killer, $target);
 								say($players[$killer]->info["name"]."^3 lower his/her killing spree after teamkill.");
 							}
+							$players[$target]->spree->dead->last++;
+							higest_spree($killer, $target);
 							break;
 				case 3:		if ( $players[$killer]->spree->kill->last > 0)
 							{
 								$players[$killer]->spree->kill->last = 0;
-								$players[$target]->spree->dead->last++;
-								higest_spree($killer, $target);
 								say($players[$killer]->info["name"]."^3 reset his/her killing spree after teamkill.");
 							}
+							$players[$target]->spree->dead->last++;
+							higest_spree($killer, $target);
 							break;
 				default:	break;
 			endswitch;
