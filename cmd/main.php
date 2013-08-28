@@ -21,6 +21,23 @@ function c_disconnect ($time, $args)
 	unset($players[$args]);
 }
 
+// what to do if server shutdown ?
+function g_shutdown ($time)
+{
+	foreach($players as $player)
+		c_disconnect($time, $player);
+}
+
+function c_hit ($time, $args)
+{
+	headshot($time, $args);
+}
+
+function c_kill ($time, $args)
+{
+	spree($time, $args);
+}
+
 function c_info ($time, $args)
 {
 	if($temp = grep_user($args))
@@ -52,4 +69,12 @@ function grep_kill ($line)	// [1]Killer, [2]Target, [3]Weapon
 	return false;
 }
 
+function grep_hit ($line)	// [1]Target, [2]Shooter, [3]Part, [4]Weapon
+{
+	$pattern=("/([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+):(.*)/");
+	if(preg_match($pattern, $line, $temp))
+		return $temp;
+	return false;
+}
+	
 ?>
