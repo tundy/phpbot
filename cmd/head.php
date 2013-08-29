@@ -45,7 +45,7 @@ function write_hs ($id)
 		write($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshots");
 }
 
-function cmd_hs ($id, $args);
+function cmd_hs ($id, $args)
 {
 	global $players;
 	
