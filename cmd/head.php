@@ -51,7 +51,7 @@ function cmd_hs ($id, $args)
 	
 	if( isset($args[0]) )
 	{
-		if(preg_match("/[0-9]+/", $args[0], $id))
+		if(preg_match("/[0-9]+/", $args[0], $id))	// If Number
 		{
 			$id = $id[0];
 			if( isset($players[$id]) )

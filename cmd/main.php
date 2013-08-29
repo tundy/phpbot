@@ -136,16 +136,28 @@ function grep_user($line)	// [1]Player ID, [2]VARs
 }
 
 // Get player ID from Name
-function search ($arg)
+function search ($arg, $lower = 0, $color = 0)
 {
 	global $players;
 	
 	if( isset($arg) )
 	{
+		$found = array();
 		$pattern = "/(.*)(".$arg.")(.*)/";
 		foreach ( array_keys($players) as $id)
 		{
-			if( preg_match($pattern, $players[$id]->info["name"]) )
+			$name = $players[$id]->info["name"];
+			if( $color )
+			{
+				$get = $arg;
+				$name = preg_replace ("/(\^.)/", "", $arg);
+			}
+			if( $lower )
+			{
+				$get = strtolower($arg);
+				$name = strtolower( $players[$id]->info["name"] );
+			}
+			if( preg_match($pattern, $name) )
 				$found[$id] = $players[$id]->info["name"];
 		}
 		
@@ -166,13 +178,14 @@ function search ($arg)
 		elseif( count($found) == 0 )
 		{
 			
-			if( strtolower($arg) == $arg )
-				say("Player not found.");
+			if ( !$lower && !$color)
+				return search($arg, 1, 0);
+			elseif ( $lower && !$color)
+				return search($arg, 1, 1);
+			elseif ( $lower && $color)
+				return search($arg, 0, 1);
 			else
-			{
-			$arg = strtolower($arg);
-			return search($arg);
-			}
+				say("Player not found.");
 		}
 	}	
 }
