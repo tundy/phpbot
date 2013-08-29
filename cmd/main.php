@@ -47,21 +47,46 @@ function c_kill ($time, $args)
 {
 	spree($time, $args);
 }
+		
+function c_changed($time, $arg)
+{
+	global $players;
+
+	if($grep = grep_user($arg))
+	{
+		unset($arg);
+		$id = $grep[1];
+		$var = explode("\\", $grep[2]);
+		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
+		unset($grep);
+		$i = 0;
+		while ($i < $vars)											// new $var's "KEY" is equal to old $var[$i]
+		{
+			$players[$id]->info["$var[$i]"] = $var[$i + 1];			// new info["KEY"]'s VALUE is equal to old $var[$i+1]
+			unset($var[$i]);										// After setting new KEY old one will be unset
+			unset($var[$i + 1]);									// After setting new VALUE old one will be unset
+			$i += 2;
+		}
+		unset($i);
+		unset($vars);
+		unset($var);
+	}
+}
 
 function c_info ($time, $args)
 {
 	global $players;
-	if($temp = grep_user($args))
+	if($grep = grep_user($args))
 	{
 		unset($arg);
-		$id = $temp[1];
-		$var = explode("\\", $temp[2]);
-		$vars = (substr_count("$temp[2]","\\"));					// Get number of Vars
-		unset($temp);
+		$id = $grep[1];
+		$var = explode("\\", $grep[2]);
+		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
+		unset($grep);
 		$i = 1;
 		while ($i < $vars)											// new $var's "KEY" is equal to old $var[$i]
 		{
-			$players[$id]->info["$var[$i]"] = $var[$i + 1];	// new info["KEY"]'s VALUE is equal to old $var[$i+1]
+			$players[$id]->info["$var[$i]"] = $var[$i + 1];			// new info["KEY"]'s VALUE is equal to old $var[$i+1]
 			unset($var[$i]);										// After setting new KEY old one will be unset
 			unset($var[$i + 1]);									// After setting new VALUE old one will be unset
 			$i += 2;

@@ -191,7 +191,7 @@ function decode($line)
 				c_info($time, $args);
 				break;
 			case "ClientUserinfoChanged:":
-				c_info($time, $args);
+				c_changed($time, $args);
 				break;
 			case "ClientBegin:":
 				c_begin($time, $args);
