@@ -143,20 +143,18 @@ function search ($arg, $lower = 0, $color = 0)
 	if( isset($arg) )
 	{
 		$found = array();
-		$pattern = "/(.*)(".$arg.")(.*)/";
+		if( $lower )
+			$get = strtolower($arg);
+		else
+			$get = $arg;
+		$pattern = "/(.*)(".$get.")(.*)/";
 		foreach ( array_keys($players) as $id)
 		{
 			$name = $players[$id]->info["name"];
 			if( $color )
-			{
-				$get = $arg;
-				$name = preg_replace ("/(\^.)/", "", $arg);
-			}
+				$name = preg_replace ("/(\^.)/", "", $name);
 			if( $lower )
-			{
-				$get = strtolower($arg);
-				$name = strtolower( $players[$id]->info["name"] );
-			}
+				$name = strtolower( $name );
 			if( preg_match($pattern, $name) )
 				$found[$id] = $players[$id]->info["name"];
 		}
