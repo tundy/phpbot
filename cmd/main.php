@@ -76,7 +76,7 @@ function c_say ($time, $args)
 {	
 	if($grep = grep_say($args))
 	{
-		unset($arg);
+		unset($args);
 		$id = $grep[1];
 		$name = $grep[2];
 		$msg = $grep[3];
@@ -92,7 +92,7 @@ function c_say ($time, $args)
 			$cmd = $msg;
 			unset($msg);
 		}
-		
+				
 		switch ($cmd)
 		{
 			case "!hs":
