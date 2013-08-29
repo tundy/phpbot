@@ -97,7 +97,7 @@ function c_say ($time, $args)
 		{
 			case "!hs":
 			case "!headshot":
-			case "!haedshots":	cmd_hs($id, $args); break;
+			case "!headshots":	cmd_hs($id, $args); break;
 			default:			break;
 		}
 	}
