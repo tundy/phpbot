@@ -217,9 +217,9 @@ function decode($line)
 			#case "InitRound:":
 			#	r_init($time, $args);
 			#	break;
-			#case "say:":
-			#	c_say($time, $args);
-			#	break;
+			case "say:":
+				c_say($time, $args);
+				break;
 			#case "sayteam:":
 			#	c_sayteam($time, $args);
 			#	break;

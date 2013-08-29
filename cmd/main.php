@@ -71,7 +71,38 @@ function c_info ($time, $args)
 		unset($var);
 	}
 }
-	
+
+function c_say ($time, $args)
+{	
+	if($grep = grep_say($args))
+	{
+		unset($arg);
+		$id = $grep[1];
+		$name = $grep[2];
+		$msg = $grep[3];
+		unset($grep);
+		if(preg_match("/(.*) (.*)/", $msg, $grep))
+		{
+		$cmd = $grep[1];
+		$args = explode(' ', $grep[2]);
+		unset($grep);
+		}
+		else
+		{
+			$cmd = $msg;
+			unset($msg);
+		}
+		
+		switch ($cmd)
+		{
+			case "!hs":
+			case "!headshot":
+			case "!haedshots":	cmd_hs($id, $args); break;
+			default:			break;
+		}
+	}
+}
+
 function grep_kill ($line)	// [1]Killer, [2]Target, [3]Weapon
 {
 	$pattern=("/([0-9]+) ([0-9]+) ([0-9]+):(.*)/");
