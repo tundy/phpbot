@@ -28,7 +28,8 @@ function headshot ($time, $args)
 function say_hs ($id)
 {
 	global $players;
-
+	if ( !isset($players[$id]->headshots) )
+		$players[$id]->headshots = 0;
 	if ( $players[$id]->headshots == 1 )
 		say($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshot");
 	else
@@ -38,7 +39,8 @@ function say_hs ($id)
 function write_hs ($id)
 {
 	global $players;
-
+	if ( !isset($players[$id]->headshots) )
+		$players[$id]->headshots = 0;
 	if ( $players[$id]->headshots == 1 )
 		write($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshot");
 	else
