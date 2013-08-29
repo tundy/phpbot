@@ -103,5 +103,47 @@ function grep_user($line)	// [1]Player ID, [2]VARs
 		return $temp;
 	return false;
 }
+
+// Get player ID from Name
+function search ($arg)
+{
+	global $players;
 	
+	if( isset($arg) )
+	{
+		$pattern = "/(.*)(".$arg.")(.*)/";
+		foreach ( array_keys($players) as $id)
+		{
+			if( preg_match($pattern, $players[$id]->info["name"]) )
+				$found[$id] = $players[$id]->info["name"];
+		}
+		
+		if( count($found) > 1 )
+		{
+			$msg = "Found players:";
+			foreach ( array_keys($found) as $id )
+			{
+				$msg .= " [".$id."] ".$found[$id];
+			}
+			say($msg);
+		}
+		elseif( count($found) == 1 )
+		{
+			$id = key($found);
+			return $id;
+		}
+		elseif( count($found) == 0 )
+		{
+			
+			if( strtolower($arg) == $arg )
+				say("Player not found.");
+			else
+			{
+			$arg = strtolower($arg);
+			return search($arg);
+			}
+		}
+	}	
+}
+
 ?>
