@@ -122,7 +122,11 @@ function c_say ($time, $args)
 		{
 			case "!hs":
 			case "!headshot":
-			case "!headshots":	cmd_hs($id, $args); break;
+			case "!headshots":	if( isset($args) )
+									cmd_hs($id, $args);
+								else
+									cmd_hs($id);
+								break;
 			default:			break;
 		}
 	}
