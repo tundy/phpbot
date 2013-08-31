@@ -127,6 +127,7 @@ function c_say ($time, $args)
 			if (isset($args) )	// if command with arguments
 				switch ($cmd)
 				{
+					case "!":		cmd_chat($id, $args); break;
 					case "hs":
 					case "headshot":
 					case "headshots":	cmd_hs($id, $args); break;
@@ -138,6 +139,50 @@ function c_say ($time, $args)
 					case "hs":
 					case "headshot":
 					case "headshots":	cmd_hs($id); break;
+					default:		break;
+				}
+		}
+		else				// else message
+		{} // do nothing
+	}
+}
+
+function c_sayteam ($time, $args)
+{	
+	if($grep = grep_say($args))
+	{
+		unset($args);
+		$id = $grep[1];
+		$name = $grep[2];
+		$msg = $grep[3];
+		unset($grep);
+		// if command with arguments
+		if(preg_match("/!(.+) (.+)/", $msg, $grep))
+		{
+		$cmd = $grep[1];
+		$args = explode(' ', $grep[2]);
+		unset($grep);
+		}
+		// if command without arguments
+		elseif(preg_match("/!(.+)/", $msg, $grep))
+		{
+			$cmd = $msg;
+			unset($msg);
+			unset($grep);
+		}
+		// else message
+				
+		if( isset($cmd) )		// if command
+		{
+			if (isset($args) )	// if command with arguments
+				switch ($cmd)
+				{
+					case "!":		cmd_chat($id, $args); break;
+					default:		break;
+				}
+			else			// else command without arguments
+				switch ($cmd)
+				{
 					default:		break;
 				}
 		}
