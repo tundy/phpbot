@@ -106,29 +106,43 @@ function c_say ($time, $args)
 		$name = $grep[2];
 		$msg = $grep[3];
 		unset($grep);
-		if(preg_match("/(.*) (.*)/", $msg, $grep))
+		// if command with arguments
+		if(preg_match("/!(.+) (.+)/", $msg, $grep))
 		{
 		$cmd = $grep[1];
 		$args = explode(' ', $grep[2]);
 		unset($grep);
 		}
-		else
+		// if command without arguments
+		elseif(preg_match("/!(.+)/", $msg, $grep))
 		{
 			$cmd = $msg;
 			unset($msg);
+			unset($grep);
 		}
+		// else message
 				
-		switch ($cmd)
+		if( isset($cmd) )		// if command
 		{
-			case "!hs":
-			case "!headshot":
-			case "!headshots":	if( isset($args) )
-									cmd_hs($id, $args);
-								else
-									cmd_hs($id);
-								break;
-			default:			break;
+			if (isset($args) )	// if command with arguments
+				switch ($cmd)
+				{
+					case "hs":
+					case "headshot":
+					case "headshots":	cmd_hs($id, $args); break;
+					default:		break;
+				}
+			else			// else command without arguments
+				switch ($cmd)
+				{
+					case "hs":
+					case "headshot":
+					case "headshots":	cmd_hs($id); break;
+					default:		break;
+				}
 		}
+		else				// else message
+		{} // do nothing
 	}
 }
 
