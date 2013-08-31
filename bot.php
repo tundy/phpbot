@@ -115,7 +115,7 @@ function out($cmd)
 	global $server, $ip, $port;
 	$errno = null;
 	$errstr = null;
-	$cmd = "ÿÿÿÿ" . $cmd;
+	$cmd = "ï¿½ï¿½ï¿½ï¿½" . $cmd;
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");
@@ -220,9 +220,9 @@ function decode($line)
 			case "say:":
 				c_say($time, $args);
 				break;
-			#case "sayteam:":
-			#	c_sayteam($time, $args);
-			#	break;
+			case "sayteam:":
+				c_sayteam($time, $args);
+				break;
 			case "Hit:":
 				c_hit($time, $args);
 				break;
