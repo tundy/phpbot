@@ -56,8 +56,13 @@ function cmd_hs ($id, $args = null)
 			$id = $id[0];
 			if( isset($players[$id]) )
 				say_hs($id);
-			else						
-				say("ID not found !");
+			else									// If ID not found check if it's a name
+			{			
+				unset($id);
+				$id = search($args[0]);
+				if( isset($id) )
+					say_hs($id);	
+			}
 		}
 		else
 		{
