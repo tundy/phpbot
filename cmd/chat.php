@@ -6,10 +6,10 @@ function cmd_chat ($id, $args)
   
 	if( isset($args) )
 	{
-		if($players[$killer]->info["team"] == TEAM_SPEC)	// You have to be spectator
+		if($players[$id]->info["team"] == TEAM_SPEC)	// You have to be spectator
 		{
 			$msg = implode(" ", $args);
-			say($players[$id]."^3: ".$msg);
+			say($players[$id]->info["name"]."^3: ".$msg);
 		}
 	}
 }
