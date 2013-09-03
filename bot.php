@@ -115,7 +115,7 @@ function out($cmd)
 	global $server, $ip, $port;
 	$errno = null;
 	$errstr = null;
-	$cmd = "ï¿½ï¿½ï¿½ï¿½" . $cmd;
+	$cmd = "ÿÿÿÿ" . $cmd;
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");
