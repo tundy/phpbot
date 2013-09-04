@@ -67,15 +67,44 @@ foreach (glob("class/*.php") as $file)
 unset($file);
 	
 // Start loop
+initialize();
 loop();
 
 #### STARTUP // END ####
 
-#### LOOP // START ####
+function initialize()
+{
+	global $log, $lines;
 	
+	$file = new SplFileObject($log);
+	$lines = 0;
+	
+	$file->seek($lines);
+	while (!$file->eof())
+	{
+		$lines = $file->key();
+		if($file->valid())
+			$file->next();
+	}
+	
+	$status = rcon("n");
+	$data = explode("\n", $status);
+	foreach($data as $line)
+	{
+		$pattern=("/ +(\d+) +\d+ +\d+ +.+/");
+		if(preg_match($pattern, $line, $grep))
+		{
+			$id = $grep[1];
+			$dump = rcon("dumpuser $id");
+		}
+	}
+}
+
+#### LOOP // START ####
+
 function loop()
 {
-	global $log, $loop;
+	global $log, $loop, $lines;
 
 	$file = new SplFileObject($log);
 	$lines = 0;
@@ -96,12 +125,9 @@ function loop()
 			else
 				$last_line = $file->key();
 				
-			if( isset($first) )	// Do not decode old logs
-				{}
-			elseif($last_line != $lines)
+			if($last_line != $lines)
 				decode($line);
 		}
-		unset($first);
 	}
 }
 
