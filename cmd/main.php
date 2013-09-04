@@ -207,7 +207,7 @@ function grep_hit ($line)	// [1]Target, [2]Shooter, [3]Part, [4]Weapon
 	return false;
 }
 
-function grep_say($line)	// [1]Player ID, [2]VARs
+function grep_say($line)	// [1]Player ID, [2]Name, [3]Message
 {
 	$pattern=("/([0-9]+) (.*): (.*)/");
 	if(preg_match($pattern, $line, $temp))
