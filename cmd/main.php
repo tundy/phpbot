@@ -1,5 +1,4 @@
 <?php
-
 // what to do if player connect ?
 function c_connect ($time, $args)
 {
@@ -34,8 +33,9 @@ function c_disconnect ($time, $args)
 function g_shutdown ($time)
 {
 	global $players;
-	foreach(array_keys($players) as $player)
-		c_disconnect($time, $player);
+	if ( isset($players) && is_array($players) )
+		foreach(array_keys($players) as $player)
+			c_disconnect($time, $player);
 }
 
 function c_hit ($time, $args)
@@ -124,7 +124,7 @@ function c_say ($time, $args)
 				
 		if( isset($cmd) )		// if command
 		{
-			if (isset($args) )	// if command with arguments
+			if ( isset($args) )	// if command with arguments
 				switch ($cmd)
 				{
 					case "!":			cmd_chat($id, $args); break;
@@ -138,7 +138,7 @@ function c_say ($time, $args)
 				{
 					case "hs":
 					case "headshot":
-					case "headshots":	cmd_hs($id); break;
+					case "headshots":	cmd_hs($id, null); break;
 					default:			break;
 				}
 		}
@@ -275,5 +275,4 @@ function search ($arg, $lower = 0, $color = 0)
 		}
 	}	
 }
-
 ?>
