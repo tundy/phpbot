@@ -42,7 +42,7 @@ if ( !isset($prefix) or empty($prefix) ):
 	echo("^3 used instead.\r\n");
 	$prefix = '^3';
 endif;
-	
+
 $file = "games/index.php";
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
@@ -65,7 +65,7 @@ unset($file);
 foreach (glob("class/*.php") as $file)
 	require_once $file;
 unset($file);
-	
+
 // Start loop
 initialize();
 loop();
@@ -83,11 +83,12 @@ function initialize()
 	while (!$file->eof())
 	{
 		$lines = $file->key();
+	$file->current();
 		if($file->valid())
 			$file->next();
 	}
 	
-	$status = rcon("n");
+	$status = rcon("status");
 	$data = explode("\n", $status);
 	foreach($data as $line)
 	{
@@ -96,6 +97,7 @@ function initialize()
 		{
 			$id = $grep[1];
 			$dump = rcon("dumpuser $id");
+			
 		}
 	}
 }
@@ -107,7 +109,6 @@ function loop()
 	global $log, $loop, $lines;
 
 	$file = new SplFileObject($log);
-	$lines = 0;
 	$loop = 1;
 	$first = 1;
 
@@ -141,7 +142,7 @@ function out($cmd)
 	global $server, $ip, $port;
 	$errno = null;
 	$errstr = null;
-	$cmd = "ÿÿÿÿ" . $cmd;
+	$cmd = "\xFF\xFF\xFF\xFF" . $cmd;
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");
