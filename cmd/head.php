@@ -1,11 +1,9 @@
 <?php
 
-function headshot ($time, $args)
-{
+function headshot($time, $args) {
 	global $players;
-
-	if($grep = grep_hit($args))
-	{
+	
+	if($grep = grep_hit($args)) {
 		unset($arg);
 		$target		= $grep[1];
 		$shooter	= $grep[2];
@@ -14,10 +12,8 @@ function headshot ($time, $args)
 		unset($grep);
 		
 		// Enemy hit
-		if ($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"])
-		{
-			if ($part == HIT_HEAD or $part == HIT_HELMET)
-			{
+		if ($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
+			if ($part == HIT_HEAD or $part == HIT_HELMET) {
 				$players[$shooter]->headshots++;
 				write_hs($shooter);
 			}
@@ -25,8 +21,7 @@ function headshot ($time, $args)
 	}			
 }
 
-function say_hs ($id)
-{
+function say_hs($id) {
 	global $players;
 	
 	if ( $players[$id]->headshots == 1 )
@@ -35,8 +30,7 @@ function say_hs ($id)
 		say($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshots");
 }
 
-function write_hs ($id)
-{
+function write_hs($id) {
 	global $players;
 	
 	if ( $players[$id]->headshots == 1 )
@@ -45,27 +39,22 @@ function write_hs ($id)
 		write($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshots");
 }
 
-function cmd_hs ($id, $args = null)
-{
+function cmd_hs ($id, $args = null) {
 	global $players;
 	
-	if( isset($args[0]) )
-	{
-		if(preg_match("/[0-9]+/", $args[0], $id))	// If Number
-		{
+	if( isset($args[0]) ) {
+		if(preg_match("/[0-9]+/", $args[0], $id)) {		// If Number
 			$id = $id[0];
 			if( isset($players[$id]) )
 				say_hs($id);
-			else									// If ID not found check if it's a name
-			{			
+			else {										// If ID not found check if it's a name
 				unset($id);
 				$id = search($args[0]);
 				if( isset($id) )
 					say_hs($id);	
 			}
 		}
-		else
-		{
+		else {
 			unset($id);
 			$id = search($args[0]);
 			if( isset($id) )

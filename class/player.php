@@ -1,11 +1,9 @@
 <?php
 
-class player
-{
+class player {
 	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $spree, $flags, $headshots;
 	
-	function player ()
-	{
+	function player() {
 		$this->kills		= (new kills);
 		$this->deads		= (new deads);
 		$this->hits			= (new hits);
@@ -22,12 +20,10 @@ class player
 	}	
 }
 
-class kills
-{
+class kills {
 	public $target, $weapon, $team, $self, $enemy;
 	
-	function kills ()
-	{
+	function kills() {
 		$this->target	= array();		// Kills on specific player
 		$this->weapon	= array();		// Kills with specific weapon
 		$this->team		= 0;			// Team Kills
@@ -36,12 +32,10 @@ class kills
 	}
 }
 
-class deads
-{
+class deads {
 	public $killer, $weapon, $team, $self, $enemy;
 		
-	function deads ()
-	{
+	function deads() {
 		$this->killer	= array();		// Killed by ...
 		$this->weapon	= array();		// Killed with ...
 		$this->team		= 0;			// Team Deads
@@ -50,12 +44,10 @@ class deads
 	}
 }
 
-class hits
-{
+class hits {
 	public $enemy, $team, $target, $weapon, $part;
 
-	function hits ()
-	{
+	function hits() {
 		$this->enemy		= new stdClass();
 		$this->enemy->got	= 0;		// How many times was hit by enemy
 		$this->enemy->hit	= 0;		// How many times hit enemy
@@ -74,12 +66,10 @@ class hits
 	}
 }
 
-class spree
-{
+class spree {
 	public $kill, $dead, $flag;
 		
-	function spree ()
-	{
+	function spree() {
 		$this->kill				= new stdClass();
 		$this->kill->last		= 0;			// Killing spree
 		$this->kill->high		= 0;			// Killing best
@@ -92,23 +82,19 @@ class spree
 	}
 }
 
-class flags
-{
+class flags {
 	public $captured, $save;
 		
-	function deads ()
-	{
+	function flags() {
 		$this->captured		= 0;			// Captured flags
 		$this->saved		= 0;			// Saved flags
 	}
 }
 
-class rounds
-{
+class rounds {
 	public $won, $draw, $lost;
 		
-	function deads ()
-	{
+	function deads() {
 		$this->won		= 0;			// Won games
 		$this->lost		= 0;			// Lost games
 		$this->draw		= 0;			// Draw games
