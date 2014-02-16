@@ -26,7 +26,7 @@ if ( !is_readable($log))
 if ( !isset($rcon) or empty($rcon) )
 	die("\$rcon password is not set.\r\n");
 
-	// If not set, use default instead
+// If not set, use default instead
 if ( !isset($ip) or empty($ip) ):
 	echo("\$ip adress is not set.\r\n");
 	echo("127.0.0.1 used instead.\r\n");
@@ -72,53 +72,91 @@ loop();
 
 #### STARTUP // END ####
 
-function initialize()
-{
+function initialize() {
 	global $log, $lines;
 	
 	$file = new SplFileObject($log);
 	$lines = 0;
 	
 	$file->seek($lines);
-	while (!$file->eof())
-	{
+	while (!$file->eof()) {
 		$lines = $file->key();
-	$file->current();
+		$file->current();
 		if($file->valid())
 			$file->next();
 	}
 	
 	$status = rcon("status");
-	$data = explode("\n", $status);
-	foreach($data as $line)
-	{
-		$pattern=("/ +(\d+) +\d+ +\d+ +.+/");
-		if(preg_match($pattern, $line, $grep))
-		{
-			$id = $grep[1];
-			$dump = rcon("dumpuser $id");
-			
+	if ( empty($status) )
+		return false;
+	$status = preg_split('/\n|\r/', $status, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
+	
+	$pattern=("/map:\s+(.+)/");
+	if(preg_match($pattern, $status[0], $temp)) {
+		$map = $temp[1];
+		unset($status[0]);
+	}
+	
+	$g_blueteamlist = get_cvar("g_blueteamlist");
+	$g_redteamlist = get_cvar("g_redteamlist");
+		
+	$temp_players = array();
+	
+	if ( !empty($g_blueteamlist) ) {
+		$g_blueteamlist = str_split($g_blueteamlist);
+		foreach ( $g_blueteamlist as $member) {
+			$id = ( ord($member) - ord('A') );
+			$temp_players[$id] = 2;
 		}
 	}
+
+	if ( !empty($g_redteamlist) ) {
+		$g_redteamlist = str_split($g_redteamlist);
+		foreach ( $g_redteamlist as $member) {
+			$id = ( ord($member) - ord('A') );
+			$temp_players[$id] = 1;
+		}
+	}
+	
+	foreach ($status as $player) {
+		$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
+		if(preg_match($pattern, $player, $temp)) {
+			$id = trim($temp[1]);
+			$score = trim($temp[2]);
+			$ping = trim($temp[3]);
+			$name = trim($temp[4]);
+			$lastmsg = trim($temp[5]);
+			$address = trim($temp[6]);
+			$qport = trim($temp[7]);
+			$rate = trim($temp[8]);
+			if ( !isset($temp_players[$id]) )
+				$team = 3;
+			else
+				$team = $temp_players[$id];
+			
+			unset($temp_players[$id]);
+			c_create($id, $name, $team);
+		}
+	}
+	unset($temp_players);
+	unset($temp);
 }
 
 #### LOOP // START ####
 
-function loop()
-{
+function loop() {
 	global $log, $loop, $lines;
-
+	global $players;
+	
+	
 	$file = new SplFileObject($log);
 	$loop = 1;
-	$first = 1;
 
 	// Loop that will scan log file forever
-	while ($loop) 
-	{
+	while ($loop) {
 		$last_line = -1;
 		$file->seek($lines);
-		while (!$file->eof())
-		{
+		while (!$file->eof()) {
 			$lines = $file->key();
 			$line = $file->current();
 			if($file->valid())
@@ -129,6 +167,7 @@ function loop()
 			if($last_line != $lines)
 				decode($line);
 		}
+		#file_put_contents('bot.log', print_r($players, true));
 	}
 }
 
@@ -137,43 +176,75 @@ function loop()
 #### Main Functions // START ####
 
 // Send message to server
-function out($cmd)
-{
+function out($cmd) {
 	global $server, $ip, $port;
 	$errno = null;
 	$errstr = null;
-	$cmd = "\xFF\xFF\xFF\xFF" . $cmd;
+	$cmd = "\xFF\xFF\xFF\xFF" . $cmd;								// Every query must start with 4 chars 0xFF
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");
-	socket_set_timeout ($server, 1, 0);
-	fwrite ($server, $cmd);
+	socket_set_timeout ($server, 0, 125000);								// maybe the lowest possible timeout for avarage connection
+	
+	$cycles = 5;
+	$cycle = 0;
 	$input = '';
-	while ($temp = fread ($server, 10000))
-	{
-		$input .= $temp;
+	while ( empty($input) ) {
+		if ( $cycle++ == $cycles )
+			break;
+		
+		fwrite ($server, $cmd);
+		$temp = '';
+		while ($temp = fread ($server, 1000)) {
+			$input .= $temp;
+		}
+		if ( empty($input) )
+			sleep(1);
 	}
 	fclose ($server);
-	return $input;
+	
+	$pattern = "/\xFF\xFF\xFF\xFF.*(\n|\r)/";
+	$replacement = "";
+	$input = preg_replace($pattern, $replacement, $input);
+	
+	if ( empty($input) )
+		return false;	
+	return trim($input);
+}
+
+// get cvar value from server
+function get_cvar ($cvar) {	
+	global $rcon;
+	$temp = rcon($cvar);
+		
+	$pattern = "/\".+\"\s+is:\"(.*)\^7\"\s+default:.*/";
+	$subject = $temp;
+	unset($temp);	
+	preg_match($pattern, $subject, $temp);
+	if ( count($temp) < 2 ) {
+		$pattern = "/\".+\"\s+is:\"(.*)\^7\"/";
+		preg_match($pattern, $subject, $temp);
+	}
+
+	if ( isset($temp[1]) )
+		return trim($temp[1]);
+	return false;
 }
 
 // send command to server
-function rcon($cmd)
-{
+function rcon($cmd) {
 	global $rcon;
 	return (out("rcon ".$rcon." ".$cmd));
 }
 
 // send message to chat
-function say($msg)
-{
+function say($msg) {
 	global $prefix, $sufix;
 	return (rcon("say ".$prefix.$msg.$sufix));
 }	
 
 // write message in console
-function write($msg)
-{
+function write($msg) {
 	global $prefix, $sufix;
 	return (rcon($prefix.$msg.$sufix));
 }
@@ -184,11 +255,9 @@ function write($msg)
 // [1] = Time in seconds	(2625)
 // [2] = Command			('ClientConnect:')
 // [3] = Arguments			('1')
-function grep_logline($line)
-{
+function grep_logline($line) {
 	$pattern=("/([0-9]+:[0-9]{2})([a-zA-Z ]+:)(.*)/");
-	if(preg_match($pattern, $line, $grep))
-	{
+	if(preg_match($pattern, $line, $grep)) {
 		$grep[1] = trim($grep[1]);
 		$grep[2] = trim($grep[2]);
 		$pattern=("/([0-9]+):([0-9]{2}).*/");
@@ -200,17 +269,13 @@ function grep_logline($line)
 	}
 }
 
-function decode($line)
-{
-	if($temp = grep_logline($line))
-	{
+function decode($line) {
+	if($temp = grep_logline($line)) {
 		$time	= $temp[1];
 		$cmd	= $temp[2];
 		if(isset($temp[3]))
-			$args	= $temp[3];
-		
-		switch($cmd)
-		{
+			$args	= $temp[3];			
+		switch($cmd) {
 			case "ClientConnect:":
 				c_connect($time, $args);
 				break;
