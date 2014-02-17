@@ -15,10 +15,10 @@ function c_connect($time, $args) {
 
 // Player enter the game	
 function c_begin($time, $args) {
-	global $players;
+	global $players, $text_color, $name_color;
 	
 	if( !empty($players[$args]->info["name"]) and !isset($players[$args]->hello) and empty($players[$args]->hello)) {
-		say("Welcome ".$players[$args]->info["name"]);
+		say($text_color."Welcome ".$name_color.$players[$args]->info["name"]);
 		$players[$args]->hello = 1;
 	}
 	$players[$args]->spree->kill->last	= 0;
@@ -41,7 +41,64 @@ function g_shutdown($time) {
 }
 
 function c_hit($time, $args) {
+	global $players, $WEAPON_DAMAGE;
+	
 	headshot($time, $args);
+	
+	if($grep = grep_hit($args)) {
+		unset($arg);
+		$target		= $grep[1];
+		$shooter	= $grep[2];
+		$part		= $grep[3];
+		$weapon		= $grep[4];
+		unset($grep);
+			
+		if($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
+		
+			if ( isset($players[$shooter]->hits->enemy->hit) )
+				$players[$shooter]->hits->enemy->hit++;
+			else
+				$players[$shooter]->hits->enemy->hit = 1;
+				
+			if ( isset($players[$target]->hits->enemy->got) )
+				$players[$target]->hits->enemy->got++;
+			else
+				$players[$target]->hits->enemy->got = 1;
+				
+			if ( isset($players[$shooter]->dmg->enemy->hit) )
+				$players[$shooter]->dmg->enemy->hit += $WEAPON_DAMAGE[$weapon][$part];
+			else
+				$players[$shooter]->dmg->enemy->hit = $WEAPON_DAMAGE[$weapon][$part];
+			
+			if ( isset($players[$target]->dmg->enemy->got) )
+				$players[$target]->dmg->enemy->got += $WEAPON_DAMAGE[$weapon][$part];
+			else
+				$players[$target]->dmg->enemy->got = $WEAPON_DAMAGE[$weapon][$part];
+				
+		} else {	
+		
+			if ( isset($players[$shooter]->hits->team->hit) )
+				$players[$shooter]->hits->team->hit++;
+			else
+				$players[$shooter]->hits->team->hit = 1;
+				
+			if ( isset($players[$target]->hits->team->got) )
+				$players[$target]->hits->team->got++;
+			else
+				$players[$target]->hits->team->got = 1;
+				
+			if ( isset($players[$shooter]->dmg->team->hit) )
+				$players[$shooter]->dmg->team->hit += $WEAPON_DAMAGE[$weapon][$part];
+			else
+				$players[$shooter]->dmg->team->hit = $WEAPON_DAMAGE[$weapon][$part];
+			
+			if ( isset($players[$target]->dmg->team->got) )
+				$players[$target]->dmg->team->got += $WEAPON_DAMAGE[$weapon][$part];
+			else
+				$players[$target]->dmg->team->got = $WEAPON_DAMAGE[$weapon][$part];
+				
+		}
+	}
 }
 
 function c_kill($time, $args) {
