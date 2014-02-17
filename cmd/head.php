@@ -22,21 +22,21 @@ function headshot($time, $args) {
 }
 
 function say_hs($id) {
-	global $players;
+	global $players, $name_color, $text_color, $alt_color;
 	
 	if ( $players[$id]->headshots == 1 )
-		say($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshot");
+		say($name_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshot");
 	else
-		say($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshots");
+		say($name_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshots");
 }
 
 function write_hs($id) {
-	global $players;
+	global $players, $name_color, $text_color, $alt_color;
 	
 	if ( $players[$id]->headshots == 1 )
-		write($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshot");
+		write($name_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshot");
 	else
-		write($players[$id]->info["name"]."^3 made ^7".$players[$id]->headshots."^3 headshots");
+		write($name_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshots");
 }
 
 function cmd_hs ($id, $args = null) {

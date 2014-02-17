@@ -23,7 +23,8 @@ function higest_spree ($killer, $target) {
 }
 
 function spree ($time, $args) {
-	global $players, $spree_start, $spree_tk, $prefix;
+	global $players, $spree_start, $spree_tk, $name_color, $text_color, $alt_color;
+	global $WEAPON_KILL;
 
 	if($grep = grep_kill($args)) {
 		unset($args);
@@ -42,7 +43,7 @@ function spree ($time, $args) {
 		// Self Kill
 		elseif($killer == $target) {
 			if ( $players[$target]->spree->kill->last >= $spree_start)
-				say($players[$target]->info["name"]."^3 stopped his/her killing spree. (" . $WEAPON_KILL[$weapon] . ")");
+				say($name_color.$players[$target]->info["name"].$text_color." stopped his/her killing spree.");
 			$players[$target]->spree->dead->last++;
 			higest_spree($killer, $target);
 			$players[$killer]->spree->kill->last = 0;
@@ -63,14 +64,14 @@ function spree ($time, $args) {
 							break;
 				case 2:		if ( $players[$killer]->spree->kill->last > 0) {
 								$players[$killer]->spree->kill->last--;
-								say($players[$killer]->info["name"]."^3 lower his/her killing spree after teamkill.");
+								say($name_color.$players[$killer]->info["name"].$text_color." lower his/her killing spree after teamkill.");
 							}
 							$players[$target]->spree->dead->last++;
 							higest_spree($killer, $target);
 							break;
 				case 3:		if ( $players[$killer]->spree->kill->last > 0) {
 								$players[$killer]->spree->kill->last = 0;
-								say($players[$killer]->info["name"]."^3 reset his/her killing spree after teamkill.");
+								say($name_color.$players[$killer]->info["name"].$text_color." reset his/her killing spree after teamkill.");
 							}
 							$players[$target]->spree->dead->last++;
 							higest_spree($killer, $target);
@@ -80,9 +81,9 @@ function spree ($time, $args) {
 		}
 		
 		if ($players[$killer]->spree->kill->last >= $spree_start)
-			say($players[$killer]->info["name"]."^3 is on killing spree. ^7".$players[$killer]->spree->kill->last."^3 kills in the row.");	
+			say($name_color.$players[$killer]->info["name"].$text_color." is on killing spree. ".$alt_color.$players[$killer]->spree->kill->last.$text_color." kills in the row.");	
 		if ( $players[$target]->spree->kill->last >= $spree_start)
-			say($players[$killer]->info["name"]."^3 stopped ".$prefix.$players[$target]->info["name"]."^3's killing spree.");
+			say($name_color.$players[$killer]->info["name"].$text_color." stopped ".$name_color.$players[$target]->info["name"].$text_color."'s killing spree.");
 		$players[$target]->spree->kill->last = 0;
 	}
 }

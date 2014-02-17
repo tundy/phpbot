@@ -42,12 +42,23 @@ if ( !isset($prefix) or empty($prefix) ):
 	echo("^3 used instead.\r\n");
 	$prefix = '^3';
 endif;
+if ( !isset($text_color) or empty($text_color) ):
+	echo("\$text_color is not set.\r\n");
+	echo(YELLOW_COLOR . " used instead.\r\n");
+	$text_color = YELLOW_COLOR;
+endif;
+if ( !isset($name_color) or empty($name_color) ):
+	echo("\$name_color is not set.\r\n");
+	echo(WHITE_COLOR . " used instead.\r\n");
+	$name_color = WHITE_COLOR;
+endif;
 
-$file = "games/index.php";
-if ( !file_exists($file) )
-	die("'$file' file not found.\r\n");
-require_once($file);
-unset($file);
+$prefix = $prefix.$text_color;
+
+if($text_color == WHITE_COLOR)
+	$alt_color = YELLOW_COLOR;
+else
+	$alt_color = WHITE_COLOR;
 
 // Check main functions list
 $file = "cmd/main.php";
@@ -64,6 +75,12 @@ unset($file);
 // Include all classes
 foreach (glob("class/*.php") as $file)
 	require_once $file;
+unset($file);
+
+$file = "games/index.php";
+if ( !file_exists($file) )
+	die("'$file' file not found.\r\n");
+require_once($file);
 unset($file);
 
 // Start loop
@@ -106,7 +123,7 @@ function initialize() {
 		$g_blueteamlist = str_split($g_blueteamlist);
 		foreach ( $g_blueteamlist as $member) {
 			$id = ( ord($member) - ord('A') );
-			$temp_players[$id] = 2;
+			$temp_players[$id] = TEAM_BLUE;
 		}
 	}
 
@@ -114,7 +131,7 @@ function initialize() {
 		$g_redteamlist = str_split($g_redteamlist);
 		foreach ( $g_redteamlist as $member) {
 			$id = ( ord($member) - ord('A') );
-			$temp_players[$id] = 1;
+			$temp_players[$id] = TEAM_RED;
 		}
 	}
 	
@@ -130,7 +147,7 @@ function initialize() {
 			$qport = trim($temp[7]);
 			$rate = trim($temp[8]);
 			if ( !isset($temp_players[$id]) )
-				$team = 3;
+				$team = TEAM_SPEC;
 			else
 				$team = $temp_players[$id];
 			
@@ -167,7 +184,7 @@ function loop() {
 			if($last_line != $lines)
 				decode($line);
 		}
-		#file_put_contents('bot.log', print_r($players, true));
+		file_put_contents('bot.log', print_r($players, true));
 	}
 }
 
@@ -180,7 +197,7 @@ function out($cmd) {
 	global $server, $ip, $port;
 	$errno = null;
 	$errstr = null;
-	$cmd = "\xFF\xFF\xFF\xFF" . $cmd;								// Every query must start with 4 chars 0xFF
+	$cmd = "\xFF\xFF\xFF\xFF" . $cmd;										// Every query must start with 4 chars 0xFF
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");
