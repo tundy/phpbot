@@ -8,7 +8,6 @@ class player {
 		$this->deads		= (new deads);
 		$this->hits			= (new hits);
 		$this->dmg			= (new hits);
-		unset($this->dmg->part);
 		$this->rounds		= (new rounds);
 		#$this->games		= (new games);
 		$this->flags		= (new flags);
@@ -54,7 +53,7 @@ class hits {
 		$this->team			= new stdClass();
 		$this->team->got	= 0;		// How many times was hit by team mate
 		$this->team->hit	= 0;		// How many times hit team mate
-		$this->target		= new stdClass();
+		/*$this->target		= new stdClass();
 		$this->target->got	= array();	// Hit by specific player
 		$this->target->hit	= array();	// Hit specific player
 		$this->weapon		= new stdClass();
@@ -62,7 +61,7 @@ class hits {
 		$this->weapon->hit	= array();	// Hit with specific weapon
 		$this->part			= new stdClass();
 		$this->part->got	= array();	// Was hit to specific part of body
-		$this->part->hit	= array();	// Hit to specific part of body
+		$this->part->hit	= array();	// Hit to specific part of body*/
 	}
 }
 
@@ -94,7 +93,7 @@ class flags {
 class rounds {
 	public $won, $draw, $lost;
 		
-	function deads() {
+	function rounds() {
 		$this->won		= 0;			// Won games
 		$this->lost		= 0;			// Lost games
 		$this->draw		= 0;			// Draw games
