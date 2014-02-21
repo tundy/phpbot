@@ -23,8 +23,8 @@ class kills {
 	public $target, $weapon, $team, $self, $enemy;
 	
 	function kills() {
-		$this->target	= array();		// Kills on specific player
-		$this->weapon	= array();		// Kills with specific weapon
+		//$this->target	= array();		// Kills on specific player
+		//$this->weapon	= array();		// Kills with specific weapon
 		$this->team		= 0;			// Team Kills
 		$this->self		= 0;			// Self Kills
 		$this->enemy	= 0;			// Normal Kills
@@ -82,7 +82,7 @@ class spree {
 }
 
 class flags {
-	public $captured, $save;
+	public $captured, $saved;
 		
 	function flags() {
 		$this->captured		= 0;			// Captured flags
