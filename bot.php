@@ -1,4 +1,12 @@
 <?php
+$options = getopt("v::");
+function debug($log_msg) {
+	global $options;
+	if(isset($options["v"])) {
+		echo ("\r\n");
+		print_r ($log_msg);
+	}
+}
 
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
@@ -91,6 +99,7 @@ loop();
 
 function initialize() {
 	global $log, $lines;
+	debug("* Starting Inicialization.");
 	
 	$file = new SplFileObject($log);
 	$lines = 0;
@@ -155,6 +164,9 @@ function initialize() {
 			c_create($id, $name, $team);
 		}
 	}
+	
+	say(" ^9BOT ^1S^2t^3a^4r^5t^6e^7d ^8!");
+	
 	unset($temp_players);
 	unset($temp);
 }
@@ -164,7 +176,7 @@ function initialize() {
 function loop() {
 	global $log, $loop, $lines;
 	global $players;
-	
+	debug("* Entered Loop.");
 	
 	$file = new SplFileObject($log);
 	$loop = 1;
@@ -195,6 +207,9 @@ function loop() {
 // Send message to server
 function out($cmd) {
 	global $server, $ip, $port;
+	debug("Querying Server with:");
+	debug($cmd);
+	
 	$errno = null;
 	$errstr = null;
 	$cmd = "\xFF\xFF\xFF\xFF" . $cmd;										// Every query must start with 4 chars 0xFF
@@ -226,6 +241,8 @@ function out($cmd) {
 	
 	if ( empty($input) )
 		return false;	
+	debug("GOT:");
+	debug( trim($input) );
 	return trim($input);
 }
 
@@ -258,8 +275,13 @@ function rcon($cmd) {
 function say($msg) {
 	global $prefix, $sufix;
 	return (rcon("say ".$prefix.$msg.$sufix));
-}	
+}
 
+// send private message to player
+function tell($id, $msg) {
+	global $prefix, $sufix;
+	return (rcon("tell ".$id." ".$prefix.$msg.$sufix));
+}
 // write message in console
 function write($msg) {
 	global $prefix, $sufix;
@@ -287,6 +309,8 @@ function grep_logline($line) {
 }
 
 function decode($line) {
+	debug("_____________________");
+	debug("New Line in Log File.");
 	if($temp = grep_logline($line)) {
 		$time	= $temp[1];
 		$cmd	= $temp[2];
@@ -294,51 +318,76 @@ function decode($line) {
 			$args	= $temp[3];			
 		switch($cmd) {
 			case "ClientConnect:":
+				debug("\tClientConnect.");
 				c_connect($time, $args);
 				break;
 			case "ClientUserinfo:":
+				debug("\tClientUserinfo.");
 				c_info($time, $args);
 				break;
 			case "ClientUserinfoChanged:":
+				debug("\tClientUserinfoChanged.");
 				c_changed($time, $args);
 				break;
 			case "ClientBegin:":
+				debug("\tClientBegin.");
 				c_begin($time, $args);
 				break;
 			case "ClientDisconnect:":
+				debug("\tClientDisconnect.");
 				c_disconnect($time, $args);
 				break;
 			case "ShutdownGame:":
+				debug("\tShutdownGame.");
 				g_shutdown($time);
 				break;
-			#case "SurvivorWinner:":
-			#	g_winner($time, $args);
-			#	break;
-			#case "Warmup:":
-			#	g_warmup($time);
-			#	break;
-			#case "InitAuth:":
-			#	a_init($time, $args);
-			#	break;
-			#case "InitGame:":
-			#	g_init($time, $args);
-			#	break;
-			#case "InitRound:":
-			#	r_init($time, $args);
-			#	break;
+			case "Item:":
+				debug("\tItem.");
+				#g_item($time, $args);
+				break;
+			case "ClientSpawn:":
+				debug("\tClientSpawn.");
+				#c_spawn($time, $args);
+				break;
+			case "SurvivorWinner:":
+				debug("\tSurvivorWinner.");
+				#g_winner($time, $args);
+				break;
+			case "Warmup:":
+				debug("\tWarmup.");
+				#g_warmup($time);
+				break;
+			case "InitAuth:":
+				debug("\tInitAuth.");
+				#a_init($time, $args);
+				break;
+			case "InitGame:":
+				debug("\tInitGame.");
+				#g_init($time, $args);
+				break;
+			case "InitRound:":
+				debug("\tInitRound.");
+				#r_init($time, $args);
+				break;
 			case "say:":
+				debug("\tsay.");
 				c_say($time, $args);
 				break;
 			case "sayteam:":
+				debug("\tsayteam.");
 				c_sayteam($time, $args);
 				break;
 			case "Hit:":
+				debug("\tHit.");
 				c_hit($time, $args);
 				break;
 			case "Kill:":
+				debug("\tKill.");
 				c_kill($time, $args);
 				break;
 			default:
+				debug("\tUnknown.");
+				debug("\t\t$line");
 				break;
 		}
 	}

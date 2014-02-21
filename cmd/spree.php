@@ -25,6 +25,7 @@ function higest_spree ($killer, $target) {
 function spree ($time, $args) {
 	global $players, $spree_start, $spree_tk, $name_color, $text_color, $alt_color;
 	global $WEAPON_KILL;
+	debug("\t\tspree()");
 
 	if($grep = grep_kill($args)) {
 		unset($args);
