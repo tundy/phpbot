@@ -20,7 +20,7 @@ class player {
 }
 
 class kills {
-	public $target, $weapon, $team, $self, $enemy;
+	public /*$target, $weapon,*/ $team, $self, $enemy;
 	
 	function kills() {
 		//$this->target	= array();		// Kills on specific player
@@ -32,11 +32,11 @@ class kills {
 }
 
 class deads {
-	public $killer, $weapon, $team, $self, $enemy;
+	public /*$killer, $weapon,*/ $team, $self, $enemy;
 		
 	function deads() {
-		$this->killer	= array();		// Killed by ...
-		$this->weapon	= array();		// Killed with ...
+		//$this->killer	= array();		// Killed by ...
+		//$this->weapon	= array();		// Killed with ...
 		$this->team		= 0;			// Team Deads
 		$this->self		= 0;			// Self and World Kills
 		$this->enemy	= 0;			// Normal Deads
@@ -44,7 +44,7 @@ class deads {
 }
 
 class hits {
-	public $enemy, $team, $target, $weapon, $part;
+	public $enemy, $team/*, $target, $weapon, $part*/;
 
 	function hits() {
 		$this->enemy		= new stdClass();
