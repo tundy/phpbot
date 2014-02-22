@@ -353,8 +353,6 @@ function grep_logline($line) {
 			$grep[3] = trim($grep[3]);
 		return $grep;
 	}
-	debug("Unknown.", 1);
-	debug($line, 1);
 	return false;
 }
 
@@ -368,78 +366,138 @@ function decode($line) {
 			$args	= $temp[3];			
 		switch($cmd) {
 			case "ClientConnect:":
+				// 0:06 ClientConnect: 4
 				debug("ClientConnect.", 1);
 				c_connect($time, $args);
 				break;
 			case "ClientUserinfo:":
+				//  0:06 ClientUserinfo: 4 \ip\188.120.11.151 ... \weapmodes\000001112200000200020
 				debug("ClientUserinfo.", 1);
 				c_info($time, $args);
 				break;
 			case "ClientUserinfoChanged:":
+				// 0:06 ClientUserinfoChanged: 4 n\-ANIKI-PaRaMeSHWaR\t\3\r\1\tl\0\a0\151\a1\151\a2\0
 				debug("ClientUserinfoChanged.", 1);
 				c_changed($time, $args);
 				break;
 			case "ClientBegin:":
+				// 0:36 ClientBegin: 4 
 				debug("ClientBegin.", 1);
 				c_begin($time, $args);
 				break;
 			case "ClientDisconnect:":
+				// 6:09 ClientDisconnect: 8
 				debug("ClientDisconnect.", 1);
 				c_disconnect($time, $args);
 				break;
 			case "ShutdownGame:":
+				// 21:26 ShutdownGame:
 				debug("ShutdownGame.", 1);
 				g_shutdown($time);
 				break;
 			case "Item:":
+				// 2:32 Item: 4 ut_weapon_ump45
 				debug("Item.", 1);
 				#g_item($time, $args);
 				break;
 			case "ClientSpawn:":
+				// 72:32 ClientSpawn: 16
 				debug("ClientSpawn.", 1);
 				#c_spawn($time, $args);
 				break;
 			case "SurvivorWinner:":
+				// 1:58 SurvivorWinner: Red
 				debug("SurvivorWinner.", 1);
 				#g_winner($time, $args);
 				break;
 			case "Warmup:":
+				// 0:00 Warmup:
 				debug("Warmup.", 1);
 				#g_warmup($time);
 				break;
-			case "InitAuth:":
-				debug("InitAuth.", 1);
-				#a_init($time, $args);
-				break;
 			case "InitGame:":
+				// 0:00 InitGame: \sv_allowdownload\0\g_matc ... th\0\auth_status\init\g_modversion\4.2.010
 				debug("InitGame.", 1);
 				#g_init($time, $args);
 				break;
 			case "InitRound:":
+				// 1:11 InitRound: \sv_allowdownload\0\g_match ... lePrecip\0\auth\1\auth_status\public\g_modversion\4.2.010
 				debug("InitRound.", 1);
 				#r_init($time, $args);
 				break;
 			case "say:":
+				// 5:18 say: 4 -ANIKI-PaRaMeSHWaR: Lorem i..adasd
 				debug("say.", 1);
 				c_say($time, $args);
 				break;
 			case "sayteam:":
+				// 7:08 sayteam: 6 zabijak:D: 20
 				debug("sayteam.", 1);
 				c_sayteam($time, $args);
 				break;
 			case "Hit:":
+				// 4:00 Hit: 2 16 2 19: ThunderBird hit =lvl6=fMAQWRA in the Helmet
 				debug("Hit.", 1);
 				c_hit($time, $args);
 				break;
 			case "Kill:":
+				// 1:58 Kill: 5 4 19: Freza killed -ANIKI-PaRaMeSHWaR by UT_MOD_LR300
 				debug("Kill.", 1);
 				c_kill($time, $args);
 				break;
+			case "Exit:":
+				// 60:23 Exit: Timelimit hit.
+				debug("Round ended.", 1);
+				#g_exit($time, $args);
+				break;
+			case "red:":
+				// 60:23 red:-41  blue:35
+				debug("Got final Score for Teams.", 1);
+				#g_score($time, $args);
+				break;
+			case "score:":
+				// 60:23 score: 29  ping: 106  client: 16 ruben
+				debug("Got Score for Player.", 1);
+				#c_score($time, $args);
+				break;
+			case "InitAuth:":
+				// 0:00 InitAuth: \auth\0\auth_status\init\auth_cheaters\1\auth_tags\1\auth_notoriety\0\auth_groups\\auth_owners\\auth_verbosity\1
+				debug("InitAuth.", 1);
+				#a_init($time, $args);
+				break;
+			case "AccountValidated:":
+				// 0:03 AccountValidated: 16 -  - 0 - "0"
+				// 0:07 AccountValidated: 4 - parameshwar - -1 - "basic"
+				debug("AccountValidated.", 1);
+				#a_valid($time, $args);
+				break;
+			case "AccountKick:":
+				// 24:47 AccountKick: 18 - Notorcan rejected: bad challenge
+				debug("AccountKick.", 1);
+				#a_kick($time, $args);
+				break;
+			case "AccountRejected:":
+				// 24:34 AccountRejected: 18 -  - "bad challenge"
+				debug("AccountRejected.", 1);
+				#a_reject($time, $args);
+				break;
+			case "Radio:":
+				// 50:59 Radio: 16 - 5 - 1 - "Reception" - "Enemy spotted at Reception"
+				// 51:00 Radio: 16 - 7 - 2 - "Reception" - "I'm going for the flag"
+				// 51:01 Radio: 16 - 5 - 5 - "Reception" - "Incoming!"
+				debug("Radio.", 1);
+				#c_radio($time, $args);
+				break;
 			default:
 				debug("Unknown.", 1);
-				debug("$line", 1);
+				debug($line, 1);
 				break;
 		}
+	} else {
+		// 8:29 Session data initialised for client on slot 0 at 155024873
+		// 0:40 ------------------------------------------------------------
+		debug("Unknown.", 1);
+		debug($line, 1);
 	}
 }
 
