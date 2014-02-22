@@ -22,30 +22,30 @@ function headshot($time, $args) {
 }
 
 function say_hs($id) {
-	global $players, $name_color, $text_color, $alt_color;
+	global $players, $alt_color, $text_color;
 	
 	if ( $players[$id]->headshots == 1 )
-		say($name_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshot");
+		say($alt_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshot");
 	else
-		say($name_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshots");
+		say($alt_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshots");
 }
 
 function tell_hs($id, $hs_id) {
-	global $players, $name_color, $text_color, $alt_color;
+	global $players, $alt_color, $text_color;
 	
 	if ( $players[$hs_id]->headshots == 1 )
-		tell($id, $name_color.$players[$hs_id]->info["name"].$text_color." made ".$alt_color.$players[$hs_id]->headshots.$text_color." headshot");
+		tell($id, $alt_color.$players[$hs_id]->info["name"].$text_color." made ".$alt_color.$players[$hs_id]->headshots.$text_color." headshot");
 	else
-		tell($id, $name_color.$players[$hs_id]->info["name"].$text_color." made ".$alt_color.$players[$hs_id]->headshots.$text_color." headshots");
+		tell($id, $alt_color.$players[$hs_id]->info["name"].$text_color." made ".$alt_color.$players[$hs_id]->headshots.$text_color." headshots");
 }
 
 function write_hs($id) {
-	global $players, $name_color, $text_color, $alt_color;
+	global $players, $alt_color, $text_color;
 	
 	if ( $players[$id]->headshots == 1 )
-		write($name_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshot");
+		write($alt_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshot");
 	else
-		write($name_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshots");
+		write($alt_color.$players[$id]->info["name"].$text_color." made ".$alt_color.$players[$id]->headshots.$text_color." headshots");
 }
 
 function cmd_hs ($id, $args = null) {

@@ -47,26 +47,19 @@ if ( !isset($port) or empty($port) ):
 endif;
 if ( !isset($prefix) or empty($prefix) ):
 	echo("\$prefix is not set.\r\n");
-	echo("^3 used instead.\r\n");
-	$prefix = '^3';
-endif;
-if ( !isset($text_color) or empty($text_color) ):
-	echo("\$text_color is not set.\r\n");
-	echo(YELLOW_COLOR . " used instead.\r\n");
-	$text_color = YELLOW_COLOR;
-endif;
-if ( !isset($name_color) or empty($name_color) ):
-	echo("\$name_color is not set.\r\n");
-	echo(WHITE_COLOR . " used instead.\r\n");
-	$name_color = WHITE_COLOR;
+	echo("^0[^8B^0]^9: used instead.\r\n");
+	$prefix = '^0[^8B^0]^9:';
 endif;
 
+$file = "cfg/colors.php";
+if ( !file_exists($file) )
+	die("'$file' file not found.\r\n");
+require_once($file);
+unset($file);
+
+$text_color = YELLOW_COLOR;
+$alt_color = WHITE_COLOR;
 $prefix = $prefix.$text_color;
-
-if($text_color == WHITE_COLOR)
-	$alt_color = YELLOW_COLOR;
-else
-	$alt_color = WHITE_COLOR;
 
 // Check main functions list
 $file = "cmd/main.php";

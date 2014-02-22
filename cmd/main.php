@@ -17,11 +17,11 @@ function c_connect($time, $args) {
 
 // Player enter the game	
 function c_begin($time, $args) {
-	global $players, $text_color, $name_color;
+	global $players, $text_color, $alt_color;
 	debug("\t\tc_begin()");
 	
 	if( !empty($players[$args]->info["name"]) and !isset($players[$args]->hello) and empty($players[$args]->hello)) {
-		say($text_color."Welcome ".$name_color.$players[$args]->info["name"]);
+		say($text_color."Welcome ".$alt_color.$players[$args]->info["name"]);
 		$players[$args]->hello = 1;
 	}
 	$players[$args]->spree->kill->last	= 0;
