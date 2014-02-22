@@ -14,7 +14,8 @@ class player {
 		$this->spree		= (new spree);
 		$this->info			= array();
 		$this->headshots	= 0;
-		$this->info["n"]	= &$this->info["name"];
+		// ["n"] Doesn't have colors in names
+		//$this->info["n"]	= &$this->info["name"];
 		$this->info["t"]	= &$this->info["team"];
 	}	
 }
