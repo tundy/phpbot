@@ -274,7 +274,7 @@ function grep_user($line) {		// [1]Player ID, [2]VARs
 
 // Get player ID from Name
 function search ($arg, $lower = 0, $color = 0, $id = null) {
-	global $players;
+	global $players, $alt_color, $text_color;
 	
 	if( isset($arg) ) {
 		$found = array();
@@ -297,7 +297,7 @@ function search ($arg, $lower = 0, $color = 0, $id = null) {
 			$msg = "Found players:";
 			foreach ( array_keys($found) as $id )
 			{
-				$msg .= " [".$id."] ".$found[$id];
+				$msg .= " [".$alt_color.$id.$text_color."] ".$found[$id];
 			}
 			if(isset($id) && $players[$id]->info["team"] == TEAM_SPEC)
 				tell($msg);			
@@ -312,9 +312,9 @@ function search ($arg, $lower = 0, $color = 0, $id = null) {
 			if ( !$lower && !$color)
 				return search($arg, 1, 0, $id);
 			elseif ( $lower && !$color)
-				return search($arg, 1, 1, $id);
-			elseif ( $lower && $color)
 				return search($arg, 0, 1, $id);
+			elseif ( !$lower && $color)
+				return search($arg, 1, 1, $id);
 			else
 				say("Player not found.");
 		}
