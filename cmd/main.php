@@ -1,7 +1,7 @@
 <?php
 function c_create($id, $name, $team) {
 	global $players;
-	debug("\t\tc_create()");
+	debug("Creating player[${id}] ${name} / ${team}.", 2);
 	$players[$id] = (new player);
 	$players[$id]->info["n"] = $name;
 	$players[$id]->info["t"] = $team;
@@ -11,14 +11,14 @@ function c_create($id, $name, $team) {
 // what to do if player connect ?
 function c_connect($time, $args) {
 	global $players;
-	debug("\t\tc_connect()");
+	debug("Creating new player[${args}].", 2);
 	$players[$args] = (new player);
 }	
 
 // Player enter the game	
 function c_begin($time, $args) {
 	global $players, $text_color, $alt_color;
-	debug("\t\tc_begin()");
+	debug("Player[${args}] join the game.", 3);
 	
 	if( !empty($players[$args]->info["name"]) and !isset($players[$args]->hello) and empty($players[$args]->hello)) {
 		say($text_color."Welcome ".$alt_color.$players[$args]->info["name"]);
@@ -32,14 +32,14 @@ function c_begin($time, $args) {
 // what to do if player disconnect ?
 function c_disconnect($time, $args) {
 	global $players;
-	debug("\t\tc_disconnect()");
+	debug("Removing player[${args}] from memory.", 2);
 	unset($players[$args]);
 }
 
 // what to do if server shutdown ?
 function g_shutdown($time) {
 	global $players;
-	debug("\t\tg_shutdown()");
+	debug("Map/Server stopped.", 3);
 	if ( isset($players) && is_array($players) )
 		foreach(array_keys($players) as $player)
 			c_disconnect($time, $player);
@@ -47,9 +47,6 @@ function g_shutdown($time) {
 
 function c_hit($time, $args) {
 	global $players, $WEAPON_DAMAGE;
-	debug("\t\tc_hit()");
-	
-	headshot($time, $args);
 	
 	if($grep = grep_hit($args)) {
 		unset($arg);
@@ -58,6 +55,8 @@ function c_hit($time, $args) {
 		$part		= $grep[3];
 		$weapon		= $grep[4];
 		unset($grep);
+		
+		debug("player[${$shooter}] hit player[${target}]", 3);
 			
 		if($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
 			$players[$shooter]->hits->enemy->hit++;
@@ -71,13 +70,12 @@ function c_hit($time, $args) {
 			$players[$target]->dmg->team->got += $WEAPON_DAMAGE[$weapon][$part];
 		}
 	}
+	
+	headshot($time, $args);	
 }
 
 function c_kill($time, $args) {
 	global $players, $WEAPON_KILL;
-	debug("\t\tc_kill()");
-	
-	spree($time, $args);	
 
 	if($grep = grep_kill($args)) {
 		unset($args);
@@ -85,6 +83,8 @@ function c_kill($time, $args) {
 		$target =	$grep[2];
 		$weapon =	$grep[3];
 		unset($grep);
+		
+		debug("player[${$killer}] killed player[${target}]", 3);
 		
 		// Change World feature to SelfKill
 		if ($killer == WORLD or $killer == NON_CLIENT)
@@ -102,16 +102,18 @@ function c_kill($time, $args) {
 			$players[$killer]->kills->team++;
 			$players[$target]->deads->team++;
 		}
-	}
+	}	
+	
+	spree($time, $args);
 }
 		
 function c_changed($time, $arg) {
 	global $players;
-	debug("\t\tc_changed()");
 
 	if($grep = grep_user($arg)) {
 		unset($arg);
 		$id = $grep[1];
+		debug("Player[${$id}] info changed.", 2);
 		$var = explode("\\", $grep[2]);
 		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 		unset($grep);
@@ -130,11 +132,11 @@ function c_changed($time, $arg) {
 
 function c_info($time, $args) {
 	global $players;
-	debug("\t\tc_info()");
 	
 	if($grep = grep_user($args)) {
 		unset($arg);
 		$id = $grep[1];
+		debug("Player[${$id}] info made.", 3);
 		$var = explode("\\", $grep[2]);
 		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 		unset($grep);
@@ -151,9 +153,7 @@ function c_info($time, $args) {
 	}
 }
 
-function c_say($time, $args) {
-	debug("\t\tc_say()");
-	
+function c_say($time, $args) {	
 	if($grep = grep_say($args)) {
 		unset($args);
 		$id = $grep[1];
@@ -161,8 +161,8 @@ function c_say($time, $args) {
 		$msg = $grep[3];
 		unset($grep);
 
-		debug("\t\t\tGOT:");
-		debug($msg);
+		debug("Got new message.", 1);
+		debug($msg, 1);
 
 		$exp_temp = explode(' ', trim($msg));
 		$word_temp = $exp_temp[0];
@@ -174,15 +174,15 @@ function c_say($time, $args) {
 			unset($msg);
 			unset($temp);
 			unset($word_temp);
-			debug("\t\t\tCMD:");
+			debug("It is command.", 2);
 			debug($cmd);
 		} else {
-			debug("It is not command !");
+			debug("It is not command.", 2);
 		}
 
 		if ( isset($args) && isset($cmd) ) {
-			debug("\t\t\targs:");
-			debug($args);
+			debug("Arguemnts:", 3);
+			debug($args, 3);
 		}
 
 		if( isset($cmd) ) {		// if command
@@ -203,32 +203,42 @@ function c_say($time, $args) {
 				}
 			}
 		} else {					// else message
-		}						// do nothing
+		}							// do nothing
 	}
 }
 
 function c_sayteam($time, $args) {
-	debug("\t\tc_sayteam()");
 	if($grep = grep_say($args)) {
 		unset($args);
 		$id = $grep[1];
 		$name = $grep[2];
 		$msg = $grep[3];
 		unset($grep);
-		// if command with arguments
-		if(preg_match("/!(.+) (.+)/", $msg, $grep)) {
-			$cmd = $grep[1];
-			$args = explode(' ', $grep[2]);
-			unset($grep);
-		}
-		// if command without arguments
-		elseif(preg_match("/!(.+)/", $msg, $grep)) {
-			$cmd = $msg;
+
+		debug("Got new team message.", 2);
+		debug($msg, 2);
+
+		$exp_temp = explode(' ', trim($msg));
+		$word_temp = $exp_temp[0];
+		unset($exp_temp[0]);
+		$args = array_merge(array(), $exp_temp);
+		unset($exp_temp);
+		if(preg_match("/!(.+)/", $word_temp, $temp)) {
+			$cmd = $temp[1];
 			unset($msg);
-			unset($grep);
+			unset($temp);
+			unset($word_temp);
+			debug("It is command.");
+			debug($cmd);
+		} else {
+			debug("It is not command.");
 		}
-		// else message
-				
+
+		if ( isset($args) && isset($cmd) ) {
+			debug("Arguemnts:", 3);
+			debug($args, 3);
+		}
+
 		if( isset($cmd) ) {		// if command
 			if(isset($args) )	// if command with arguments
 				switch ($cmd) {

@@ -1,10 +1,28 @@
 <?php
-$options = getopt("v::");
-function debug($log_msg) {
+$options = getopt("q::v::");
+// q = be quiet
+// v = verbose
+
+
+// $lvl = how many v options you have to add for verbose
+function debug($verbose="DEBUG HIT", $lvl=0) {
 	global $options;
-	if(isset($options["v"])) {
-		echo ("\r\n");
-		print_r ($log_msg);
+	
+	if( !isset($options["q"]) ) {
+		if( $lvl == 0 ) {
+				print_r ($log_msg);
+				echo ("\r\n");
+		} elseif(isset($options["v"])) {
+			if( is_array($options["v"]) ) {
+				if( count($options["v"]) <= $lvl ) {
+					print_r ($log_msg);
+					echo ("\r\n");
+				}
+			} elseif( $lvl = 1 ) {
+				print_r ($log_msg);
+				echo ("\r\n");
+			}
+		}
 	}
 }
 
@@ -14,71 +32,88 @@ error_reporting(E_ALL | E_STRICT);
 #### STARTUP // START ####
 
 // Check if this script is runned from CLI
+debug("Checking if you are running script from CLI.", 2);
 if (PHP_SAPI !== 'cli')
 	die("Start this script from console !\r\n");
 
+debug("Loading Configurations.");
 // Check main bot configuration
 $file = "cfg/config.php";
+debug("Loading ${file}.", 2);
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
 unset($file);
 
+// Check colors definitions
+$file = "cfg/colors.php";
+if ( !file_exists($file) )
+debug("Loading ${file}.", 2);
+	die("'$file' file not found.\r\n");
+require_once($file);
+unset($file);
+
+debug("Searching for Log File.");
 // This must always work
+debug("Is set ${log}?", 2);
 if ( !isset($log) or empty($log) )
 	die("\$log file is not set.\r\n");
+debug("Exists ${log}?", 2);
 if ( !file_exists($log))
 	die($log." not found.\r\n");
+debug("Is readable ${log}?", 2);
 if ( !is_readable($log))
 	die("Can't read from ".$log."\r\n");
+debug("Is rcon password set?", 2);
 if ( !isset($rcon) or empty($rcon) )
 	die("\$rcon password is not set.\r\n");
 
 // If not set, use default instead
 if ( !isset($ip) or empty($ip) ):
-	echo("\$ip adress is not set.\r\n");
-	echo("127.0.0.1 used instead.\r\n");
+	debug("\$ip adress is not set.");
+	debug("127.0.0.1 used instead.");
 	$ip = '127.0.0.1';
 endif;
 if ( !isset($port) or empty($port) ):
-	echo("\$port is not set.\r\n");
-	echo("27960 used instead.\r\n");
+	debug("\$port is not set.");
+	debug("27960 used instead.");
 	$port = 27960;
 endif;
 if ( !isset($prefix) or empty($prefix) ):
-	echo("\$prefix is not set.\r\n");
-	echo("^0[^8B^0]^9: used instead.\r\n");
+	debug("\$prefix is not set.");
+	debug("^0[^8B^0]^9: used instead.");
 	$prefix = '^0[^8B^0]^9:';
 endif;
-
-$file = "cfg/colors.php";
-if ( !file_exists($file) )
-	die("'$file' file not found.\r\n");
-require_once($file);
-unset($file);
 
 $text_color = YELLOW_COLOR;
 $alt_color = WHITE_COLOR;
 $prefix = $prefix.$text_color;
 
+debug("Loading Functions.");
 // Check main functions list
 $file = "cmd/main.php";
+debug("Loading ${file}.", 2);
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
 unset($file);
 
 // Include all other functions
-foreach (glob("cmd/*.php") as $file)
+foreach (glob("cmd/*.php") as $file) {
+	debug("Loading ${file}.", 2);
 	require_once $file;
+}
 unset($file);
 
+debug("Loading Classes.");
 // Include all classes
 foreach (glob("class/*.php") as $file)
 	require_once $file;
 unset($file);
 
+debug("Checking Game Version.");
 $file = "games/index.php";
+debug("Loading ${file}.", 2);
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
@@ -92,11 +127,12 @@ loop();
 
 function initialize() {
 	global $log, $lines;
-	debug("* Starting Inicialization.");
+	debug("Starting Inicialization.");
 	
 	$file = new SplFileObject($log);
 	$lines = 0;
 	
+	debug("Seeking to end of Log File.", 1);
 	$file->seek($lines);
 	while (!$file->eof()) {
 		$lines = $file->key();
@@ -104,7 +140,9 @@ function initialize() {
 		if($file->valid())
 			$file->next();
 	}
+	debug("Last line is ${lines}.", 2);
 	
+	debug("Adding already connected players into memmory.", 1);
 	$status = rcon("status");
 	if ( empty($status) )
 		return false;
@@ -116,11 +154,10 @@ function initialize() {
 		unset($status[0]);
 	}
 	
-	$g_blueteamlist = get_cvar("g_blueteamlist");
-	$g_redteamlist = get_cvar("g_redteamlist");
-		
 	$temp_players = array();
 	
+	debug("Searcching for Blue Members.", 2);
+	$g_blueteamlist = get_cvar("g_blueteamlist");	
 	if ( !empty($g_blueteamlist) ) {
 		$g_blueteamlist = str_split($g_blueteamlist);
 		foreach ( $g_blueteamlist as $member) {
@@ -129,6 +166,8 @@ function initialize() {
 		}
 	}
 
+	debug("Searcching for Red Members.", 2);
+	$g_redteamlist = get_cvar("g_redteamlist");
 	if ( !empty($g_redteamlist) ) {
 		$g_redteamlist = str_split($g_redteamlist);
 		foreach ( $g_redteamlist as $member) {
@@ -137,6 +176,7 @@ function initialize() {
 		}
 	}
 	
+	debug("Requesting status from server.", 2);
 	foreach ($status as $player) {
 		$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
 		if(preg_match($pattern, $player, $temp)) {
@@ -154,10 +194,12 @@ function initialize() {
 				$team = $temp_players[$id];
 			
 			unset($temp_players[$id]);
+			debug("Adding already connected player ${id} into memmory.", 2);
 			c_create($id, $name, $team);
 		}
 	}
 	
+	debug("Sending message to server that BOT is online.");
 	say(" ^9BOT ^1S^2t^3a^4r^5t^6e^7d ^8!");
 	
 	unset($temp_players);
@@ -169,7 +211,7 @@ function initialize() {
 function loop() {
 	global $log, $loop, $lines;
 	global $players;
-	debug("* Entered Loop.");
+	debug("Entered Loop.");
 	
 	$file = new SplFileObject($log);
 	$loop = 1;
@@ -189,7 +231,10 @@ function loop() {
 			if($last_line != $lines)
 				decode($line);
 		}
+
+		// Just Debug stuff
 		file_put_contents('bot.log', print_r($players, true));
+
 	}
 }
 
@@ -200,12 +245,14 @@ function loop() {
 // Send message to server
 function out($cmd) {
 	global $server, $ip, $port;
-	debug("Querying Server with:");
-	debug($cmd);
+	debug("Querying Server with:", 1);
+	debug($cmd, 1);
 	
 	$errno = null;
 	$errstr = null;
 	$cmd = "\xFF\xFF\xFF\xFF" . $cmd;										// Every query must start with 4 chars 0xFF
+	debug("Real query to Server:", 3);
+	debug($cmd, 3);
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");
@@ -228,20 +275,23 @@ function out($cmd) {
 	}
 	fclose ($server);
 	
+	debug("Real answer from server:", 3);
+	debug($input, 3);
 	$pattern = "/\xFF\xFF\xFF\xFF.*(\n|\r)/";
 	$replacement = "";
 	$input = preg_replace($pattern, $replacement, $input);
 	
 	if ( empty($input) )
 		return false;	
-	debug("GOT:");
-	debug( trim($input) );
+	debug("Answer from server:", 1);
+	debug(trim($input), 1);
 	return trim($input);
 }
 
 // get cvar value from server
 function get_cvar ($cvar) {	
 	global $rcon;
+	debug("get_cvar(${cvar})", 2);
 	$temp = rcon($cvar);
 		
 	$pattern = "/\".+\"\s+is:\"(.*)\^7\"\s+default:.*/";
@@ -261,23 +311,27 @@ function get_cvar ($cvar) {
 // send command to server
 function rcon($cmd) {
 	global $rcon;
+	debug("rcon(${cmd})", 3);
 	return (out("rcon ".$rcon." ".$cmd));
 }
 
 // send message to chat
 function say($msg) {
 	global $prefix, $sufix;
+	debug("say(${msg})", 2);
 	return (rcon("say ".$prefix.$msg.$sufix));
 }
 
 // send private message to player
 function tell($id, $msg) {
 	global $prefix, $sufix;
+	debug("tell(${id}, ${msg})", 2);
 	return (rcon("tell ".$id." ".$prefix.$msg.$sufix));
 }
 // write message in console
 function write($msg) {
 	global $prefix, $sufix;
+	debug("write(${msg})", 2);
 	return (rcon($prefix.$msg.$sufix));
 }
 
@@ -299,11 +353,14 @@ function grep_logline($line) {
 			$grep[3] = trim($grep[3]);
 		return $grep;
 	}
+	debug("Unknown.", 1);
+	debug($line, 1);
+	return false;
 }
 
 function decode($line) {
-	debug("_____________________");
-	debug("New Line in Log File.");
+	debug("_____________________", 1);
+	debug("New Line in Log File.", 2);
 	if($temp = grep_logline($line)) {
 		$time	= $temp[1];
 		$cmd	= $temp[2];
@@ -311,76 +368,76 @@ function decode($line) {
 			$args	= $temp[3];			
 		switch($cmd) {
 			case "ClientConnect:":
-				debug("\tClientConnect.");
+				debug("ClientConnect.", 1);
 				c_connect($time, $args);
 				break;
 			case "ClientUserinfo:":
-				debug("\tClientUserinfo.");
+				debug("ClientUserinfo.", 1);
 				c_info($time, $args);
 				break;
 			case "ClientUserinfoChanged:":
-				debug("\tClientUserinfoChanged.");
+				debug("ClientUserinfoChanged.", 1);
 				c_changed($time, $args);
 				break;
 			case "ClientBegin:":
-				debug("\tClientBegin.");
+				debug("ClientBegin.", 1);
 				c_begin($time, $args);
 				break;
 			case "ClientDisconnect:":
-				debug("\tClientDisconnect.");
+				debug("ClientDisconnect.", 1);
 				c_disconnect($time, $args);
 				break;
 			case "ShutdownGame:":
-				debug("\tShutdownGame.");
+				debug("ShutdownGame.", 1);
 				g_shutdown($time);
 				break;
 			case "Item:":
-				debug("\tItem.");
+				debug("Item.", 1);
 				#g_item($time, $args);
 				break;
 			case "ClientSpawn:":
-				debug("\tClientSpawn.");
+				debug("ClientSpawn.", 1);
 				#c_spawn($time, $args);
 				break;
 			case "SurvivorWinner:":
-				debug("\tSurvivorWinner.");
+				debug("SurvivorWinner.", 1);
 				#g_winner($time, $args);
 				break;
 			case "Warmup:":
-				debug("\tWarmup.");
+				debug("Warmup.", 1);
 				#g_warmup($time);
 				break;
 			case "InitAuth:":
-				debug("\tInitAuth.");
+				debug("InitAuth.", 1);
 				#a_init($time, $args);
 				break;
 			case "InitGame:":
-				debug("\tInitGame.");
+				debug("InitGame.", 1);
 				#g_init($time, $args);
 				break;
 			case "InitRound:":
-				debug("\tInitRound.");
+				debug("InitRound.", 1);
 				#r_init($time, $args);
 				break;
 			case "say:":
-				debug("\tsay.");
+				debug("say.", 1);
 				c_say($time, $args);
 				break;
 			case "sayteam:":
-				debug("\tsayteam.");
+				debug("sayteam.", 1);
 				c_sayteam($time, $args);
 				break;
 			case "Hit:":
-				debug("\tHit.");
+				debug("Hit.", 1);
 				c_hit($time, $args);
 				break;
 			case "Kill:":
-				debug("\tKill.");
+				debug("Kill.", 1);
 				c_kill($time, $args);
 				break;
 			default:
-				debug("\tUnknown.");
-				debug("\t\t$line");
+				debug("Unknown.", 1);
+				debug("$line", 1);
 				break;
 		}
 	}

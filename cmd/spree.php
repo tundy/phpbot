@@ -3,6 +3,7 @@
 // Killing Spree
 
 $file = "cfg/spree.php";
+debug("Loading ${file}.", 2);
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
@@ -25,7 +26,8 @@ function higest_spree ($killer, $target) {
 function spree ($time, $args) {
 	global $players, $spree_start, $spree_tk, $alt_color, $text_color;
 	global $WEAPON_KILL;
-	debug("\t\tspree()");
+
+	debug("Counting Killing Spree.", 2);
 
 	if($grep = grep_kill($args)) {
 		unset($args);
