@@ -14,11 +14,11 @@ function debug($verbose="DEBUG HIT", $lvl=0) {
 				echo ("\r\n");
 		} elseif(isset($options["v"])) {
 			if( is_array($options["v"]) ) {
-				if( count($options["v"]) <= $lvl ) {
+				if( count($options["v"]) >= $lvl ) {
 					print_r ($verbose);
 					echo ("\r\n");
 				}
-			} elseif( $lvl = 1 ) {
+			} elseif( $lvl == 1 ) {
 				print_r ($verbose);
 				echo ("\r\n");
 			}
@@ -39,7 +39,7 @@ if (PHP_SAPI !== 'cli')
 debug("Loading Configurations.");
 // Check main bot configuration
 $file = "cfg/config.php";
-debug("Loading ${file}.", 2);
+debug("Loading $file.", 2);
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
@@ -47,21 +47,21 @@ unset($file);
 
 // Check colors definitions
 $file = "cfg/colors.php";
+debug("Loading $file.", 2);
 if ( !file_exists($file) )
-debug("Loading ${file}.", 2);
 	die("'$file' file not found.\r\n");
 require_once($file);
 unset($file);
 
 debug("Searching for Log File.");
 // This must always work
-debug("Is set ${log}?", 2);
+debug("Is set $log?", 2);
 if ( !isset($log) or empty($log) )
 	die("\$log file is not set.\r\n");
-debug("Exists ${log}?", 2);
+debug("Exists $log?", 2);
 if ( !file_exists($log))
 	die($log." not found.\r\n");
-debug("Is readable ${log}?", 2);
+debug("Is readable $log?", 2);
 if ( !is_readable($log))
 	die("Can't read from ".$log."\r\n");
 debug("Is rcon password set?", 2);
@@ -92,7 +92,7 @@ $prefix = $prefix.$text_color;
 debug("Loading Functions.");
 // Check main functions list
 $file = "cmd/main.php";
-debug("Loading ${file}.", 2);
+debug("Loading $file.", 2);
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
@@ -100,7 +100,7 @@ unset($file);
 
 // Include all other functions
 foreach (glob("cmd/*.php") as $file) {
-	debug("Loading ${file}.", 2);
+	debug("Loading $file.", 2);
 	require_once $file;
 }
 unset($file);
@@ -113,7 +113,7 @@ unset($file);
 
 debug("Checking Game Version.");
 $file = "games/index.php";
-debug("Loading ${file}.", 2);
+debug("Loading $file.", 2);
 if ( !file_exists($file) )
 	die("'$file' file not found.\r\n");
 require_once($file);
@@ -140,7 +140,7 @@ function initialize() {
 		if($file->valid())
 			$file->next();
 	}
-	debug("Last line is ${lines}.", 2);
+	debug("Last line is $lines.", 2);
 	
 	debug("Adding already connected players into memmory.", 1);
 	$status = rcon("status");
@@ -194,7 +194,7 @@ function initialize() {
 				$team = $temp_players[$id];
 			
 			unset($temp_players[$id]);
-			debug("Adding already connected player ${id} into memmory.", 2);
+			debug("Adding already connected player $id into memmory.", 2);
 			c_create($id, $name, $team);
 		}
 	}

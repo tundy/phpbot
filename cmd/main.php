@@ -1,7 +1,7 @@
 <?php
 function c_create($id, $name, $team) {
 	global $players;
-	debug("Creating player[${id}] ${name} / ${team}.", 2);
+	debug("Creating player[$id] $name / $team.", 2);
 	$players[$id] = (new player);
 	$players[$id]->info["n"] = $name;
 	$players[$id]->info["t"] = $team;
@@ -11,14 +11,14 @@ function c_create($id, $name, $team) {
 // what to do if player connect ?
 function c_connect($time, $args) {
 	global $players;
-	debug("Creating new player[${args}].", 2);
+	debug("Creating new player[$args].", 2);
 	$players[$args] = (new player);
 }	
 
 // Player enter the game	
 function c_begin($time, $args) {
 	global $players, $text_color, $alt_color;
-	debug("Player[${args}] join the game.", 3);
+	debug("Player[$args] join the game.", 3);
 	
 	if( !empty($players[$args]->info["name"]) and !isset($players[$args]->hello) and empty($players[$args]->hello)) {
 		say($text_color."Welcome ".$alt_color.$players[$args]->info["name"]);
@@ -32,7 +32,7 @@ function c_begin($time, $args) {
 // what to do if player disconnect ?
 function c_disconnect($time, $args) {
 	global $players;
-	debug("Removing player[${args}] from memory.", 2);
+	debug("Removing player[$args] from memory.", 2);
 	unset($players[$args]);
 }
 
@@ -49,14 +49,13 @@ function c_hit($time, $args) {
 	global $players, $WEAPON_DAMAGE;
 	
 	if($grep = grep_hit($args)) {
-		unset($arg);
 		$target		= $grep[1];
 		$shooter	= $grep[2];
 		$part		= $grep[3];
 		$weapon		= $grep[4];
 		unset($grep);
 		
-		debug("player[${$shooter}] hit player[${target}]", 3);
+		debug("player[$shooter] hit player[$target]", 3);
 			
 		if($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
 			$players[$shooter]->hits->enemy->hit++;
@@ -78,13 +77,12 @@ function c_kill($time, $args) {
 	global $players, $WEAPON_KILL;
 
 	if($grep = grep_kill($args)) {
-		unset($args);
 		$killer =	$grep[1];
 		$target =	$grep[2];
 		$weapon =	$grep[3];
 		unset($grep);
 		
-		debug("player[${$killer}] killed player[${target}]", 3);
+		debug("player[$killer] killed player[$target]", 3);
 		
 		// Change World feature to SelfKill
 		if ($killer == WORLD or $killer == NON_CLIENT)
@@ -113,7 +111,7 @@ function c_changed($time, $arg) {
 	if($grep = grep_user($arg)) {
 		unset($arg);
 		$id = $grep[1];
-		debug("Player[${$id}] info changed.", 2);
+		debug("Player[$id] info changed.", 2);
 		$var = explode("\\", $grep[2]);
 		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 		unset($grep);
@@ -136,7 +134,7 @@ function c_info($time, $args) {
 	if($grep = grep_user($args)) {
 		unset($arg);
 		$id = $grep[1];
-		debug("Player[${$id}] info made.", 3);
+		debug("Player[$id] info made.", 3);
 		$var = explode("\\", $grep[2]);
 		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 		unset($grep);
