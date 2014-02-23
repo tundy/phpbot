@@ -12,10 +12,12 @@ class player {
 		#$this->games		= (new games);
 		$this->flags		= (new flags);
 		$this->spree		= (new spree);
-		$this->info			= array();
 		$this->headshots	= 0;
+		$this->info			= array();
+		#$this->info["name"]	= "";
 		// ["n"] Doesn't have colors in names
-		//$this->info["n"]	= &$this->info["name"];
+		#$this->info["n"]	= &$this->info["name"];
+		$this->info["team"]	= "";
 		$this->info["t"]	= &$this->info["team"];
 	}	
 }
@@ -24,8 +26,8 @@ class kills {
 	public /*$target, $weapon,*/ $team, $self, $enemy;
 	
 	function kills() {
-		//$this->target	= array();		// Kills on specific player
-		//$this->weapon	= array();		// Kills with specific weapon
+		#$this->target	= array();		// Kills on specific player
+		#$this->weapon	= array();		// Kills with specific weapon
 		$this->team		= 0;			// Team Kills
 		$this->self		= 0;			// Self Kills
 		$this->enemy	= 0;			// Normal Kills
@@ -36,8 +38,8 @@ class deads {
 	public /*$killer, $weapon,*/ $team, $self, $enemy;
 		
 	function deads() {
-		//$this->killer	= array();		// Killed by ...
-		//$this->weapon	= array();		// Killed with ...
+		#$this->killer	= array();		// Killed by ...
+		#$this->weapon	= array();		// Killed with ...
 		$this->team		= 0;			// Team Deads
 		$this->self		= 0;			// Self and World Kills
 		$this->enemy	= 0;			// Normal Deads

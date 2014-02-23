@@ -3,8 +3,8 @@ function c_create($id, $name, $team) {
 	global $players;
 	debug("Creating player[$id] $name / $team.", 2);
 	$players[$id] = (new player);
-	$players[$id]->info["n"] = $name;
-	$players[$id]->info["t"] = $team;
+	$players[$id]->info["name"] = $name;
+	$players[$id]->info["team"] = $team;
 	$players[$id]->hello = 1;
 }	
 
