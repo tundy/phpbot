@@ -359,6 +359,7 @@ function grep_logline($line) {
 function decode($line) {
 	debug("_____________________", 1);
 	debug("New Line in Log File.", 2);
+	debug($line, 4);
 	if($temp = grep_logline($line)) {
 		$time	= $temp[1];
 		$cmd	= $temp[2];
