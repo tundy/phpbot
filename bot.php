@@ -7,7 +7,6 @@ $options = getopt("q::v::");
 // $lvl = how many v options you have to add for verbose
 function debug($verbose="DEBUG HIT", $lvl=0) {
 	global $options;
-	
 	if( !isset($options["q"]) ) {
 		if( $lvl == 0 ) {
 				print_r ($verbose);
@@ -79,15 +78,25 @@ if ( !isset($port) or empty($port) ):
 	debug("27960 used instead.");
 	$port = 27960;
 endif;
-if ( !isset($prefix) or empty($prefix) ):
-	debug("\$prefix is not set.");
+if ( !isset($say_prefix) or empty($say_prefix) ):
+	debug("\$say_prefix is not set.");
 	debug("^0[^8B^0]^9: used instead.");
-	$prefix = '^0[^8B^0]^9:';
+	$say_prefix = '^0[^8B^0]^9: ';
+endif;
+if ( !isset($tell_prefix) or empty($tell_prefix) ):
+	debug("\$tell_prefix is not set.");
+	debug("^0[^8PM^0]^9: used instead.");
+	$tell_prefix = '^0[^8PM^0]^9: ';
 endif;
 
 $text_color = YELLOW_COLOR;
 $alt_color = WHITE_COLOR;
-$prefix = $prefix.$text_color;
+$say_prefix = $say_prefix.$text_color;
+$tell_prefix = $tell_prefix.$text_color;
+rcon("set sv_sayprefix \"" . $say_prefix . "\"");
+rcon("set sv_tellprefix \"" . $tell_prefix . "\"");
+unset($say_prefix);
+unset($tell_prefix);
 
 debug("Loading Functions.");
 // Check main functions list
@@ -234,7 +243,6 @@ function loop() {
 
 		// Just Debug stuff
 		file_put_contents('bot.log', print_r($players, true));
-
 	}
 }
 
@@ -317,22 +325,20 @@ function rcon($cmd) {
 
 // send message to chat
 function say($msg) {
-	global $prefix, $sufix;
 	debug("say(${msg})", 2);
-	return (rcon("say ".$prefix.$msg.$sufix));
+	return (rcon("say ".$msg));
 }
 
 // send private message to player
 function tell($id, $msg) {
-	global $prefix, $sufix;
 	debug("tell(${id}, ${msg})", 2);
-	return (rcon("tell ".$id." ".$prefix.$msg.$sufix));
+	return (rcon("tell ".$id." ".$msg));
 }
 // write message in console
 function write($msg) {
-	global $prefix, $sufix;
+	global $text_color;
 	debug("write(${msg})", 2);
-	return (rcon($prefix.$msg.$sufix));
+	return (rcon($text_color.$msg));
 }
 
 // Input:
@@ -489,9 +495,31 @@ function decode($line) {
 				debug("Radio.", 1);
 				#c_radio($time, $args);
 				break;
+			case "ClientSavePosition:":
+				// 39:46 ClientSavePosition: 4 - -132.564514 - -168.874969 - -3703.875000
+				debug("Radio.", 1);
+				#c_savePos($time, $args);
+				break;
+			case "ClientLoadPosition:":
+				// 39:46 ClientLoadPosition: 4 - -132.564514 - -168.874969 - -3703.875000
+				debug("Radio.", 1);
+				#c_loadPos($time, $args);
+				break;
+			case "Flag:":
+				// 60:37 Flag: 4 2: team_CTF_redflag
+				// 60:41 Flag: 4 2: team_CTF_blueflag
+				// 79:22 Flag: 6 0: team_CTF_blueflag
+				debug("Radio.", 1);
+				#c_flag($time, $args);
+				break;
+			case "FlagCaptureTime:":
+				// 60:37 FlagCaptureTime: 4: 2508600
+				debug("Radio.", 1);
+				#c_flagCap($time, $args);
+				break;
 			default:
-				debug("Unknown.", 1);
-				debug($line, 1);
+				debug("Unknown.");
+				debug($line);
 				break;
 		}
 	} else {
