@@ -56,6 +56,8 @@ function c_hit($time, $args) {
 		unset($grep);
 		
 		debug("player[$shooter] hit player[$target]", 3);
+		debug("player[$shooter] team is ".$players[$shooter]->info["team"], 4);
+		debug("player[$target] team is ".$players[$target]->info["team"], 4);
 			
 		if($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
 			$players[$shooter]->hits->enemy->hit++;
@@ -69,7 +71,6 @@ function c_hit($time, $args) {
 			$players[$target]->dmg->team->got += $WEAPON_DAMAGE[$weapon][$part];
 		}
 	}
-	
 	headshot($time, $args);	
 }
 
@@ -83,6 +84,9 @@ function c_kill($time, $args) {
 		unset($grep);
 		
 		debug("player[$killer] killed player[$target]", 3);
+		debug("player[$killer] team is ".$players[$killer]->info["team"], 4);
+		debug("player[$target] team is ".$players[$target]->info["team"], 4);
+		debug("with ".$WEAPON_KILL[$weapon], 3);
 		
 		// Change World feature to SelfKill
 		if ($killer == WORLD or $killer == NON_CLIENT)
@@ -101,7 +105,6 @@ function c_kill($time, $args) {
 			$players[$target]->deads->team++;
 		}
 	}	
-	
 	spree($time, $args);
 }
 		
