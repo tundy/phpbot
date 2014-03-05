@@ -15,7 +15,6 @@ class player {
 		$this->headshots	= 0;
 		$this->info			= array();
 		#$this->info["name"]	= "";
-		// ["n"] Doesn't have colors in names
 		#$this->info["n"]	= &$this->info["name"];
 		$this->info["team"]	= "";
 		$this->info["t"]	= &$this->info["team"];
