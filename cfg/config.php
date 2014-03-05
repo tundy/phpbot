@@ -1,14 +1,8 @@
 <?php
-$ip				= 'localhost';
+$ip				= '127.0.0.1';
 $port			= 27960;
-$prefix			= '^3';
-$sufix			= '';
-$rcon			= 'rconpassword';
-$log			= '/home/urt/urbanterror/q3ut4/server.log';
-
-define('DB_TYPE', 'mysql');
-define('DB_HOST', '0.0.0.0');
-define('DB_NAME', 'login');
-define('DB_USER', 'root');
-define('DB_PASS', 'mysql');
+$say_prefix		= '';
+$tell_prefix	= '';
+$rcon			= 'rconpw';
+$log			= 'D:\Program Files\Games\UrbanTerror42\q3ut4\games.log';
 ?>
