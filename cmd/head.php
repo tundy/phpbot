@@ -3,7 +3,7 @@
 function headshot($time, $args) {
 	global $players;
 	
-	debug("Was hit headshot?", 2);
+	debug("$time: Was hit headshot?", 2);
 		
 	if($grep = grep_hit($args)) {
 		unset($arg);

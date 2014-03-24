@@ -11,14 +11,14 @@ function c_create($id, $name, $team) {
 // what to do if player connect ?
 function c_connect($time, $args) {
 	global $players;
-	debug("Creating new player[$args].", 2);
+	debug("$time: Creating new player[$args].", 2);
 	$players[$args] = (new player);
 }	
 
 // Player enter the game	
 function c_begin($time, $args) {
 	global $players, $text_color, $alt_color;
-	debug("Player[$args] join the game.", 3);
+	debug("$time: Player[$args] join the game.", 3);
 	
 	if( !empty($players[$args]->info["name"]) and !isset($players[$args]->hello) and empty($players[$args]->hello)) {
 		say($text_color."Welcome ".$alt_color.$players[$args]->info["name"]);
@@ -32,14 +32,14 @@ function c_begin($time, $args) {
 // what to do if player disconnect ?
 function c_disconnect($time, $args) {
 	global $players;
-	debug("Removing player[$args] from memory.", 2);
+	debug("$time: Removing player[$args] from memory.", 2);
 	unset($players[$args]);
 }
 
 // what to do if server shutdown ?
 function g_shutdown($time) {
 	global $players;
-	debug("Map/Server stopped.", 3);
+	debug("$time: Map/Server stopped.", 3);
 	if ( isset($players) && is_array($players) )
 		foreach(array_keys($players) as $player)
 			c_disconnect($time, $player);
@@ -55,9 +55,9 @@ function c_hit($time, $args) {
 		$weapon		= $grep[4];
 		unset($grep);
 		
-		debug("player[$shooter] hit player[$target]", 3);
-		debug("player[$shooter] team is ".$players[$shooter]->info["team"], 4);
-		debug("player[$target] team is ".$players[$target]->info["team"], 4);
+		debug("$time: player[$shooter] hit player[$target]", 3);
+		debug("$time: player[$shooter] team is ".$players[$shooter]->info["team"], 4);
+		debug("$time: player[$target] team is ".$players[$target]->info["team"], 4);
 			
 		if($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
 			$players[$shooter]->hits->enemy->hit++;
@@ -83,15 +83,15 @@ function c_kill($time, $args) {
 		$weapon =	$grep[3];
 		unset($grep);
 		
-		debug("player[$killer] killed player[$target]", 3);
-		debug("player[$killer] team is ".$players[$killer]->info["team"], 4);
-		debug("player[$target] team is ".$players[$target]->info["team"], 4);
-		debug("with ".$WEAPON_KILL[$weapon], 3);
-		
 		// Change World feature to SelfKill
 		if ($killer == WORLD or $killer == NON_CLIENT)
 			$killer = $target;
 			
+		debug("$time: player[$killer] killed player[$target]", 3);
+		debug("$time: player[$killer] team is ".$players[$killer]->info["team"], 4);
+		debug("$time: player[$target] team is ".$players[$target]->info["team"], 4);
+		debug("$time: with ".$WEAPON_KILL[$weapon], 3);
+					
 		if($weapon == UT_MOD_FLAG) {	// Not Kill
 			// do nothing
 		} elseif($killer == $target) {	// Self Kill
@@ -114,7 +114,7 @@ function c_changed($time, $arg) {
 	if($grep = grep_user($arg)) {
 		unset($arg);
 		$id = $grep[1];
-		debug("Player[$id] info changed.", 2);
+		debug("$time: Player[$id] info changed.", 2);
 		$var = explode("\\", $grep[2]);
 		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 		unset($grep);
@@ -137,7 +137,7 @@ function c_info($time, $args) {
 	if($grep = grep_user($args)) {
 		unset($arg);
 		$id = $grep[1];
-		debug("Player[$id] info made.", 3);
+		debug("$time: Player[$id] info made.", 3);
 		$var = explode("\\", $grep[2]);
 		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 		unset($grep);
@@ -162,7 +162,7 @@ function c_say($time, $args) {
 		$msg = $grep[3];
 		unset($grep);
 
-		debug("Got new message.", 1);
+		debug("$time: Got new message.", 1);
 		debug($msg, 1);
 
 		$exp_temp = explode(' ', trim($msg));
@@ -216,7 +216,7 @@ function c_sayteam($time, $args) {
 		$msg = $grep[3];
 		unset($grep);
 
-		debug("Got new team message.", 2);
+		debug("$time: Got new team message.", 2);
 		debug($msg, 2);
 
 		$exp_temp = explode(' ', trim($msg));
@@ -232,7 +232,7 @@ function c_sayteam($time, $args) {
 			debug("It is command.");
 			debug($cmd);
 		} else {
-			debug("It is not command.");
+			debug("It is not command.", 2);
 		}
 
 		if ( isset($args) && isset($cmd) ) {

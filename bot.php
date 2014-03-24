@@ -374,151 +374,151 @@ function decode($line) {
 		switch($cmd) {
 			case "ClientConnect:":
 				// 0:06 ClientConnect: 4
-				debug("ClientConnect.", 1);
+				debug("$time: ClientConnect.", 1);
 				c_connect($time, $args);
 				break;
 			case "ClientUserinfo:":
 				//  0:06 ClientUserinfo: 4 \ip\188.120.11.151 ... \weapmodes\000001112200000200020
-				debug("ClientUserinfo.", 1);
+				debug("$time: ClientUserinfo.", 1);
 				c_info($time, $args);
 				break;
 			case "ClientUserinfoChanged:":
 				// 0:06 ClientUserinfoChanged: 4 n\-ANIKI-PaRaMeSHWaR\t\3\r\1\tl\0\a0\151\a1\151\a2\0
-				debug("ClientUserinfoChanged.", 1);
+				debug("$time: ClientUserinfoChanged.", 1);
 				c_changed($time, $args);
 				break;
 			case "ClientBegin:":
 				// 0:36 ClientBegin: 4 
-				debug("ClientBegin.", 1);
+				debug("$time: ClientBegin.", 1);
 				c_begin($time, $args);
 				break;
 			case "ClientDisconnect:":
 				// 6:09 ClientDisconnect: 8
-				debug("ClientDisconnect.", 1);
+				debug("$time: ClientDisconnect.", 1);
 				c_disconnect($time, $args);
 				break;
 			case "ShutdownGame:":
 				// 21:26 ShutdownGame:
-				debug("ShutdownGame.", 1);
+				debug("$time: ShutdownGame.", 1);
 				g_shutdown($time);
 				break;
 			case "Item:":
 				// 2:32 Item: 4 ut_weapon_ump45
-				debug("Item.", 1);
+				debug("$time: Item.", 1);
 				#g_item($time, $args);
 				break;
 			case "ClientSpawn:":
 				// 72:32 ClientSpawn: 16
-				debug("ClientSpawn.", 1);
+				debug("$time: ClientSpawn.", 1);
 				#c_spawn($time, $args);
 				break;
 			case "SurvivorWinner:":
 				// 1:58 SurvivorWinner: Red
-				debug("SurvivorWinner.", 1);
+				debug("$time: SurvivorWinner.", 1);
 				#g_winner($time, $args);
 				break;
 			case "Warmup:":
 				// 0:00 Warmup:
-				debug("Warmup.", 1);
+				debug("$time: Warmup.", 1);
 				#g_warmup($time);
 				break;
 			case "InitGame:":
 				// 0:00 InitGame: \sv_allowdownload\0\g_matc ... th\0\auth_status\init\g_modversion\4.2.010
-				debug("InitGame.", 1);
+				debug("$time: InitGame.", 1);
 				#g_init($time, $args);
 				break;
 			case "InitRound:":
 				// 1:11 InitRound: \sv_allowdownload\0\g_match ... lePrecip\0\auth\1\auth_status\public\g_modversion\4.2.010
-				debug("InitRound.", 1);
+				debug("$time: InitRound.", 1);
 				#r_init($time, $args);
 				break;
 			case "say:":
 				// 5:18 say: 4 -ANIKI-PaRaMeSHWaR: Lorem i..adasd
-				debug("say.", 1);
+				debug("$time: say.", 1);
 				c_say($time, $args);
 				break;
 			case "sayteam:":
 				// 7:08 sayteam: 6 zabijak:D: 20
-				debug("sayteam.", 1);
+				debug("$time: sayteam.", 1);
 				c_sayteam($time, $args);
 				break;
 			case "Hit:":
 				// 4:00 Hit: 2 16 2 19: ThunderBird hit =lvl6=fMAQWRA in the Helmet
-				debug("Hit.", 1);
+				debug("$time: Hit.", 1);
 				c_hit($time, $args);
 				break;
 			case "Kill:":
 				// 1:58 Kill: 5 4 19: Freza killed -ANIKI-PaRaMeSHWaR by UT_MOD_LR300
-				debug("Kill.", 1);
+				debug("$time: Kill.", 1);
 				c_kill($time, $args);
 				break;
 			case "Exit:":
 				// 60:23 Exit: Timelimit hit.
-				debug("Round ended.", 1);
+				debug("$time: Round ended.", 1);
 				#g_exit($time, $args);
 				break;
 			case "red:":
 				// 60:23 red:-41  blue:35
-				debug("Got final Score for Teams.", 1);
+				debug("$time: Got final Score for Teams.", 1);
 				#g_score($time, $args);
 				break;
 			case "score:":
 				// 60:23 score: 29  ping: 106  client: 16 ruben
-				debug("Got Score for Player.", 1);
+				debug("$time: Got Score for Player.", 1);
 				#c_score($time, $args);
 				break;
 			case "InitAuth:":
 				// 0:00 InitAuth: \auth\0\auth_status\init\auth_cheaters\1\auth_tags\1\auth_notoriety\0\auth_groups\\auth_owners\\auth_verbosity\1
-				debug("InitAuth.", 1);
+				debug("$time: InitAuth.", 1);
 				#a_init($time, $args);
 				break;
 			case "AccountValidated:":
 				// 0:03 AccountValidated: 16 -  - 0 - "0"
 				// 0:07 AccountValidated: 4 - parameshwar - -1 - "basic"
-				debug("AccountValidated.", 1);
+				debug("$time: AccountValidated.", 1);
 				#a_valid($time, $args);
 				break;
 			case "AccountKick:":
 				// 24:47 AccountKick: 18 - Notorcan rejected: bad challenge
-				debug("AccountKick.", 1);
+				debug("$time: AccountKick.", 1);
 				#a_kick($time, $args);
 				break;
 			case "AccountRejected:":
 				// 24:34 AccountRejected: 18 -  - "bad challenge"
-				debug("AccountRejected.", 1);
+				debug("$time: AccountRejected.", 1);
 				#a_reject($time, $args);
 				break;
 			case "Radio:":
 				// 50:59 Radio: 16 - 5 - 1 - "Reception" - "Enemy spotted at Reception"
 				// 51:00 Radio: 16 - 7 - 2 - "Reception" - "I'm going for the flag"
 				// 51:01 Radio: 16 - 5 - 5 - "Reception" - "Incoming!"
-				debug("Radio.", 1);
+				debug("$time: Radio.", 1);
 				#c_radio($time, $args);
 				break;
 			case "ClientSavePosition:":
 				// 39:46 ClientSavePosition: 4 - -132.564514 - -168.874969 - -3703.875000
-				debug("Radio.", 1);
+				debug("$time: ClientSavePosition.", 1);
 				#c_savePos($time, $args);
 				break;
 			case "ClientLoadPosition:":
 				// 39:46 ClientLoadPosition: 4 - -132.564514 - -168.874969 - -3703.875000
-				debug("Radio.", 1);
+				debug("$time: ClientLoadPosition.", 1);
 				#c_loadPos($time, $args);
 				break;
 			case "Flag:":
 				// 60:37 Flag: 4 2: team_CTF_redflag
 				// 60:41 Flag: 4 2: team_CTF_blueflag
 				// 79:22 Flag: 6 0: team_CTF_blueflag
-				debug("Radio.", 1);
+				debug("$time: Flag.", 1);
 				#c_flag($time, $args);
 				break;
 			case "FlagCaptureTime:":
 				// 60:37 FlagCaptureTime: 4: 2508600
-				debug("Radio.", 1);
+				debug("$time: FlagCaptureTime.", 1);
 				#c_flagCap($time, $args);
 				break;
 			default:
-				debug("Unknown.");
+				debug("$time: Unknown.");
 				debug($line);
 				break;
 		}
