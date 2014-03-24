@@ -35,7 +35,8 @@ define('UT_MOD_SUICIDE', 29);
 define('UT_MOD_AK103', 30);
 define('UT_MOD_SPLODED', 31);
 define('UT_MOD_SLAPPED', 32);
-define('UT_MOD_NEGEV', 35);
+#define('UT_MOD_NEGEV', 35);
+define('UT_MOD_NEGEV', 36);
 define('UT_MOD_HK69_HIT', 37);
 define('UT_MOD_M4', 38);
 define('UT_MOD_GLOCK', 39);
@@ -86,6 +87,7 @@ $WEAPON_KILL[UT_MOD_FLAG] = "Exploding flag";
 $WEAPON_KILL[UT_MOD_GOOMBA] = "Curb Stomped";
 
 // hit_weapon
+define('HIT_UNKNOWN',0);
 define('HIT_KNIFE',1);
 define('HIT_BERETTA',2);
 define('HIT_DEAGLE',3);
@@ -100,9 +102,9 @@ define('HIT_AK103',15);
 define('HIT_NEGEV',17);
 define('HIT_M4',19);
 define('HIT_GLOCK',20);
-define('HIT_COLT1911',21);	// Not sure
-define('HIT_MAC',22);		// Not sure
-define('HIT_KICKED',23);	// Not sure
+define('HIT_COLT1911',21);
+define('HIT_MAC',22);
+define('HIT_KICKED',24);
 define('HIT_KNIFE_THROWN',25);
 
 // hit_part
