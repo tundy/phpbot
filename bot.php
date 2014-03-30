@@ -119,6 +119,7 @@ unset($file);
 debug("Loading Classes.");
 // Include all classes
 foreach (glob("class/*.php") as $file)
+	debug("Loading $file.", 2);
 	require_once $file;
 unset($file);
 
@@ -229,6 +230,7 @@ function loop() {
 
 	// Loop that will scan log file forever
 	while ($loop) {
+		time_sleep_until(microtime(true)+0.2);
 		$last_line = -1;
 		$file->seek($lines);
 		while (!$file->eof()) {
@@ -261,8 +263,6 @@ function out($cmd) {
 	$errno = null;
 	$errstr = null;
 	$cmd = "\xFF\xFF\xFF\xFF" . $cmd;										// Every query must start with 4 chars 0xFF
-	debug("Real query to Server:", 3);
-	debug($cmd, 3);
 	$server = fsockopen('udp://' . $ip, $port, $errno, $errstr, 1);
 	if (!$server)
 		die ("Unable to connect. Error $errno - $errstr\n");
@@ -285,14 +285,17 @@ function out($cmd) {
 	}
 	fclose ($server);
 	
-	debug("Real answer from server:", 3);
-	debug($input, 3);
+	$temp = $input;
 	$pattern = "/\xFF\xFF\xFF\xFF.*(\n|\r)/";
 	$replacement = "";
 	$input = preg_replace($pattern, $replacement, $input);
 	
-	if ( empty($input) )
+	if ( empty($input) ) {
+		debug("Answer from server:", 1);
+		debug($temp, 1);
+		unset($temp);
 		return false;	
+	}
 	debug("Answer from server:", 1);
 	debug(trim($input), 1);
 	return trim($input);
@@ -321,25 +324,25 @@ function get_cvar ($cvar) {
 // send command to server
 function rcon($cmd) {
 	global $rcon;
-	debug("rcon(${cmd})", 3);
+	debug("rcon(${cmd})", 4);
 	return (out("rcon ".$rcon." ".$cmd));
 }
 
 // send message to chat
 function say($msg) {
-	debug("say(${msg})", 2);
+	debug("say(${msg})", 3);
 	return (rcon("say ".$msg));
 }
 
 // send private message to player
 function tell($id, $msg) {
-	debug("tell(${id}, ${msg})", 2);
+	debug("tell(${id}, ${msg})", 3);
 	return (rcon("tell ".$id." ".$msg));
 }
 // write message in console
 function write($msg) {
 	global $text_color;
-	debug("write(${msg})", 2);
+	debug("write(${msg})", 3);
 	return (rcon($text_color.$msg));
 }
 
