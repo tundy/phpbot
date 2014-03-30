@@ -14,6 +14,9 @@ function c_connect($time, $args) {
 	debug("$time: Creating new player[$args].", 2);
 	if( !isset($players[$args]) )
 		$players[$args] = (new player);
+	else
+		debug("$time: player[$args] already exist.", 2);
+	
 }	
 
 // Player enter the game	
