@@ -47,7 +47,7 @@ function g_shutdown($time) {
 }
 
 function c_hit($time, $args) {
-	global $players, $WEAPON_DAMAGE;
+	global $players, $WEAPON_DAMAGE, $WEAPON_HIT, $BODY_PART;
 	
 	if($grep = grep_hit($args)) {
 		$target		= $grep[1];
