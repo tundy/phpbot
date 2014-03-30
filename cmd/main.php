@@ -12,7 +12,8 @@ function c_create($id, $name, $team) {
 function c_connect($time, $args) {
 	global $players;
 	debug("$time: Creating new player[$args].", 2);
-	$players[$args] = (new player);
+	if( !isset($players[$args]) )
+		$players[$args] = (new player);
 }	
 
 // Player enter the game	
@@ -58,6 +59,8 @@ function c_hit($time, $args) {
 		debug("$time: player[$shooter] hit player[$target]", 3);
 		debug("$time: player[$shooter] team is ".$players[$shooter]->info["team"], 4);
 		debug("$time: player[$target] team is ".$players[$target]->info["team"], 4);
+		debug("$time: with ".$WEAPON_HIT[$weapon], 3);
+		debug("$time: into ".$BODY_PART[$part], 3);
 			
 		if($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
 			$players[$shooter]->hits->enemy->hit++;
