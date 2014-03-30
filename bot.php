@@ -3,7 +3,6 @@ $options = getopt("q::v::");
 // q = be quiet
 // v = verbose
 
-
 // $lvl = how many v options you have to add for verbose
 function debug($verbose="DEBUG HIT", $lvl=0) {
 	global $options;
@@ -341,13 +340,13 @@ function write($msg) {
 	return (rcon($text_color.$msg));
 }
 
+function grep_logline($line) {
 // Input:
 // 43:45 ClientConnect: 1
 // Output:
 // [1] = Time in seconds	(2625)
 // [2] = Command			('ClientConnect:')
 // [3] = Arguments			('1')
-function grep_logline($line) {
 	$pattern=("/([0-9]+:[0-9]{2})([a-zA-Z ]+:)(.*)/");
 	if(preg_match($pattern, $line, $grep)) {
 		$grep[1] = trim($grep[1]);
