@@ -1,7 +1,7 @@
 <?php
 function c_create($id, $name, $team) {
-	global $players;
-	debug("Creating player[$id] $name / $team.", 2);
+	global $players, $TEAM;
+	debug("Creating player[$id] $name / " . $TEAM[$team], 2);
 	$players[$id] = (new player);
 	$players[$id]->info["name"] = $name;
 	$players[$id]->info["team"] = $team;
@@ -89,15 +89,18 @@ function c_kill($time, $args) {
 		$weapon =	$grep[3];
 		unset($grep);
 		
+		debug("$time: player[$killer] killed player[$target]", 3);
+		if( isset($players[$killer]) )
+			debug("$time: player[$killer] team is ".$players[$killer]->info["team"], 4);
+		else
+			debug("$time: unknown player, probably World Feature.", 3);
+		debug("$time: player[$target] team is ".$players[$target]->info["team"], 4);
+		debug("$time: with ".$WEAPON_KILL[$weapon], 3);
+
 		// Change World feature to SelfKill
 		if ($killer == WORLD or $killer == NON_CLIENT)
 			$killer = $target;
 			
-		debug("$time: player[$killer] killed player[$target]", 3);
-		debug("$time: player[$killer] team is ".$players[$killer]->info["team"], 4);
-		debug("$time: player[$target] team is ".$players[$target]->info["team"], 4);
-		debug("$time: with ".$WEAPON_KILL[$weapon], 3);
-					
 		if($weapon == UT_MOD_FLAG) {	// Not Kill
 			// do nothing
 		} elseif($killer == $target) {	// Self Kill
