@@ -8,15 +8,18 @@ function debug($verbose="DEBUG HIT", $lvl=0) {
 	global $options;
 	if( !isset($options["q"]) ) {
 		if( $lvl == 0 ) {
+				echo ($lvl . ") ");
 				print_r ($verbose);
 				echo ("\r\n");
 		} elseif(isset($options["v"])) {
 			if( is_array($options["v"]) ) {
 				if( count($options["v"]) >= $lvl ) {
+					echo ($lvl . ") ");
 					print_r ($verbose);
 					echo ("\r\n");
 				}
 			} elseif( $lvl == 1 ) {
+				echo ($lvl . ") ");
 				print_r ($verbose);
 				echo ("\r\n");
 			}
