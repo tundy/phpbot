@@ -3,8 +3,6 @@
 function cmd_chat($id, $args) {
 	global $players, $alt_color, $text_color;
 
-	debug("Someone used !!.", 2);
-	
 	if( isset($args) ) {
 		if($players[$id]->info["team"] == TEAM_SPEC) {	// You have to be spectator
 			$msg = implode(" ", $args);

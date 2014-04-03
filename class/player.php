@@ -2,7 +2,7 @@
 
 class player {
 	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $spree, $flags, $headshots;
-	
+
 	function player() {
 		$this->kills		= (new kills);
 		$this->deads		= (new deads);
@@ -18,12 +18,12 @@ class player {
 		#$this->info["n"]	= &$this->info["name"];
 		$this->info["team"]	= "";
 		$this->info["t"]	= &$this->info["team"];
-	}	
+	}
 }
 
 class kills {
 	public /*$target, $weapon,*/ $team, $self, $enemy;
-	
+
 	function kills() {
 		#$this->target	= array();		// Kills on specific player
 		#$this->weapon	= array();		// Kills with specific weapon
@@ -35,7 +35,7 @@ class kills {
 
 class deads {
 	public /*$killer, $weapon,*/ $team, $self, $enemy;
-		
+
 	function deads() {
 		#$this->killer	= array();		// Killed by ...
 		#$this->weapon	= array();		// Killed with ...
@@ -69,7 +69,7 @@ class hits {
 
 class spree {
 	public $kill, $dead, $flag;
-		
+
 	function spree() {
 		$this->kill				= new stdClass();
 		$this->kill->last		= 0;			// Killing spree
@@ -85,7 +85,7 @@ class spree {
 
 class flags {
 	public $captured, $saved;
-		
+
 	function flags() {
 		$this->captured		= 0;			// Captured flags
 		$this->saved		= 0;			// Saved flags
@@ -94,7 +94,7 @@ class flags {
 
 class rounds {
 	public $won, $draw, $lost;
-		
+
 	function rounds() {
 		$this->won		= 0;			// Won games
 		$this->lost		= 0;			// Lost games
