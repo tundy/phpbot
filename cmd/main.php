@@ -11,18 +11,18 @@ function c_create($id, $name, $team) {
 // what to do if player connect ?
 function c_connect($time, $args) {
 	global $players;
-	echo("$time: Creating new player[${args}].\r\n");
+	echo("Creating new player[${args}].\r\n");
 	if( !isset($players[$args]) )
 		$players[$args] = (new player);
 	else
-		echo("$time: player[${args}] already exist.\r\n");
+		echo("player[${args}] already exist.\r\n");
 
 }
 
 // Player enter the game
 function c_begin($time, $args) {
 	global $players, $text_color, $alt_color;
-	echo("$time: Player[${args}] join the game.\r\n");
+	echo("Player[${args}] join the game.\r\n");
 
 	if( !empty($players[$args]->info["name"]) and !isset($players[$args]->hello) and empty($players[$args]->hello)) {
 		say($text_color."Welcome ".$alt_color.$players[$args]->info["name"]);
@@ -36,14 +36,14 @@ function c_begin($time, $args) {
 // what to do if player disconnect ?
 function c_disconnect($time, $args) {
 	global $players;
-	echo("$time: Removing player[${args}] from memory.\r\n");
+	echo("Removing player[${args}] from memory.\r\n");
 	unset($players[$args]);
 }
 
 // what to do if server shutdown ?
 function g_shutdown($time) {
 	global $players;
-	echo("$time: Map/Server stopped.\r\n");
+	echo("Map/Server stopped.\r\n");
 	if ( isset($players) && is_array($players) )
 		foreach(array_keys($players) as $player)
 			c_disconnect($time, $player);
@@ -61,11 +61,11 @@ function c_hit($time, $args) {
 
 
 
-		echo("$time: player[${shooter}] ( ");
+		echo("player[${shooter}] (");
 		echo($TEAM[$players[$shooter]->info["team"]]);
-		echo(" ) hit player[${target}] ( ");
+		echo(") hit player[${target}] (");
 		echo($TEAM[$players[$target]->info["team"]]);
-		echo(" ) ".$WEAPON_HIT[$weapon]);
+		echo(") ".$WEAPON_HIT[$weapon]);
 		echo(" | ".$BODY_PART[$part]."\r\n");
 
 		if($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
@@ -84,7 +84,7 @@ function c_hit($time, $args) {
 }
 
 function c_kill($time, $args) {
-	global $players, $WEAPON_KILL;
+	global $players, $WEAPON_KILL, $TEAM;
 
 	if($grep = grep_kill($args)) {
 		$killer =	$grep[1];
@@ -92,15 +92,15 @@ function c_kill($time, $args) {
 		$weapon =	$grep[3];
 		unset($grep);
 
-		echo("$time: player[$killer] ( ");
+		echo("player[$killer] (");
 		if( isset($players[$killer]) )
 			echo($TEAM[$players[$killer]->info["team"]]);
 		else
 			echo("World\r\n");
 
-		echo(" ) killed player[$target] ( ");
+		echo(") > ".$WEAPON_KILL[$weapon]." > player[$target] (");
 		echo($TEAM[$players[$target]->info["team"]]);
-		echo(" | ".$WEAPON_KILL[$weapon]."\r\n");
+		echo(")\r\n");
 
 		// Change World feature to SelfKill
 		if ($killer == WORLD or $killer == NON_CLIENT)
@@ -128,7 +128,7 @@ function c_changed($time, $arg) {
 	if($grep = grep_user($arg)) {
 		unset($arg);
 		$id = $grep[1];
-		echo("$time: Player[${id}] info changed.\r\n");
+		echo("Player[${id}] info changed.\r\n");
 		$var = explode("\\", $grep[2]);
 		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 		unset($grep);
@@ -151,7 +151,7 @@ function c_info($time, $args) {
 	if($grep = grep_user($args)) {
 		unset($arg);
 		$id = $grep[1];
-		echo("$time: Player[${id}] info made.\r\n");
+		echo("Player[${id}] info made.\r\n");
 		$var = explode("\\", $grep[2]);
 		$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 		unset($grep);
@@ -176,7 +176,7 @@ function c_say($time, $args) {
 		$msg = $grep[3];
 		unset($grep);
 
-		echo("$time: Got new message. | ");
+		echo("Got new message. | ");
 		echo($msg."\r\n");
 
 		$exp_temp = explode(' ', trim($msg));
@@ -200,6 +200,8 @@ function c_say($time, $args) {
 					case "hs":
 					case "headshot":
 					case "headshots":	cmd_hs($id, $args); break;
+					case "h":
+					case "help":		cmd_help($id, $args); break;
 					default:			break;
 				}
 			} else {				// else command without arguments
@@ -207,6 +209,8 @@ function c_say($time, $args) {
 					case "hs":
 					case "headshot":
 					case "headshots":	cmd_hs($id, null); break;
+					case "h":
+					case "help":		cmd_help($id, null); break;
 					default:			break;
 				}
 			}
@@ -223,7 +227,7 @@ function c_sayteam($time, $args) {
 		$msg = $grep[3];
 		unset($grep);
 
-		echo("$time: Got new team message. | ");
+		echo("Got new team message. | ");
 		echo($msg."\r\n");
 
 		$exp_temp = explode(' ', trim($msg));
