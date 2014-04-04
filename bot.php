@@ -1,39 +1,21 @@
 <?php
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
-bot_initialize();
-bot_loop();
-
-// write STDOUT to $logfile
-function debug($arg = null) {
-	global $logfile;
-	file_put_contents($logfile, ob_get_contents(), FILE_APPEND);
-	if($arg == 'kill' || $arg == 'die' || $arg == 'stop' || $arg == 'quit' || $arg == 'exit'):
-		ob_flush();
-		ob_end_clean();
-		die("Unexpectable Error!\r\n");
-	elseif ($arg):
-		ob_flush();
-	endif;
-	ob_end_clean();
-	ob_start();
-	return true;
-}
-
-// Load all configurations and get current server information
-function bot_initialize() {
-	global $log, $lines;
 
 	if(PHP_SAPI !== 'cli')
 		die("Start this script from console!\r\n");
 	$file = "cfg/config.php";
 	if( !file_exists($file) )
 		die("'${file}' file not found.\r\n");
-	echo("Including ${file}.\r\n");
-	if( (include_once $file) === false )
-		debug('die');
+	require_once($file);
 	unset($file);
 
+	if( !isset($logfile) or empty($logfile) ):
+		echo("\$logfile adress is not set.\r\n");
+		echo("'bot.log' used instead.\r\n");
+		$logfile = 'bot.log';
+	endif;
+	
 	ob_start();
 	file_put_contents($logfile, '');
 	echo("Loading Configurations.\r\n");
@@ -91,12 +73,12 @@ function bot_initialize() {
 	endif;
 	if( !isset($say_prefix) or empty($say_prefix) ):
 		echo("\$say_prefix is not set.\r\n");
-		echo("^0[^8B^0]^9: used instead.\r\n");
+		echo("'^0[^8B^0]^9: ' used instead.\r\n");
 		$say_prefix = '^0[^8B^0]^9: ';
 	endif;
 	if( !isset($tell_prefix) or empty($tell_prefix) ):
 		echo("\$tell_prefix is not set.\r\n");
-		echo("^0[^8PM^0]^9: used instead.\r\n");
+		echo("'^0[^8PM^0]^9: ' used instead.\r\n");
 		$tell_prefix = '^0[^8PM^0]^9: ';
 	endif;
 	debug();
@@ -153,6 +135,29 @@ function bot_initialize() {
 	if( (include_once $file) === false )
 		debug('die');
 	unset($file);
+
+bot_initialize();
+bot_loop();
+
+// write STDOUT to $logfile
+function debug($arg = null) {
+	global $logfile;
+	file_put_contents($logfile, ob_get_contents(), FILE_APPEND);
+	if($arg == 'kill' || $arg == 'die' || $arg == 'stop' || $arg == 'quit' || $arg == 'exit'):
+		ob_flush();
+		ob_end_clean();
+		die("Unexpectable Error!\r\n");
+	elseif ($arg):
+		ob_flush();
+	endif;
+	ob_end_clean();
+	ob_start();
+	return true;
+}
+
+// Load all configurations and get current server information
+function bot_initialize() {
+	global $log, $lines;
 
 	echo("Starting Initialization.\r\n");
 	debug();
@@ -270,6 +275,7 @@ function out($cmd) {
 	global $server, $ip, $port;
 	echo("Querying Server with: ");
 	echo($cmd);
+	echo("\r\n");
 
 	$errno = null;
 	$errstr = null;
@@ -300,13 +306,13 @@ function out($cmd) {
 	$replacement = "";
 	$input = preg_replace($pattern, $replacement, $input);
 
-	if ( empty($input) ) {
+	if( empty($input) ):
 		echo("Answer from server: ");
 		print_r($temp);
-		echo("\r\n");
+		echo("\\0\r\n");
 		unset($temp);
 		return false;
-	}
+	endif;
 	echo("Answer from server: ");
 	print_r(trim($input));
 	echo("\r\n");
@@ -523,7 +529,7 @@ function decode($line) {
 				// 60:37 Flag: 4 2: team_CTF_redflag
 				// 60:41 Flag: 4 2: team_CTF_blueflag
 				// 79:22 Flag: 6 0: team_CTF_blueflag
-				echo("$time: Flag.", 1);
+				echo("$time: Flag.\r\n");
 				#c_flag($time, $args);
 				break;
 			case "FlagCaptureTime:":
@@ -532,14 +538,14 @@ function decode($line) {
 				#c_flagCap($time, $args);
 				break;
 			default:
-				echo("$time: Unknown.\r\n");
+				echo("$time: Unknown command.\r\n");
 				echo($line);
 				break;
 		}
 	} else {
 		// 8:29 Session data initialised for client on slot 0 at 155024873
 		// 0:40 ------------------------------------------------------------
-		echo("Unknown.\r\n");
+		echo("Unable to decode.\r\n");
 		echo($line);
 	}
 }
