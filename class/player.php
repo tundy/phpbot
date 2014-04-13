@@ -1,7 +1,7 @@
 <?php
 
 class player {
-	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $spree, $flags, $headshots;
+	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $spree, $flags;
 
 	function player() {
 		$this->kills		= (new kills);
@@ -12,7 +12,6 @@ class player {
 		#$this->games		= (new games);
 		$this->flags		= (new flags);
 		$this->spree		= (new spree);
-		$this->headshots	= 0;
 		$this->info			= array();
 		#$this->info["name"]	= "";
 		#$this->info["n"]	= &$this->info["name"];
