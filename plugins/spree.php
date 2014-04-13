@@ -12,6 +12,11 @@ if( !function_exists('higest_spree') ) {
 		debug('die');
 	unset($file);
 	debug();
+	
+	global $players;
+	if ( isset($players) && is_array($players) )
+		foreach(array_keys($players) as $id)
+			$players[$id]->spree = (new spree);
 
 	function higest_spree($killer, $target) {
 		global $players;
@@ -100,6 +105,9 @@ if( !function_exists('higest_spree') ) {
 }
 
 switch($cmd):
+	case "ClientConnect:":
+		$players[$args]->spree = (new spree);
+		break;
 	case "Kill:":
 		spree($args);
 		break;

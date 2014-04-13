@@ -1,7 +1,7 @@
 <?php
 
 class player {
-	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $spree, $flags;
+	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $flags;
 
 	function player() {
 		$this->kills		= (new kills);
@@ -11,7 +11,6 @@ class player {
 		$this->rounds		= (new rounds);
 		#$this->games		= (new games);
 		$this->flags		= (new flags);
-		$this->spree		= (new spree);
 		$this->info			= array();
 		#$this->info["name"]	= "";
 		#$this->info["n"]	= &$this->info["name"];
@@ -63,22 +62,6 @@ class hits {
 		$this->part			= new stdClass();
 		$this->part->got	= array();	// Was hit to specific part of body
 		$this->part->hit	= array();	// Hit to specific part of body*/
-	}
-}
-
-class spree {
-	public $kill, $dead, $flag;
-
-	function spree() {
-		$this->kill				= new stdClass();
-		$this->kill->last		= 0;			// Killing spree
-		$this->kill->high		= 0;			// Killing best
-		$this->dead				= new stdClass();
-		$this->dead->last		= 0;			// Dead spree (longest)
-		$this->dead->high		= 0;			// Dead spree worst (longest)
-		$this->flag				= new stdClass();
-		$this->flag->save		= 0;			// Saved Flags without dead
-		$this->flag->capture	= 0;			// Captured Flags without dead
 	}
 }
 
