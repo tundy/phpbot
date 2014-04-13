@@ -118,10 +118,11 @@ error_reporting(E_ALL | E_STRICT);
 	echo("Loading Classes.\r\n");
 	debug();
 	// Include all classes
-	foreach (glob("class/*.php") as $file)
+	foreach (glob("class/*.php") as $file):
 		echo("Including ${file}.\r\n");
 		if( (include_once $file) === false )
 			debug('die');
+	endforeach;
 	unset($file);
 
 	echo("Checking Game Version.\r\n");
