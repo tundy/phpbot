@@ -213,6 +213,15 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+# phpbot
 config.php
 config - copy.php
 config - Copy.php
+start.sh
+restart.sh
+stop.sh
+temp.php
+cfg/config.php
+cfg/config - copy.php
+cfg/config - Copy.php
