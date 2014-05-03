@@ -2,6 +2,7 @@
 if( !function_exists('higest_spree') ) {
 	global $spree_start, $spree_tk;
 
+	debug();
 	$file = "cfg/spree.php";
 	if( !file_exists($file))
 		echo("'${file}' not found.\r\n");
@@ -9,7 +10,6 @@ if( !function_exists('higest_spree') ) {
 	if( (include_once $file) === false )
 		debug('die');
 	unset($file);
-	debug();
 	
 	global $players;
 	if ( isset($players) && is_array($players) )
