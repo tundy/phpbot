@@ -1,12 +1,10 @@
 <?php
 if( !function_exists('higest_spree') ) {
+	global $spree_start, $spree_tk;
 
 	$file = "cfg/spree.php";
-	if( !file_exists($file)):
+	if( !file_exists($file))
 		echo("'${file}' not found.\r\n");
-		debug('die');
-	endif;
-
 	echo("Including ${file}.\r\n");
 	if( (include_once $file) === false )
 		debug('die');
