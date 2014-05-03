@@ -8,38 +8,40 @@ error_reporting(E_ALL | E_STRICT);
 	$plugins = array();
 	$plugins[] = 'main.php';
 
+	ob_start();
+	
 	$file = "cfg/config.php";
+	echo("Including ${file}.\r\n");
 	if( !file_exists($file) )
-		die("'${file}' file not found.\r\n");
-	require_once($file);
+		echo("\r\n'${file}' file not found.\r\n");	
+	if( (include_once $file) === false ):
+		$logfile = 'bot.log';
+		debug('die');
+	endif;
 	unset($file);
+	debug();
 
 	if( !isset($logfile) or empty($logfile) ):
+		$logfile = 'bot.log';
 		echo("\$logfile adress is not set.\r\n");
 		echo("'bot.log' used instead.\r\n");
-		$logfile = 'bot.log';
+		debug('show');
 	endif;
 
-	ob_start();
 	file_put_contents($logfile, '');
 
 	$file = "cmd.php";
+	echo("Including ${file}.\r\n");
 	if( !file_exists($file) )
-		die("'${file}' file not found.\r\n");
-	require_once($file);
+		echo("'${file}' file not found.\r\n");
+	if( (include_once $file) === false )
+		debug('die');
 	unset($file);
-	
-	echo("Loading Configurations.\r\n");
-	debug();
 
 	$file = "cfg/colors.php";
-	if( !file_exists($file)):
-		echo("'${file}' not found.\r\n");
-		debug('die');
-	endif;
-	debug();
-
 	echo("Including ${file}.\r\n");
+	if( !file_exists($file))
+		echo("'${file}' not found.\r\n");
 	if( (include_once $file) === false )
 		debug('die');
 	unset($file);
@@ -51,13 +53,11 @@ error_reporting(E_ALL | E_STRICT);
 		echo("Server '\$log' is not set.\r\n");
 		debug('die');
 	endif;
-	debug();
 
 	if( !file_exists($log)):
 		echo("'${log}' not found.\r\n");
 		debug('die');
 	endif;
-	debug();
 
 	if( !is_readable($log)):
 		echo("Can't read from '${log}'.\r\n");
@@ -77,16 +77,19 @@ error_reporting(E_ALL | E_STRICT);
 		echo("127.0.0.1 used instead.\r\n");
 		$ip = '127.0.0.1';
 	endif;
+	debug();
 	if( !isset($port) or empty($port) ):
 		echo("\$port is not set.\r\n");
 		echo("27960 used instead.\r\n");
 		$port = 27960;
 	endif;
+	debug();
 	if( !isset($say_prefix) or empty($say_prefix) ):
 		echo("\$say_prefix is not set.\r\n");
 		echo("'^0[^8B^0]^9: ' used instead.\r\n");
 		$say_prefix = '^0[^8B^0]^9: ';
 	endif;
+	debug();
 	if( !isset($tell_prefix) or empty($tell_prefix) ):
 		echo("\$tell_prefix is not set.\r\n");
 		echo("'^0[^8PM^0]^9: ' used instead.\r\n");
@@ -104,12 +107,9 @@ error_reporting(E_ALL | E_STRICT);
 	unset($tell_prefix);
 
 	$file = "cmd.php";
-	if( !file_exists($file) ):
-		echo("'${file}' file not found.\r\n");
-		debug('die');
-	endif;
-
 	echo("Including ${file}.\r\n");
+	if( !file_exists($file) )
+		echo("'${file}' file not found.\r\n");
 	if( (include_once $file) === false )
 		debug('die');
 	unset($file);
@@ -122,19 +122,20 @@ error_reporting(E_ALL | E_STRICT);
 		echo("Including ${file}.\r\n");
 		if( (include_once $file) === false )
 			debug('die');
+		else
+			debug();		
 	endforeach;
 	unset($file);
 
 	echo("Checking Game Version.\r\n");
 	$file = "games/index.php";
-	if( !file_exists($file) ):
+	if( !file_exists($file) )
 		echo("'${file}' file not found.\r\n");
-		debug('die');
-	endif;
 	echo("Including ${file}.\r\n");
 	if( (include_once $file) === false )
 		debug('die');
 	unset($file);
+	debug();
 
 bot_initialize();
 bot_loop();
