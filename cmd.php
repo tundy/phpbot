@@ -3,9 +3,6 @@
 // Send message to server
 function out($cmd) {
 	global $server, $ip, $port;
-	echo("Querying Server with: ");
-	echo($cmd);
-	echo("\r\n");
 
 	$errno = null;
 	$errstr = null;
@@ -71,6 +68,9 @@ function get_cvar ($cvar) {
 // send command to server
 function rcon($cmd) {
 	global $rcon;
+	echo("Querying Server with: ");
+	echo("rcon ***** ".$cmd);
+	echo("\r\n");
 	return (out("rcon ".$rcon." ".$cmd));
 }
 

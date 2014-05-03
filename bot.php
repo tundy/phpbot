@@ -209,7 +209,6 @@ function bot_initialize() {
 		}
 	}
 
-	echo("Requesting status from server.\r\n");
 	foreach ($status as $player) {
 		$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
 		if(preg_match($pattern, $player, $temp)) {
