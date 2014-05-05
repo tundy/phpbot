@@ -44,7 +44,7 @@ if( !function_exists('higest_spree') ) {
 			unset($grep);
 
 			// Change World feature to SelfKill
-			if ($killer == WORLD or $killer == NON_CLIENT)
+			if (!is_kill_client($killer, $weapon))
 				$killer = $target;
 
 			// Not Kill

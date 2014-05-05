@@ -1,5 +1,38 @@
 <?php
 
+function is_player($id) {
+	return true;
+}
+
+function is_bot($id) {
+	return true;
+}
+
+function is_kill_client($id, $mode) {
+	if ($id == WORLD)
+		return false;
+	if ($id == NON_CLIENT)
+		switch ($mode) {
+			case MOD_UNKNOWN:
+			case MOD_WATER:
+			case MOD_SLIMED:
+			case MOD_LAVA:
+			case MOD_CRUSHED:
+			case MOD_FALLING:
+			case MOD_SUICIDE:
+			case MOD_LASER_TARGET:
+			case MOD_TRIGGER_HURT:
+			case MOD_CHANGE_TEAM:
+			case UT_MOD_SUICIDE:
+			case UT_MOD_SLAPPED:
+			case UT_MOD_FLAG:
+				return false;
+			default:
+				return true;
+		}
+	return true;
+}
+			
 // Send message to server
 function out($cmd) {
 	global $server, $ip, $port;

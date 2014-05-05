@@ -134,7 +134,7 @@ if( !function_exists('c_connect') ) {
 			echo(")\r\n");
 
 			// Change World feature to SelfKill
-			if ($killer == WORLD or $killer == NON_CLIENT)
+			if (!is_kill_client($killer, $weapon))
 				$killer = $target;
 
 			if($weapon == UT_MOD_FLAG) {	// Not Kill

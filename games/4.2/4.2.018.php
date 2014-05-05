@@ -83,7 +83,7 @@ $WEAPON_KILL[UT_MOD_M4] = "M4";
 $WEAPON_KILL[UT_MOD_GLOCK] = "Glock";
 $WEAPON_KILL[UT_MOD_COLT1911] = "Colt 1911";
 $WEAPON_KILL[UT_MOD_MAC] = "Mac";
-$WEAPON_KILL[UT_MOD_FLAG] = "Exploding flag";
+$WEAPON_KILL[UT_MOD_FLAG] = "Flag";
 $WEAPON_KILL[UT_MOD_GOOMBA] = "Curb Stomped";
 
 // hit_weapon
