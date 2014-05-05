@@ -38,9 +38,9 @@ if( !function_exists('higest_spree') ) {
 
 		if($grep = grep_kill($args)) {
 			unset($args);
-			$killer =	$grep['killer'];
-			$target =	$grep['target'];
-			$weapon =	$grep['weapon'];
+			$killer = $grep['killer'];
+			$target = $grep['target'];
+			$weapon = $grep['weapon'];
 			unset($grep);
 
 			// Change World feature to SelfKill

@@ -9,7 +9,7 @@ if( !function_exists('c_connect') ) {
 		else
 			echo("player[${id}] already exist.\r\n");
 	}
-	
+
 	function c_begin($id) {
 		global $players, $text_color, $alt_color;
 		echo("Player[${id}] join the game.\r\n");
@@ -20,13 +20,13 @@ if( !function_exists('c_connect') ) {
 		}
 		$players[$id]->flags = 0;
 	}
-	
+
 	function c_disconnect($id) {
 		global $players;
 		echo("Removing player[${id}] from memory.\r\n");
 		unset($players[$id]);
 	}
-	
+
 	function g_shutdown() {
 		global $players;
 		echo("Map/Server stopped.\r\n");
@@ -34,7 +34,7 @@ if( !function_exists('c_connect') ) {
 			foreach(array_keys($players) as $id)
 				c_disconnect($id);*/
 	}
-	
+
 	function c_changed($arg) {
 		global $players;
 
@@ -85,6 +85,7 @@ if( !function_exists('c_connect') ) {
 		global $players, $WEAPON_DAMAGE, $WEAPON_HIT, $BODY_PART, $TEAM;
 
 		if($grep = grep_hit($args)) {
+			unset($args);
 			$target		= $grep['target'];
 			$shooter	= $grep['shooter'];
 			$part		= $grep['part'];
@@ -116,9 +117,10 @@ if( !function_exists('c_connect') ) {
 		global $players, $WEAPON_KILL, $TEAM;
 
 		if($grep = grep_kill($args)) {
-			$killer =	$grep['killer'];
-			$target =	$grep['target'];
-			$weapon =	$grep['weapon'];
+			unset($args);
+			$killer = $grep['killer'];
+			$target = $grep['target'];
+			$weapon = $grep['weapon'];
 			unset($grep);
 
 			echo("player[$killer] (");
@@ -218,12 +220,12 @@ switch($cmd) {
 	case "Hit:":
 		// 4:00 Hit: 2 16 2 19: ThunderBird hit =lvl6=fMAQWRA in the Helmet
 		echo("$time: Hit.\r\n");
-		c_hit($time, $args);
+		c_hit($args);
 		break;
 	case "Kill:":
 		// 1:58 Kill: 5 4 19: Freza killed -ANIKI-PaRaMeSHWaR by UT_MOD_LR300
 		echo("$time: Kill.\r\n");
-		c_kill($time, $args);
+		c_kill($args);
 		break;
 	case "Exit:":
 		// 60:23 Exit: Timelimit hit.
