@@ -1,9 +1,9 @@
 <?php
 
-class player {
+class client {
 	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $flags;
 
-	function player() {
+	function client() {
 		$this->kills		= (new kills);
 		$this->deads		= (new deads);
 		$this->hits			= (new hits);
@@ -23,7 +23,7 @@ class kills {
 	public /*$target, $weapon,*/ $team, $self, $enemy;
 
 	function kills() {
-		#$this->target	= array();		// Kills on specific player
+		#$this->target	= array();		// Kills on specific client
 		#$this->weapon	= array();		// Kills with specific weapon
 		$this->team		= 0;			// Team Kills
 		$this->self		= 0;			// Self Kills
@@ -54,8 +54,8 @@ class hits {
 		$this->team->got	= 0;		// How many times was hit by team mate
 		$this->team->hit	= 0;		// How many times hit team mate
 		/*$this->target		= new stdClass();
-		$this->target->got	= array();	// Hit by specific player
-		$this->target->hit	= array();	// Hit specific player
+		$this->target->got	= array();	// Hit by specific client
+		$this->target->hit	= array();	// Hit specific client
 		$this->weapon		= new stdClass();
 		$this->weapon->got	= array();	// Hit by specific weapon
 		$this->weapon->hit	= array();	// Hit with specific weapon

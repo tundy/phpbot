@@ -11,27 +11,27 @@ if( !function_exists('higest_spree') ) {
 		debug('die');
 	unset($file);
 	
-	global $players;
-	if ( isset($players) && is_array($players) )
-		foreach(array_keys($players) as $id)
-			$players[$id]->spree = (new spree);
+	global $clients;
+	if ( isset($clients) && is_array($clients) )
+		foreach(array_keys($clients) as $id)
+			$clients[$id]->spree = (new spree);
 
 	function higest_spree($killer, $target) {
-		global $players;
+		global $clients;
 
-		if ( !isset($players[$killer]->spree->kill->high) )
-			$players[$killer]->spree->kill->high = $players[$killer]->spree->kill->last;
-		elseif ($players[$killer]->spree->kill->last > $players[$killer]->spree->kill->high)
-			$players[$killer]->spree->kill->high = $players[$killer]->spree->kill->last;
+		if ( !isset($clients[$killer]->spree->kill->high) )
+			$clients[$killer]->spree->kill->high = $clients[$killer]->spree->kill->last;
+		elseif ($clients[$killer]->spree->kill->last > $clients[$killer]->spree->kill->high)
+			$clients[$killer]->spree->kill->high = $clients[$killer]->spree->kill->last;
 
-		if ( !isset($players[$target]->spree->dead->high) )
-			$players[$target]->spree->dead->high = $players[$target]->spree->dead->last;
-		elseif ($players[$target]->spree->dead->last > $players[$target]->spree->dead->high)
-			$players[$target]->spree->dead->high = $players[$target]->spree->dead->last;
+		if ( !isset($clients[$target]->spree->dead->high) )
+			$clients[$target]->spree->dead->high = $clients[$target]->spree->dead->last;
+		elseif ($clients[$target]->spree->dead->last > $clients[$target]->spree->dead->high)
+			$clients[$target]->spree->dead->high = $clients[$target]->spree->dead->last;
 	}
 
 	function spree($args) {
-		global $players, $spree_start, $spree_tk, $alt_color, $text_color;
+		global $clients, $spree_start, $spree_tk, $alt_color, $text_color;
 		global $WEAPON_KILL;
 
 		echo("Counting Killing Spree. | ");
@@ -52,18 +52,18 @@ if( !function_exists('higest_spree') ) {
 				echo("Flag captured, not kill.\r\n");
 			} // Self Kill
 			elseif($killer == $target) {
-				if ( $players[$target]->spree->kill->last >= $spree_start)
-					say($alt_color.$players[$target]->info["name"].$text_color." stopped his/her killing spree.");
-				$players[$target]->spree->dead->last++;
+				if ( $clients[$target]->spree->kill->last >= $spree_start)
+					say($alt_color.$clients[$target]->info["name"].$text_color." stopped his/her killing spree.");
+				$clients[$target]->spree->dead->last++;
 				echo("Self Kill, RESET.\r\n");
 				higest_spree($killer, $target);
-				$players[$killer]->spree->kill->last = 0;
+				$clients[$killer]->spree->kill->last = 0;
 			}
 			// Normal Kill
-			elseif ($players[$killer]->info["team"] == TEAM_FFA or $players[$killer]->info["team"] != $players[$target]->info["team"]) {
-				$players[$target]->spree->dead->last++;
-				$players[$killer]->spree->kill->last++;
-				$players[$killer]->spree->dead->last = 0;
+			elseif ($clients[$killer]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] != $clients[$target]->info["team"]) {
+				$clients[$target]->spree->dead->last++;
+				$clients[$killer]->spree->kill->last++;
+				$clients[$killer]->spree->dead->last = 0;
 				echo("Normal Kill, COUNT.\r\n");
 				higest_spree($killer, $target);
 			}
@@ -71,47 +71,47 @@ if( !function_exists('higest_spree') ) {
 			else {
 				echo("Team Kill, SPECIAL.\r\n");
 				switch($spree_tk):
-					case 1:		$players[$killer]->spree->kill->last++;
-								$players[$target]->spree->dead->last++;
+					case 1:		$clients[$killer]->spree->kill->last++;
+								$clients[$target]->spree->dead->last++;
 								higest_spree($killer, $target);
 								break;
-					case 2:		if ( $players[$killer]->spree->kill->last > 0) {
-									$players[$killer]->spree->kill->last--;
-									say($alt_color.$players[$killer]->info["name"].$text_color." lower his/her killing spree after teamkill.");
+					case 2:		if ( $clients[$killer]->spree->kill->last > 0) {
+									$clients[$killer]->spree->kill->last--;
+									say($alt_color.$clients[$killer]->info["name"].$text_color." lower his/her killing spree after teamkill.");
 								}
-								$players[$target]->spree->dead->last++;
+								$clients[$target]->spree->dead->last++;
 								higest_spree($killer, $target);
 								break;
-					case 3:		if ( $players[$killer]->spree->kill->last > 0) {
-									$players[$killer]->spree->kill->last = 0;
-									say($alt_color.$players[$killer]->info["name"].$text_color." reset his/her killing spree after teamkill.");
+					case 3:		if ( $clients[$killer]->spree->kill->last > 0) {
+									$clients[$killer]->spree->kill->last = 0;
+									say($alt_color.$clients[$killer]->info["name"].$text_color." reset his/her killing spree after teamkill.");
 								}
-								$players[$target]->spree->dead->last++;
+								$clients[$target]->spree->dead->last++;
 								higest_spree($killer, $target);
 								break;
 					default:	break;
 				endswitch;
 			}
 
-			if ($players[$killer]->spree->kill->last >= $spree_start)
-				say($alt_color.$players[$killer]->info["name"].$text_color." is on killing spree. ".$alt_color.$players[$killer]->spree->kill->last.$text_color." kills in the row.");
-			if ( $players[$target]->spree->kill->last >= $spree_start)
-				say($alt_color.$players[$killer]->info["name"].$text_color." stopped ".$alt_color.$players[$target]->info["name"].$text_color."'s killing spree.");
-			$players[$target]->spree->kill->last = 0;
+			if ($clients[$killer]->spree->kill->last >= $spree_start)
+				say($alt_color.$clients[$killer]->info["name"].$text_color." is on killing spree. ".$alt_color.$clients[$killer]->spree->kill->last.$text_color." kills in the row.");
+			if ( $clients[$target]->spree->kill->last >= $spree_start)
+				say($alt_color.$clients[$killer]->info["name"].$text_color." stopped ".$alt_color.$clients[$target]->info["name"].$text_color."'s killing spree.");
+			$clients[$target]->spree->kill->last = 0;
 		}
 	}
 }
 
 switch($cmd):
 	case "ClientConnect:":
-		$players[$args]->spree = (new spree);
+		$clients[$args]->spree = (new spree);
 		break;
 	case "Kill:":
 		spree($args);
 		break;
 	case "ClientBegin:":
-		$players[$args]->spree->kill->last	= 0;
-		$players[$args]->spree->dead->last	= 0;
+		$clients[$args]->spree->kill->last	= 0;
+		$clients[$args]->spree->dead->last	= 0;
 		break;
 endswitch;
 ?>

@@ -112,7 +112,7 @@ function say($msg) {
 	return (rcon("say ".$msg));
 }
 
-// send private message to player
+// send private message to client
 function tell($id, $msg) {
 	return (rcon("tell ".$id." ".$msg));
 }
@@ -247,9 +247,9 @@ function grep_user($line) {
 	return false;
 }
 
-// Get player ID from Name
+// Get client ID from Name
 function search ($arg, $lower = 0, $color = 0, $id = null) {
-	global $players, $alt_color, $text_color;
+	global $clients, $alt_color, $text_color;
 
 	if( isset($arg) ) {
 		$found = array();
@@ -258,23 +258,23 @@ function search ($arg, $lower = 0, $color = 0, $id = null) {
 		else
 			$get = $arg;
 		$pattern = "/(.*)(".$get.")(.*)/";
-		foreach ( array_keys($players) as $id) {
-			$name = $players[$id]->info["name"];
+		foreach ( array_keys($clients) as $id) {
+			$name = $clients[$id]->info["name"];
 			if( $color )
 				$name = preg_replace ("/(\^.)/", "", $name);
 			if( $lower )
 				$name = strtolower( $name );
 			if( preg_match($pattern, $name) )
-				$found[$id] = $players[$id]->info["name"];
+				$found[$id] = $clients[$id]->info["name"];
 		}
 
 		if( count($found) > 1 ) {
-			$msg = "Found players:";
+			$msg = "Found clients:";
 			foreach ( array_keys($found) as $id )
 			{
 				$msg .= " [".$alt_color.$id.$text_color."] ".$found[$id];
 			}
-			if(isset($id) && $players[$id]->info["team"] == TEAM_SPEC)
+			if(isset($id) && $clients[$id]->info["team"] == TEAM_SPEC)
 				tell($msg);
 			else
 				say($msg);
@@ -291,18 +291,9 @@ function search ($arg, $lower = 0, $color = 0, $id = null) {
 			elseif ( !$lower && $color)
 				return search($arg, 1, 1, $id);
 			else
-				say("Player not found.");
+				say("client not found.");
 		}
 	}
-}
-
-function c_create($id, $name, $team) {
-	global $players, $TEAM;
-	echo("Creating player[${id}] | ${name} | ".$TEAM[$team]."\r\n");
-	$players[$id] = (new player);
-	$players[$id]->info["name"] = $name;
-	$players[$id]->info["team"] = $team;
-	$players[$id]->hello = 1;
 }
 
 ?>

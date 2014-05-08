@@ -159,6 +159,7 @@ function debug($arg = null) {
 // Load all configurations and get current server information
 function bot_initialize() {
 	global $log, $lines;
+	global $clients, $TEAM;
 
 	echo("Starting Initialization.\r\n");
 	debug();
@@ -176,7 +177,7 @@ function bot_initialize() {
 	}
 	echo(" | Last line is $lines.\r\n");
 
-	echo("Adding already connected players into memmory.\r\n");
+	echo("Adding already connected clients into memmory.\r\n");
 	$status = rcon("status");
 	if ( empty($status) )
 		return false;
@@ -188,7 +189,7 @@ function bot_initialize() {
 		unset($status[0]);
 	endif;
 
-	$temp_players = array();
+	$temp_client_team = array();
 
 	echo("Searching for Red & Blue Members.\r\n");
 	$g_blueteamlist = get_cvar("g_blueteamlist");
@@ -196,7 +197,7 @@ function bot_initialize() {
 		$g_blueteamlist = str_split($g_blueteamlist);
 		foreach ( $g_blueteamlist as $member) {
 			$id = ( ord($member) - ord('A') );
-			$temp_players[$id] = TEAM_BLUE;
+			$temp_client_team[$id] = TEAM_BLUE;
 		}
 	}
 
@@ -205,13 +206,13 @@ function bot_initialize() {
 		$g_redteamlist = str_split($g_redteamlist);
 		foreach ( $g_redteamlist as $member) {
 			$id = ( ord($member) - ord('A') );
-			$temp_players[$id] = TEAM_RED;
+			$temp_client_team[$id] = TEAM_RED;
 		}
 	}
 
-	foreach ($status as $player) {
+	foreach ($status as $client) {
 		$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
-		if(preg_match($pattern, $player, $temp)) {
+		if(preg_match($pattern, $client, $temp)) {
 			$id = trim($temp[1]);
 			$score = trim($temp[2]);
 			$ping = trim($temp[3]);
@@ -220,20 +221,30 @@ function bot_initialize() {
 			$address = trim($temp[6]);
 			$qport = trim($temp[7]);
 			$rate = trim($temp[8]);
-			if ( !isset($temp_players[$id]) )
+			if ( !isset($temp_client_team[$id]) )
 				$team = TEAM_SPEC;
 			else
-				$team = $temp_players[$id];
-
-			unset($temp_players[$id]);
-			c_create($id, $name, $team);
+				$team = $temp_client_team[$id];
+			unset($temp_client_team[$id]);
+			
+			echo("Creating client[${id}] | ${name} | ".$TEAM[$team]."\r\n");
+			$clients[$id] = (new client);
+			$clients[$id]->info["name"] = $name;
+			$clients[$id]->info["n"] = $name;
+			$clients[$id]->info["team"] = $team;
+			$clients[$id]->info["score"] = $score;
+			$clients[$id]->info["lastmsg"] = $lastmsg;
+			$clients[$id]->info["address"] = $address;
+			$clients[$id]->info["qport"] = $qport;
+			$clients[$id]->info["rate"] = $rate;
+			$clients[$id]->hello = 1;
 		}
 	}
 
 	echo("Sending message to server that BOT is online.\r\n");
 	say(" ^9BOT ^1S^2t^3a^4r^5t^6e^7d ^8!");
 
-	unset($temp_players);
+	unset($temp_client_team);
 	unset($temp);
 
 	debug();
@@ -242,7 +253,7 @@ function bot_initialize() {
 // Scanning Server Log
 function bot_loop() {
 	global $log, $loop, $lines;
-	global $players;
+	global $clients;
 	echo("Entered Loop.\r\n");
 
 	$file = new SplFileObject($log);
@@ -266,7 +277,8 @@ function bot_loop() {
 		endwhile;
 
 		debug();
-		#file_put_contents('players.log', print_r($players, true));
+		file_put_contents('clients.log', print_r($clients, true));
+		#file_put_contents('clients.log', print_r($clients, true), FILE_APPEND);
 	endwhile;
 }
 
@@ -274,7 +286,7 @@ function bot_loop() {
 function decode($line) {
 	global $time, $cmd, $args;
 	global $alt_color, $text_color;
-	global $players, $HELP;
+	global $clients, $HELP;
 	global $plugins;
 
 	if($temp = grep_logline($line)) {

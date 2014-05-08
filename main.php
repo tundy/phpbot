@@ -2,52 +2,52 @@
 if( !function_exists('c_connect') ) {
 
 	function c_connect($id) {
-		global $players;
-		echo("Creating new player[${id}].\r\n");
-		if( !isset($players[$id]) )
-			$players[$id] = (new player);
+		global $clients;
+		echo("Creating new client[${id}].\r\n");
+		if( !isset($clients[$id]) )
+			$clients[$id] = (new client);
 		else
-			echo("player[${id}] already exist.\r\n");
+			echo("client[${id}] already exist.\r\n");
 	}
 
 	function c_begin($id) {
-		global $players, $text_color, $alt_color;
-		echo("Player[${id}] join the game.\r\n");
+		global $clients, $text_color, $alt_color;
+		echo("client[${id}] join the game.\r\n");
 
-		if( !empty($players[$id]->info["name"]) and !isset($players[$id]->hello) and empty($players[$id]->hello)) {
-			say($text_color."Welcome ".$alt_color.$players[$id]->info["name"]);
-			$players[$id]->hello = 1;
+		if( !empty($clients[$id]->info["name"]) and !isset($clients[$id]->hello) and empty($clients[$id]->hello)) {
+			say($text_color."Welcome ".$alt_color.$clients[$id]->info["name"]);
+			$clients[$id]->hello = 1;
 		}
-		$players[$id]->flags = 0;
+		$clients[$id]->flags = 0;
 	}
 
 	function c_disconnect($id) {
-		global $players;
-		echo("Removing player[${id}] from memory.\r\n");
-		unset($players[$id]);
+		global $clients;
+		echo("Removing client[${id}] from memory.\r\n");
+		unset($clients[$id]);
 	}
 
 	function g_shutdown() {
-		global $players;
+		global $clients;
 		echo("Map/Server stopped.\r\n");
-		/*if ( isset($players) && is_array($players) )
-			foreach(array_keys($players) as $id)
+		/*if ( isset($clients) && is_array($clients) )
+			foreach(array_keys($clients) as $id)
 				c_disconnect($id);*/
 	}
 
 	function c_changed($arg) {
-		global $players;
+		global $clients;
 
 		if($grep = grep_user($arg)) {
 			unset($arg);
 			$id = $grep[1];
-			echo("Player[${id}] info changed.\r\n");
+			echo("client[${id}] info changed.\r\n");
 			$var = explode("\\", $grep[2]);
 			$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 			unset($grep);
 			$i = 0;
 			while ($i < $vars) {										// new $var's "KEY" is equal to old $var[$i]
-				$players[$id]->info["$var[$i]"] = $var[$i + 1];			// new info["KEY"]'s VALUE is equal to old $var[$i+1]
+				$clients[$id]->info["$var[$i]"] = $var[$i + 1];			// new info["KEY"]'s VALUE is equal to old $var[$i+1]
 				unset($var[$i]);										// After setting new KEY old one will be unset
 				unset($var[$i + 1]);									// After setting new VALUE old one will be unset
 				$i += 2;
@@ -59,18 +59,18 @@ if( !function_exists('c_connect') ) {
 	}
 
 	function c_info($args) {
-		global $players;
+		global $clients;
 
 		if($grep = grep_user($args)) {
 			unset($arg);
 			$id = $grep[1];
-			echo("Player[${id}] info made.\r\n");
+			echo("client[${id}] info made.\r\n");
 			$var = explode("\\", $grep[2]);
 			$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
 			unset($grep);
 			$i = 1;
 			while ($i < $vars) {										// new $var's "KEY" is equal to old $var[$i]
-				$players[$id]->info["$var[$i]"] = $var[$i + 1];			// new info["KEY"]'s VALUE is equal to old $var[$i+1]
+				$clients[$id]->info["$var[$i]"] = $var[$i + 1];			// new info["KEY"]'s VALUE is equal to old $var[$i+1]
 				unset($var[$i]);										// After setting new KEY old one will be unset
 				unset($var[$i + 1]);									// After setting new VALUE old one will be unset
 				$i += 2;
@@ -82,7 +82,7 @@ if( !function_exists('c_connect') ) {
 	}
 
 	function c_hit($args) {
-		global $players, $WEAPON_DAMAGE, $WEAPON_HIT, $BODY_PART, $TEAM;
+		global $clients, $WEAPON_DAMAGE, $WEAPON_HIT, $BODY_PART, $TEAM;
 
 		if($grep = grep_hit($args)) {
 			unset($args);
@@ -92,29 +92,29 @@ if( !function_exists('c_connect') ) {
 			$weapon		= $grep['weapon'];
 			unset($grep);
 
-			echo("player[${shooter}] (");
-			echo($TEAM[$players[$shooter]->info["team"]]);
-			echo(") hit player[${target}] (");
-			echo($TEAM[$players[$target]->info["team"]]);
+			echo("client[${shooter}] (");
+			echo($TEAM[$clients[$shooter]->info["team"]]);
+			echo(") hit client[${target}] (");
+			echo($TEAM[$clients[$target]->info["team"]]);
 			echo(") ".$WEAPON_HIT[$weapon]);
 			echo(" | ".$BODY_PART[$part]."\r\n");
 
-			if($players[$shooter]->info["team"] == TEAM_FFA or $players[$shooter]->info["team"] != $players[$target]->info["team"]) {
-				$players[$shooter]->hits->enemy->hit++;
-				$players[$target]->hits->enemy->got++;
-				$players[$shooter]->dmg->enemy->hit += $WEAPON_DAMAGE[$weapon][$part];
-				$players[$target]->dmg->enemy->got += $WEAPON_DAMAGE[$weapon][$part];
+			if($clients[$shooter]->info["team"] == TEAM_FFA or $clients[$shooter]->info["team"] != $clients[$target]->info["team"]) {
+				$clients[$shooter]->hits->enemy->hit++;
+				$clients[$target]->hits->enemy->got++;
+				$clients[$shooter]->dmg->enemy->hit += $WEAPON_DAMAGE[$weapon][$part];
+				$clients[$target]->dmg->enemy->got += $WEAPON_DAMAGE[$weapon][$part];
 			} else {
-				$players[$shooter]->hits->team->hit++;
-				$players[$target]->hits->team->got++;
-				$players[$shooter]->dmg->team->hit += $WEAPON_DAMAGE[$weapon][$part];
-				$players[$target]->dmg->team->got += $WEAPON_DAMAGE[$weapon][$part];
+				$clients[$shooter]->hits->team->hit++;
+				$clients[$target]->hits->team->got++;
+				$clients[$shooter]->dmg->team->hit += $WEAPON_DAMAGE[$weapon][$part];
+				$clients[$target]->dmg->team->got += $WEAPON_DAMAGE[$weapon][$part];
 			}
 		}
 	}
 
 	function c_kill($args) {
-		global $players, $WEAPON_KILL, $TEAM;
+		global $clients, $WEAPON_KILL, $TEAM;
 
 		if($grep = grep_kill($args)) {
 			unset($args);
@@ -123,14 +123,14 @@ if( !function_exists('c_connect') ) {
 			$weapon = $grep['weapon'];
 			unset($grep);
 
-			echo("player[$killer] (");
-			if( isset($players[$killer]) )
-				echo($TEAM[$players[$killer]->info["team"]]);
+			echo("client[$killer] (");
+			if( isset($clients[$killer]) )
+				echo($TEAM[$clients[$killer]->info["team"]]);
 			else
-				echo("World\r\n");
+				echo("World");
 
-			echo(") > ".$WEAPON_KILL[$weapon]." > player[$target] (");
-			echo($TEAM[$players[$target]->info["team"]]);
+			echo(") > ".$WEAPON_KILL[$weapon]." > client[$target] (");
+			echo($TEAM[$clients[$target]->info["team"]]);
 			echo(")\r\n");
 
 			// Change World feature to SelfKill
@@ -140,14 +140,14 @@ if( !function_exists('c_connect') ) {
 			if($weapon == UT_MOD_FLAG) {	// Not Kill
 				// do nothing
 			} elseif($killer == $target) {	// Self Kill
-				$players[$killer]->kills->self++;
-				$players[$target]->deads->self++;
-			} elseif($players[$killer]->info["team"] == TEAM_FFA or $players[$killer]->info["team"] != $players[$target]->info["team"]) {		// Normal Kill
-				$players[$killer]->kills->enemy++;
-				$players[$target]->deads->enemy++;
+				$clients[$killer]->kills->self++;
+				$clients[$target]->deads->self++;
+			} elseif($clients[$killer]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] != $clients[$target]->info["team"]) {		// Normal Kill
+				$clients[$killer]->kills->enemy++;
+				$clients[$target]->deads->enemy++;
 			} else {						// Team Kill
-				$players[$killer]->kills->team++;
-				$players[$target]->deads->team++;
+				$clients[$killer]->kills->team++;
+				$clients[$target]->deads->team++;
 			}
 		}
 	}
@@ -237,7 +237,7 @@ switch($cmd) {
 		break;
 	case "score:":
 		// 60:23 score: 29  ping: 106  client: 16 ruben
-		echo("$time: Got Score for Player.\r\n");
+		echo("$time: Got Score for client.\r\n");
 		break;
 	case "InitAuth:":
 		// 0:00 InitAuth: \auth\0\auth_status\init\auth_cheaters\1\auth_tags\1\auth_notoriety\0\auth_groups\\auth_owners\\auth_verbosity\1
