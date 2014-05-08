@@ -93,7 +93,7 @@ function status_update() {
 }
 
 function is_player($id) {
-	return false;
+	return !is_bot($id);
 }
 
 function is_bot($id) {
