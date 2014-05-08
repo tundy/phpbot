@@ -1,9 +1,22 @@
 <?php
 
 function dumpuser($id) {
+	global $clients;
 	$dump = rcon("dumpuser $id");
-	echo ($dump."\r\n");
-	return false;
+	$dump = preg_split('/\n|\r/', $dump, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
+	
+	pattern=("/userinfo/");
+	if(preg_match($pattern, $dump[0]))
+		unset($dump[0]);
+	else
+		return false;
+	unset($dump[1]);
+	$pattern=("/([^\s]+)\s+(.*)/");
+	foreach ($dump as $line) {
+		$temp = preg_split('/\s+/', $line);
+		$clients[$id]->info["$temp[0]"] = $temp[1];
+	}
+	return true;
 }
 
 function status_update() {
@@ -44,8 +57,8 @@ function status_update() {
 		}
 	}
 
-	foreach ($status as $client) {
-		$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
+	$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
+	foreach ($status as $client)
 		if(preg_match($pattern, $client, $temp)) {
 			$id = trim($temp[1]);
 			$score = trim($temp[2]);
@@ -74,7 +87,6 @@ function status_update() {
 			$clients[$id]->info["rate"] = $rate;
 			dumpuser($id);
 		}
-	}
 
 	unset($clients_team);
 	unset($temp);
