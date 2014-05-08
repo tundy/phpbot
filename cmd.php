@@ -4,7 +4,7 @@ function dumpuser($id) {
 	global $clients;
 	$dump = rcon("dumpuser $id");
 	$dump = preg_split('/\n|\r/', $dump, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
-	
+
 	pattern=("/userinfo/");
 	if(preg_match($pattern, $dump[0]))
 		unset($dump[0]);
@@ -93,10 +93,20 @@ function status_update() {
 }
 
 function is_player($id) {
-	return !is_bot($id);
+	global $clients;
+	if( !isset($clients[$id]) )
+		return false;
+	if( $clients[$id]->info["address"] == "bot" )
+		return false;
+	return true;
 }
 
 function is_bot($id) {
+	global $clients;
+	if( !isset($clients[$id]) )
+		return false;
+	if( $clients[$id]->info["address"] == "bot" )
+		return true;
 	return false;
 }
 
