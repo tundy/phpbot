@@ -10,7 +10,7 @@ if( !function_exists('higest_spree') ) {
 	if( (include_once $file) === false )
 		debug('die');
 	unset($file);
-	
+
 	global $clients;
 	if ( isset($clients) && is_array($clients) )
 		foreach(array_keys($clients) as $id)

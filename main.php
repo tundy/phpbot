@@ -159,6 +159,7 @@ switch($cmd) {
 		// 0:06 ClientConnect: 4
 		echo("$time: ClientConnect.\r\n");
 		c_connect($args);
+		status_update();
 		break;
 	case "ClientUserinfo:":
 		//  0:06 ClientUserinfo: 4 \ip\188.120.11.151 ... \weapmodes\000001112200000200020

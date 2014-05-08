@@ -9,11 +9,11 @@ error_reporting(E_ALL | E_STRICT);
 	$plugins[] = 'main.php';
 
 	ob_start();
-	
+
 	$file = "cfg/config.php";
 	echo("Including ${file}.\r\n");
 	if( !file_exists($file) )
-		echo("\r\n'${file}' file not found.\r\n");	
+		echo("\r\n'${file}' file not found.\r\n");
 	if( (include_once $file) === false ):
 		$logfile = 'bot.log';
 		debug('die');
@@ -123,7 +123,7 @@ error_reporting(E_ALL | E_STRICT);
 		if( (include_once $file) === false )
 			debug('die');
 		else
-			debug();		
+			debug();
 	endforeach;
 	unset($file);
 
@@ -178,74 +178,10 @@ function bot_initialize() {
 	echo(" | Last line is $lines.\r\n");
 
 	echo("Adding already connected clients into memmory.\r\n");
-	$status = rcon("status");
-	if ( empty($status) )
-		return false;
-	$status = preg_split('/\n|\r/', $status, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
-
-	$pattern=("/map:\s+(.+)/");
-	if(preg_match($pattern, $status[0], $temp)):
-		$map = $temp[1];
-		unset($status[0]);
-	endif;
-
-	$temp_client_team = array();
-
-	echo("Searching for Red & Blue Members.\r\n");
-	$g_blueteamlist = get_cvar("g_blueteamlist");
-	if ( !empty($g_blueteamlist) ) {
-		$g_blueteamlist = str_split($g_blueteamlist);
-		foreach ( $g_blueteamlist as $member) {
-			$id = ( ord($member) - ord('A') );
-			$temp_client_team[$id] = TEAM_BLUE;
-		}
-	}
-
-	$g_redteamlist = get_cvar("g_redteamlist");
-	if ( !empty($g_redteamlist) ) {
-		$g_redteamlist = str_split($g_redteamlist);
-		foreach ( $g_redteamlist as $member) {
-			$id = ( ord($member) - ord('A') );
-			$temp_client_team[$id] = TEAM_RED;
-		}
-	}
-
-	foreach ($status as $client) {
-		$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
-		if(preg_match($pattern, $client, $temp)) {
-			$id = trim($temp[1]);
-			$score = trim($temp[2]);
-			$ping = trim($temp[3]);
-			$name = trim($temp[4]);
-			$lastmsg = trim($temp[5]);
-			$address = trim($temp[6]);
-			$qport = trim($temp[7]);
-			$rate = trim($temp[8]);
-			if ( !isset($temp_client_team[$id]) )
-				$team = TEAM_SPEC;
-			else
-				$team = $temp_client_team[$id];
-			unset($temp_client_team[$id]);
-			
-			echo("Creating client[${id}] | ${name} | ".$TEAM[$team]."\r\n");
-			$clients[$id] = (new client);
-			$clients[$id]->info["name"] = $name;
-			$clients[$id]->info["n"] = $name;
-			$clients[$id]->info["team"] = $team;
-			$clients[$id]->info["score"] = $score;
-			$clients[$id]->info["lastmsg"] = $lastmsg;
-			$clients[$id]->info["address"] = $address;
-			$clients[$id]->info["qport"] = $qport;
-			$clients[$id]->info["rate"] = $rate;
-			$clients[$id]->hello = 1;
-		}
-	}
+	status_update();
 
 	echo("Sending message to server that BOT is online.\r\n");
 	say(" ^9BOT ^1S^2t^3a^4r^5t^6e^7d ^8!");
-
-	unset($temp_client_team);
-	unset($temp);
 
 	debug();
 }

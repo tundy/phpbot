@@ -1,11 +1,91 @@
 <?php
 
+function dumpuser($id) {
+	$dump = rcon("dumpuser $id");
+	echo ($dump."\r\n");
+	return false;
+}
+
+function status_update() {
+	global $clients, $map;
+
+	echo("Updating client list\r\n");
+
+	$status = rcon("status");
+	if ( empty($status) )
+		return false;
+
+	$status = preg_split('/\n|\r/', $status, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
+
+	# Get actual map
+	$pattern=("/map:\s+(.+)/");
+	if(preg_match($pattern, $status[0], $temp))
+		$map = $temp[1];
+	else
+		return false;
+	unset($status[0]);
+
+	$clients_team = array();
+	$g_blueteamlist = get_cvar("g_blueteamlist");
+	if ( !empty($g_blueteamlist) ) {
+		$g_blueteamlist = str_split($g_blueteamlist);
+		foreach ( $g_blueteamlist as $member) {
+			$id = ( ord($member) - ord('A') );
+			$clients_team[$id] = TEAM_BLUE;
+		}
+	}
+
+	$g_redteamlist = get_cvar("g_redteamlist");
+	if ( !empty($g_redteamlist) ) {
+		$g_redteamlist = str_split($g_redteamlist);
+		foreach ( $g_redteamlist as $member) {
+			$id = ( ord($member) - ord('A') );
+			$clients_team[$id] = TEAM_RED;
+		}
+	}
+
+	foreach ($status as $client) {
+		$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
+		if(preg_match($pattern, $client, $temp)) {
+			$id = trim($temp[1]);
+			$score = trim($temp[2]);
+			$ping = trim($temp[3]);
+			$name = trim($temp[4]);
+			$lastmsg = trim($temp[5]);
+			$address = trim($temp[6]);
+			$qport = trim($temp[7]);
+			$rate = trim($temp[8]);
+			if ( !isset($clients_team[$id]) )
+				$team = TEAM_SPEC;
+			else
+				$team = $clients_team[$id];
+			unset($clients_team[$id]);
+
+			if ( !isset($clients[$id]) ) {
+				$clients[$id] = (new client);
+				$clients[$id]->hello = 1;
+				$clients[$id]->info["team"] = $team;
+			}
+			$clients[$id]->info["name"] = $name;
+			$clients[$id]->info["score"] = $score;
+			$clients[$id]->info["lastmsg"] = $lastmsg;
+			$clients[$id]->info["address"] = $address;
+			$clients[$id]->info["qport"] = $qport;
+			$clients[$id]->info["rate"] = $rate;
+			dumpuser($id);
+		}
+	}
+
+	unset($clients_team);
+	unset($temp);
+}
+
 function is_player($id) {
-	return true;
+	return false;
 }
 
 function is_bot($id) {
-	return true;
+	return false;
 }
 
 function is_kill_client($id, $mode) {
@@ -32,7 +112,7 @@ function is_kill_client($id, $mode) {
 		}
 	return true;
 }
-			
+
 // Send message to server
 function out($cmd) {
 	global $server, $ip, $port;
@@ -152,13 +232,13 @@ function grep_logline_extra($line) {
 		$pattern=("/([0-9]+):([0-9]{2}).*/");
 		preg_match($pattern, $grep[1], $temp);
 		$grep[1] = ($temp[1]*60)+$temp[2];
-		
+
 		$exp_temp = explode(' ', trim($grep[2]));		// split words into temp array
 		$grep[2] = $exp_temp[0];						// First word should be command
 		unset($exp_temp[0]);							// remove first word from temp array
 		$grep[3] = array_merge(array(), $exp_temp);		// Other words are agruments
 		unset($exp_temp);								// remove temp array
-		
+
 		$grep['time'] = &$grep[1];
 		$grep['cmd'] = &$grep[2];
 		$grep['args'] = &$grep[3];
@@ -190,7 +270,7 @@ function grep_hit ($line) {
 	$pattern=("/([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+):(.*)/");
 	if(preg_match($pattern, $line, $temp)) {
 		unset($line);
-		
+
 		$grep[1] = $temp[1];
 		$grep[2] = $temp[2];
 		$grep[3] = $temp[3];
@@ -215,13 +295,13 @@ function grep_say($line) {
 		$grep['name'] = $temp[2];
 		$grep['msg'] = $temp[3];
 		unset($temp);
-		
+
 		$exp_temp = explode(' ', trim($grep['msg']));		// split words into temp array
 		$word_temp = $exp_temp[0];							// First word should be command
 		unset($exp_temp[0]);								// remove first word from temp array
 		$grep['args'] = array_merge(array(), $exp_temp);	// Other words are agruments
 		unset($exp_temp);									// remove temp array
-		
+
 		if(preg_match("/!(.+)/", $word_temp, $temp)) {		// If first word is !<something>
 			$grep['cmd'] = $temp[1];						// set it as command
 			unset($temp);
@@ -230,7 +310,7 @@ function grep_say($line) {
 			$grep['cmd'] = null;
 			$grep['args'] = null;
 		}
-		
+
 		return $grep;
 	}
 	return false;
