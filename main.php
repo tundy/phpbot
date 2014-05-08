@@ -123,13 +123,13 @@ if( !function_exists('c_connect') ) {
 			$weapon = $grep['weapon'];
 			unset($grep);
 
-			echo("client[$killer] (");
-			if( isset($clients[$killer]) )
+			if( isset($clients[$killer]) ) {
+				echo("client[$killer] (");
 				echo($TEAM[$clients[$killer]->info["team"]]);
-			else
-				echo("World");
+				echo(") > ");
+			}
 
-			echo(") > ".$WEAPON_KILL[$weapon]." > client[$target] (");
+			echo($WEAPON_KILL[$weapon]." > client[$target] (");
 			echo($TEAM[$clients[$target]->info["team"]]);
 			echo(")\r\n");
 

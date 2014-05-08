@@ -78,8 +78,8 @@ function status_update() {
 				$clients[$id] = (new client);
 				$clients[$id]->hello = 1;
 				$clients[$id]->info["team"] = $team;
+				$clients[$id]->info["name"] = $name;
 			}
-			$clients[$id]->info["name"] = $name;
 			$clients[$id]->info["score"] = $score;
 			$clients[$id]->info["lastmsg"] = $lastmsg;
 			$clients[$id]->info["address"] = $address;
