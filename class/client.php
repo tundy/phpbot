@@ -14,8 +14,8 @@ class client {
 		$this->info			= array();
 		#$this->info["name"]	= "";
 		#$this->info["n"]	= &$this->info["name"];
-		#$this->info["team"]	= "";
-		#$this->info["t"]	= &$this->info["team"];
+		$this->info["team"]	= "";
+		$this->info["t"]	= &$this->info["team"];
 	}
 }
 
