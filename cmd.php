@@ -5,7 +5,7 @@ function dumpuser($id) {
 	$dump = rcon("dumpuser $id");
 	$dump = preg_split('/\n|\r/', $dump, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
 
-	pattern=("/userinfo/");
+	$pattern="/userinfo/";
 	if(preg_match($pattern, $dump[0]))
 		unset($dump[0]);
 	else
@@ -163,20 +163,27 @@ function out($cmd) {
 	endwhile;
 	fclose ($server);
 
+	if( empty($input) )
+		return false;
+	
 	$temp = $input;
 	$pattern = "/\xFF\xFF\xFF\xFF.*(\n|\r)/";
 	$replacement = "";
 	$input = preg_replace($pattern, $replacement, $input);
-
+	
+	echo("Answer from server: ");
 	if( empty($input) ):
-		echo("Answer from server: ");
-		print_r($temp);
+		echo("$temp");
 		echo("\0\r\n");
 		unset($temp);
-		return false;
+		return trim($input);
 	endif;
-	echo("Answer from server: ");
-	print_r(trim($input));
+	
+	/*if( preg_match_all('/[\n|\r]/',$input) > 4 ) {
+		echo("\r\n");
+		return trim($input);
+	}*/
+	echo(trim($input));
 	echo("\r\n");
 	return trim($input);
 }
