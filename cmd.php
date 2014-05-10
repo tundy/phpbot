@@ -72,6 +72,7 @@ function status_update() {
 			$clients_team[$id] = TEAM_RED;
 		}
 	}
+	debug();
 
 	$pattern=("/(\d+)\s+([-]*\d+)\s+(\d+)\s+(.*)\s+(\d+)\s+(.+)\s+(\d+)\s+(\d+).*/");
 	foreach ($status as $client)
@@ -102,6 +103,7 @@ function status_update() {
 			$clients[$id]->info["address"] = $address;
 			$clients[$id]->info["qport"] = $qport;
 			$clients[$id]->info["rate"] = $rate;
+			debug();
 		}
 
 	unset($clients_team);

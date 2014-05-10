@@ -177,6 +177,7 @@ function bot_initialize() {
 			$file->next();
 	}
 	echo(" | Last line is $lines.\r\n");
+	debug();
 
 	echo("Adding already connected clients into memmory.\r\n");
 	$URT_INIT_DONE = TRUE;
