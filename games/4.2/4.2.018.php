@@ -128,7 +128,7 @@ $WEAPON_HIT[HIT_KICKED] = "HIT_KICKED";
 $WEAPON_HIT[HIT_KNIFE_THROWN] = "HIT_KNIFE_THROWN";
 
 // hit_part
-define('HIT_UNKNOWN', 0);
+#define('HIT_UNKNOWN', 0);
 define('HIT_HEAD', 1);
 define('HIT_HELMET', 2);
 define('HIT_TORSO', 3);

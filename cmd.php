@@ -166,26 +166,27 @@ function out($cmd) {
 	if( empty($input) )
 		return false;
 	
+	$input = trim($input);
 	$temp = $input;
 	$pattern = "/\xFF\xFF\xFF\xFF.*(\n|\r)/";
 	$replacement = "";
 	$input = preg_replace($pattern, $replacement, $input);
+	unset($replacement);
+	unset($pattern);
 	
 	echo("Answer from server: ");
 	if( empty($input) ):
+		$temp = preg_replace("/\r\n|\r|\n/", "\0".'\r\n'."\0", $temp);
 		echo("$temp");
-		echo("\0\r\n");
-		unset($temp);
-		return trim($input);
-	endif;
-	
-	/*if( preg_match_all('/[\n|\r]/',$input) > 4 ) {
 		echo("\r\n");
-		return trim($input);
-	}*/
-	echo(trim($input));
+		unset($temp);
+		return $input;
+	endif;
+    $temp = preg_replace("/\r\n|\r|\n/", "\0".'\r\n'."\0", $input);
+	echo($temp);
 	echo("\r\n");
-	return trim($input);
+	unset($temp);
+	return $input;
 }
 
 // get cvar value from server
