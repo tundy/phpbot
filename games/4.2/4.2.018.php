@@ -411,8 +411,6 @@ define('TEAM_RED', 1);
 define('TEAM_BLUE', 2);
 define('TEAM_SPEC', 3);
 
-$TEAM['red'] = "TEAM_RED";
-$TEAM['blue'] = "TEAM_BLUE";
 $TEAM[TEAM_FFA] = "TEAM_FFA";
 $TEAM[TEAM_RED] = "TEAM_RED";
 $TEAM[TEAM_BLUE] = "TEAM_BLUE";
