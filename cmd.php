@@ -14,7 +14,18 @@ function dumpuser($id) {
 	$pattern=("/([^\s]+)\s+(.*)/");
 	foreach ($dump as $line) {
 		$temp = preg_split('/\s+/', $line);
-		$clients[$id]->info["$temp[0]"] = $temp[1];
+		if(!isset($temp[1])) {
+			echo("Notice: Undefined offset: 1 in /home/aniki/phpbot/cmd.php in function dumpuser()");
+			echo("\r\n");
+			echo("\$LINE: ");
+			echo($line);
+			echo("\r\n");
+			echo("\$TEMP: ");
+			print_r($temp);
+			echo("\r\n");
+		} else {
+			$clients[$id]->info["$temp[0]"] = $temp[1];
+		}
 	}
 	return true;
 }
