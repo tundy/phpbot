@@ -213,6 +213,7 @@ switch($cmd) {
 	case "InitRound:":
 		// 1:11 InitRound: \sv_allowdownload\0\g_match ... lePrecip\0\auth\1\auth_status\public\g_modversion\4.2.010
 		$URT_INIT_DONE = TRUE;
+		status_update();
 		echo("$time: InitRound.\r\n");
 		break;
 	case "say:":
