@@ -160,6 +160,7 @@ function debug($arg = null) {
 function bot_initialize() {
 	global $log, $lines;
 	global $clients, $TEAM;
+	global $URT_INIT_DONE;
 
 	echo("Starting Initialization.\r\n");
 	debug();
@@ -178,6 +179,7 @@ function bot_initialize() {
 	echo(" | Last line is $lines.\r\n");
 
 	echo("Adding already connected clients into memmory.\r\n");
+	$URT_INIT_DONE = TRUE;
 	status_update();
 
 	echo("Sending message to server that BOT is online.\r\n");

@@ -1,4 +1,6 @@
 <?php
+global $URT_INIT_DONE;
+
 if( !function_exists('c_connect') ) {
 
 	function c_connect($id) {
@@ -196,6 +198,7 @@ switch($cmd) {
 		break;
 	case "SurvivorWinner:":
 		// 1:58 SurvivorWinner: Red
+		$URT_INIT_DONE = FALSE;
 		echo("$time: SurvivorWinner.\r\n");
 		break;
 	case "Warmup:":
@@ -204,10 +207,12 @@ switch($cmd) {
 		break;
 	case "InitGame:":
 		// 0:00 InitGame: \sv_allowdownload\0\g_matc ... th\0\auth_status\init\g_modversion\4.2.010
+		$URT_INIT_DONE = FALSE;
 		echo("$time: InitGame.\r\n");
 		break;
 	case "InitRound:":
 		// 1:11 InitRound: \sv_allowdownload\0\g_match ... lePrecip\0\auth\1\auth_status\public\g_modversion\4.2.010
+		$URT_INIT_DONE = TRUE;
 		echo("$time: InitRound.\r\n");
 		break;
 	case "say:":

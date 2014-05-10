@@ -21,6 +21,11 @@ function dumpuser($id) {
 
 function status_update() {
 	global $clients, $map;
+	global $URT_INIT_DONE;
+
+	# Wait for INIT
+	if(!$URT_INIT_DONE)
+		return false;
 
 	echo("Updating client list\r\n");
 
@@ -90,6 +95,7 @@ function status_update() {
 
 	unset($clients_team);
 	unset($temp);
+	return true;
 }
 
 function is_player($id) {
