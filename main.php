@@ -99,7 +99,7 @@ if( !function_exists('c_connect') ) {
 			echo(") ".$WEAPON_HIT[$weapon]);
 			echo(" | ".$BODY_PART[$part]."\r\n");
 
-			if($clients[$shooter]->info["team"] == TEAM_FFA or $clients[$shooter]->info["team"] != $clients[$target]->info["team"]) {
+			if($clients[$shooter]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] == TEAM_SPEC or $clients[$shooter]->info["team"] != $clients[$target]->info["team"]) {
 				$clients[$shooter]->hits->enemy->hit++;
 				$clients[$target]->hits->enemy->got++;
 				$clients[$shooter]->dmg->enemy->hit += $WEAPON_DAMAGE[$weapon][$part];
@@ -142,7 +142,7 @@ if( !function_exists('c_connect') ) {
 			} elseif($killer == $target) {	// Self Kill
 				$clients[$killer]->kills->self++;
 				$clients[$target]->deads->self++;
-			} elseif($clients[$killer]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] != $clients[$target]->info["team"]) {		// Normal Kill
+			} elseif($clients[$killer]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] == TEAM_SPEC or $clients[$killer]->info["team"] != $clients[$target]->info["team"]) {		// Normal Kill
 				$clients[$killer]->kills->enemy++;
 				$clients[$target]->deads->enemy++;
 			} else {						// Team Kill

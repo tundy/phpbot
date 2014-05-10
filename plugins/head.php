@@ -26,7 +26,7 @@ if( !function_exists('headshot') ) {
 			unset($grep);
 
 			// Enemy hit
-			if ($clients[$shooter]->info["team"] == TEAM_FFA or $clients[$shooter]->info["team"] != $clients[$target]->info["team"]) {
+			if ($clients[$shooter]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] == TEAM_SPEC or $clients[$shooter]->info["team"] != $clients[$target]->info["team"]) {
 				if ($part == HIT_HEAD or $part == HIT_HELMET) {
 					$clients[$shooter]->headshots++;
 					write_hs($shooter);

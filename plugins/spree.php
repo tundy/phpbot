@@ -60,7 +60,7 @@ if( !function_exists('higest_spree') ) {
 				$clients[$killer]->spree->kill->last = 0;
 			}
 			// Normal Kill
-			elseif ($clients[$killer]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] != $clients[$target]->info["team"]) {
+			elseif ($clients[$killer]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] == TEAM_SPEC or $clients[$killer]->info["team"] != $clients[$target]->info["team"]) {
 				$clients[$target]->spree->dead->last++;
 				$clients[$killer]->spree->kill->last++;
 				$clients[$killer]->spree->dead->last = 0;
