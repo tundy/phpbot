@@ -101,7 +101,7 @@ if( !function_exists('c_connect') ) {
 			echo(") ".$WEAPON_HIT[$weapon]);
 			echo(" | ".$BODY_PART[$part]."\r\n");
 
-			if($clients[$shooter]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] == TEAM_SPEC or $clients[$shooter]->info["team"] != $clients[$target]->info["team"]) {
+			if($clients[$shooter]->info["team"] == TEAM_FFA or $clients[$shooter]->info["team"] == TEAM_SPEC or $clients[$shooter]->info["team"] != $clients[$target]->info["team"]) {
 				$clients[$shooter]->hits->enemy->hit++;
 				$clients[$target]->hits->enemy->got++;
 				$clients[$shooter]->dmg->enemy->hit += $WEAPON_DAMAGE[$weapon][$part];
@@ -207,14 +207,14 @@ switch($cmd) {
 		break;
 	case "InitGame:":
 		// 0:00 InitGame: \sv_allowdownload\0\g_matc ... th\0\auth_status\init\g_modversion\4.2.010
-		$URT_INIT_DONE = FALSE;
 		echo("$time: InitGame.\r\n");
+		$URT_INIT_DONE = FALSE;
 		break;
 	case "InitRound:":
 		// 1:11 InitRound: \sv_allowdownload\0\g_match ... lePrecip\0\auth\1\auth_status\public\g_modversion\4.2.010
+		echo("$time: InitRound.\r\n");
 		$URT_INIT_DONE = TRUE;
 		status_update();
-		echo("$time: InitRound.\r\n");
 		break;
 	case "say:":
 		// 5:18 say: 4 -ANIKI-PaRaMeSHWaR: Lorem i..adasd
