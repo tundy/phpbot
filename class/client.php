@@ -13,9 +13,11 @@ class client {
 		$this->flags		= (new flags);
 		$this->info			= array();
 		#$this->info["name"]	= "";
-		#$this->info["n"]	= &$this->info["name"];
-		$this->info["team"]	= 3;
-		$this->info["t"]	= &$this->info["team"];
+		#$this->info["n"]		= &$this->info["name"];
+		$this->info["team"]		= 3;
+		$this->info["t"]		= &$this->info["team"];
+		$this->info["ip"]		= "";
+		$this->info["address"]	= &$this->info["ip"];
 	}
 }
 

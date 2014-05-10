@@ -184,7 +184,7 @@ function out($cmd) {
 
 	if( empty($input) )
 		return false;
-	
+
 	$input = trim($input);
 	$temp = $input;
 	$pattern = "/\xFF\xFF\xFF\xFF.*(\n|\r)/";
@@ -192,7 +192,7 @@ function out($cmd) {
 	$input = preg_replace($pattern, $replacement, $input);
 	unset($replacement);
 	unset($pattern);
-	
+
 	echo("Answer from server: ");
 	if( empty($input) ):
 		$temp = preg_replace("/\r\n|\r|\n/", "\0".'\r\n'."\0", $temp);

@@ -125,19 +125,18 @@ if( !function_exists('c_connect') ) {
 			$weapon = $grep['weapon'];
 			unset($grep);
 
-			if( isset($clients[$killer]) ) {
+			// Change World feature to SelfKill
+			if (is_kill_client($killer, $weapon)) {
 				echo("client[$killer] (");
 				echo($TEAM[$clients[$killer]->info["team"]]);
 				echo(") > ");
+			} else {
+				$killer = $target;
 			}
 
 			echo($WEAPON_KILL[$weapon]." > client[$target] (");
 			echo($TEAM[$clients[$target]->info["team"]]);
 			echo(")\r\n");
-
-			// Change World feature to SelfKill
-			if (!is_kill_client($killer, $weapon))
-				$killer = $target;
 
 			if($weapon == UT_MOD_FLAG) {	// Not Kill
 				// do nothing
