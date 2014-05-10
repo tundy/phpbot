@@ -186,6 +186,7 @@ switch($cmd) {
 	case "ShutdownGame:":
 		// 21:26 ShutdownGame:
 		echo("$time: ShutdownGame.\r\n");
+		$URT_INIT_DONE = FALSE;
 		g_shutdown();
 		break;
 	case "Item:":
@@ -198,7 +199,6 @@ switch($cmd) {
 		break;
 	case "SurvivorWinner:":
 		// 1:58 SurvivorWinner: Red
-		$URT_INIT_DONE = FALSE;
 		echo("$time: SurvivorWinner.\r\n");
 		break;
 	case "Warmup:":
