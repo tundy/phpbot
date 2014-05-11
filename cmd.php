@@ -35,11 +35,6 @@ function dumpuser($id) {
 
 function status_update() {
 	global $clients, $map;
-	global $URT_INIT_DONE;
-
-	# Wait for INIT
-	if(!$URT_INIT_DONE)
-		return false;
 
 	echo("Updating client list\r\n");
 
@@ -97,11 +92,10 @@ function status_update() {
 			if ( !isset($clients[$id]) ) {
 				$clients[$id] = (new client);
 				$clients[$id]->hello = 1;
-			}
-			// 2 attempts
-			if( !isset($clients[$id]->info["gear"]) )
+				// 2 attempts
 				if(!dumpuser($id))
 					dumpuser($id);
+			}
 			$clients[$id]->info["team"] = $team;
 			$clients[$id]->info["name"] = $name;
 			$clients[$id]->info["score"] = $score;
@@ -122,7 +116,7 @@ function is_player($id) {
 	global $clients;
 	if( !isset($clients[$id]) )
 		return false;
-	if( $clients[$id]->info["address"] == "bot" )
+	if( isset($clients[$id]->info["characterfile"]) )
 		return false;
 	return true;
 }
@@ -131,7 +125,7 @@ function is_bot($id) {
 	global $clients;
 	if( !isset($clients[$id]) )
 		return false;
-	if( $clients[$id]->info["address"] == "bot" )
+	if( isset($clients[$id]->info["characterfile"]) )
 		return true;
 	return false;
 }
@@ -153,7 +147,6 @@ function is_kill_client($id, $mode) {
 			case MOD_CHANGE_TEAM:
 			case UT_MOD_SUICIDE:
 			case UT_MOD_SLAPPED:
-			case UT_MOD_FLAG:
 				return false;
 			default:
 				return true;

@@ -1,6 +1,4 @@
 <?php
-global $URT_INIT_DONE;
-
 if( !function_exists('c_connect') ) {
 
 	function c_connect($id) {
@@ -160,7 +158,7 @@ switch($cmd) {
 		// 0:06 ClientConnect: 4
 		echo("$time: ClientConnect.\r\n");
 		c_connect($args);
-		status_update();
+		dumpuser($args);
 		break;
 	case "ClientUserinfo:":
 		//  0:06 ClientUserinfo: 4 \ip\188.120.11.151 ... \weapmodes\000001112200000200020
@@ -185,7 +183,6 @@ switch($cmd) {
 	case "ShutdownGame:":
 		// 21:26 ShutdownGame:
 		echo("$time: ShutdownGame.\r\n");
-		$URT_INIT_DONE = FALSE;
 		g_shutdown();
 		break;
 	case "Item:":
@@ -207,12 +204,11 @@ switch($cmd) {
 	case "InitGame:":
 		// 0:00 InitGame: \sv_allowdownload\0\g_matc ... th\0\auth_status\init\g_modversion\4.2.010
 		echo("$time: InitGame.\r\n");
-		$URT_INIT_DONE = FALSE;
+		status_update();
 		break;
 	case "InitRound:":
 		// 1:11 InitRound: \sv_allowdownload\0\g_match ... lePrecip\0\auth\1\auth_status\public\g_modversion\4.2.010
 		echo("$time: InitRound.\r\n");
-		$URT_INIT_DONE = TRUE;
 		status_update();
 		break;
 	case "say:":
