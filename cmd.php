@@ -2,7 +2,8 @@
 
 function dumpuser($id) {
 	global $clients;
-	$dump = rcon("dumpuser $id");
+	if(!$dump = rcon("dumpuser $id"))
+		return false;
 	$dump = preg_split('/\n|\r/', $dump, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
 
 	$pattern="/userinfo/";
@@ -10,6 +11,7 @@ function dumpuser($id) {
 		unset($dump[0]);
 	else
 		return false;
+	unset($pattern);
 	unset($dump[1]);
 	$pattern=("/([^\s]+)\s+(.*)/");
 	foreach ($dump as $line) {
@@ -27,6 +29,7 @@ function dumpuser($id) {
 			$clients[$id]->info["$temp[0]"] = $temp[1];
 		}
 	}
+	unset($dump);
 	return true;
 }
 
@@ -95,7 +98,10 @@ function status_update() {
 				$clients[$id] = (new client);
 				$clients[$id]->hello = 1;
 			}
-			dumpuser($id);
+			// 2 attempts
+			if( !isset($clients[$id]->info["gear"]) )
+				if(!dumpuser($id))
+					dumpuser($id);
 			$clients[$id]->info["team"] = $team;
 			$clients[$id]->info["name"] = $name;
 			$clients[$id]->info["score"] = $score;
@@ -107,6 +113,7 @@ function status_update() {
 		}
 
 	unset($clients_team);
+	unset($status);
 	unset($temp);
 	return true;
 }
