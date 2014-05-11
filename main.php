@@ -4,10 +4,12 @@ if( !function_exists('c_connect') ) {
 	function c_connect($id) {
 		global $clients;
 		echo("Creating new client[${id}].\r\n");
-		if( !isset($clients[$id]) )
+		if( !isset($clients[$id]) ) {
 			$clients[$id] = (new client);
-		else
+			dumpuser($id);
+		} else {
 			echo("client[${id}] already exist.\r\n");
+		}
 	}
 
 	function c_begin($id) {
@@ -158,7 +160,6 @@ switch($cmd) {
 		// 0:06 ClientConnect: 4
 		echo("$time: ClientConnect.\r\n");
 		c_connect($args);
-		dumpuser($args);
 		break;
 	case "ClientUserinfo:":
 		//  0:06 ClientUserinfo: 4 \ip\188.120.11.151 ... \weapmodes\000001112200000200020
