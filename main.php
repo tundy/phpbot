@@ -59,16 +59,16 @@ if( !function_exists('c_connect') ) {
 			unset($var);
 		}
 		
-		if($clients[$id]->info["team"] == TEAM_BLUE)
-			if(is_bot($id))
+		if ($clients[$id]->info["team"] == TEAM_BLUE) {
+			if (is_bot($id)) {
 				rcon("forceteam $id red");
-				
-		if($clients[$id]->info["team"] == TEAM_RED)
-			if(is_player($id))
+			}
+		}
+		if ($clients[$id]->info["team"] == TEAM_RED) {
+			if (is_player($id)) {
 				rcon("forceteam $id blue");
-
-		return true;
-	}
+			}
+		}
 
 	function c_info($args) {
 		global $clients;
