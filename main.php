@@ -58,19 +58,6 @@ if( !function_exists('c_connect') ) {
 			unset($vars);
 			unset($var);
 		}
-		
-		if (1) { // Force bots to RED and Players to BLUE team
-			if ($clients[$id]->info["team"] == TEAM_BLUE) {
-				if (is_bot($id)) {
-					rcon("forceteam $id red");
-				}
-			}
-			if ($clients[$id]->info["team"] == TEAM_RED) {
-				if (is_player($id)) {
-					rcon("forceteam $id blue");
-				}
-			}
-		}
 	}
 
 	function c_info($args) {

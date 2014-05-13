@@ -8,28 +8,46 @@ error_reporting(E_ALL | E_STRICT);
 	$plugins = array();
 	$plugins[] = 'main.php';
 
-	ob_start();
-
 	$file = "cfg/config.php";
 	echo("Including ${file}.\r\n");
-	if( !file_exists($file) )
-		echo("\r\n'${file}' file not found.\r\n");
-	if( (include_once $file) === false ):
-		$logfile = 'bot.log';
-		debug('die');
-	endif;
+	require_once($file);
 	unset($file);
-	debug();
 
-	if( !isset($logfile) or empty($logfile) ):
+	echo("Searching for Log File.\r\n");
+	
+	ob_start();
+	if( !isset($logfile) or empty($logfile) ) {
 		$logfile = 'bot.log';
 		echo("\$logfile adress is not set.\r\n");
 		echo("'bot.log' used instead.\r\n");
 		debug('show');
-	endif;
-
+	} else {
+		echo("All output transferred to $logfile.\r\n");
+		debug('show');
+	}
+	
+	// Rename old log files START
+	$temp_dir = scandir('.');
+	natsort($temp_dir);
+	
+	foreach($temp_dir as $file) {
+		$pattern=("/".$logfile."\.([0-9]+)/");
+		if(preg_match($pattern, $file, $temp)) {
+			$num = $temp[1];
+			unset($file);
+			unset($temp);
+		}
+	}
+	unset($temp_dir);
+	if(!isset($num))
+		$num = 1;
+	else
+		$num++;	
+	if(file_exists($logfile))
+		rename($logfile, $logfile.".".$num);
 	file_put_contents($logfile, '');
-
+	// Rename old log files STOP
+	
 	$file = "cmd.php";
 	echo("Including ${file}.\r\n");
 	if( !file_exists($file) )

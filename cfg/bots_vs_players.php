@@ -1,0 +1,4 @@
+<?php
+$BOT_TEAM		= TEAM_RED;
+$PLAYER_TEAM	= TEAM_BLUE;
+?>
