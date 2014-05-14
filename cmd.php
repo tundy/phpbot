@@ -11,7 +11,11 @@ function dumpuser($id) {
 	else
 		return false;
 	unset($pattern);
-	unset($dump[1]);
+
+	unset($dump[1]);		// Why the hell are you not working ?!?
+	if ( isset($dump[1]) )
+		unset($dump[1]);
+
 	$pattern=("/([^\s]+)\s+(.*)/");
 	foreach ($dump as $line) {
 		$temp = preg_split('/\s+/', $line);

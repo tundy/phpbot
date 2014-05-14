@@ -1,5 +1,4 @@
 <?php
-
 if( !function_exists('bots_vs_players_forceteam') ) {
 
 	$file = "cfg/bots_vs_players.php";
@@ -29,6 +28,7 @@ if( !function_exists('bots_vs_players_forceteam') ) {
 
 		if($grep = grep_user($arg)) {
 			$id = $grep["id"];
+			unset($grep);
 		}
 
 		if ( isset($clients[$id]) ) {
