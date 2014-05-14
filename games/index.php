@@ -1,5 +1,4 @@
 <?php
-
 $g_modversion = get_cvar("g_modversion");								// get urt version
 $ver = explode('.', $g_modversion);										// explode version
 

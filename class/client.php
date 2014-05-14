@@ -1,5 +1,4 @@
 <?php
-
 class client {
 	public $info, $kills, $deads, $hits, $dmg, $rounds, /*$games,*/ $flags;
 
@@ -20,7 +19,6 @@ class client {
 		$this->info["address"]	= &$this->info["ip"];
 	}
 }
-
 class kills {
 	public /*$target, $weapon,*/ $team, $self, $enemy;
 
@@ -32,7 +30,6 @@ class kills {
 		$this->enemy	= 0;			// Normal Kills
 	}
 }
-
 class deads {
 	public /*$killer, $weapon,*/ $team, $self, $enemy;
 
@@ -44,7 +41,6 @@ class deads {
 		$this->enemy	= 0;			// Normal Deads
 	}
 }
-
 class hits {
 	public $enemy, $team/*, $target, $weapon, $part*/;
 
@@ -66,7 +62,6 @@ class hits {
 		$this->part->hit	= array();	// Hit to specific part of body*/
 	}
 }
-
 class flags {
 	public $captured, $saved;
 
@@ -75,7 +70,6 @@ class flags {
 		$this->saved		= 0;			// Saved flags
 	}
 }
-
 class rounds {
 	public $won, $draw, $lost;
 
@@ -85,5 +79,4 @@ class rounds {
 		$this->draw		= 0;			// Draw games
 	}
 }
-
 ?>

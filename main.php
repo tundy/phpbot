@@ -1,6 +1,5 @@
 <?php
 if( !function_exists('c_connect') ) {
-
 	function c_connect($id) {
 		global $clients;
 		echo("Creating new client[${id}].\r\n");
@@ -11,7 +10,6 @@ if( !function_exists('c_connect') ) {
 			echo("client[${id}] already exist.\r\n");
 		}
 	}
-
 	function c_begin($id) {
 		global $clients, $text_color, $alt_color;
 		echo("client[${id}] join the game.\r\n");
@@ -22,13 +20,11 @@ if( !function_exists('c_connect') ) {
 		}
 		$clients[$id]->flags = 0;
 	}
-
 	function c_disconnect($id) {
 		global $clients;
 		echo("Removing client[${id}] from memory.\r\n");
 		unset($clients[$id]);
 	}
-
 	function g_shutdown() {
 		global $clients;
 		echo("Map/Server stopped.\r\n");
@@ -36,7 +32,6 @@ if( !function_exists('c_connect') ) {
 			foreach(array_keys($clients) as $id)
 				c_disconnect($id);*/
 	}
-
 	function c_changed($arg) {
 		global $clients;
 
@@ -59,7 +54,6 @@ if( !function_exists('c_connect') ) {
 			unset($var);
 		}
 	}
-
 	function c_info($args) {
 		global $clients;
 
@@ -82,7 +76,6 @@ if( !function_exists('c_connect') ) {
 			unset($var);
 		}
 	}
-
 	function c_hit($args) {
 		global $clients, $WEAPON_DAMAGE, $WEAPON_HIT, $BODY_PART, $TEAM;
 
@@ -114,7 +107,6 @@ if( !function_exists('c_connect') ) {
 			}
 		}
 	}
-
 	function c_kill($args) {
 		global $clients, $WEAPON_KILL, $TEAM;
 
@@ -152,9 +144,10 @@ if( !function_exists('c_connect') ) {
 			}
 		}
 	}
-
 }
+?>
 
+<?php
 switch($cmd) {
 	case "ClientConnect:":
 		// 0:06 ClientConnect: 4
@@ -286,5 +279,4 @@ switch($cmd) {
 	default:
 		break;
 	}
-
 ?>

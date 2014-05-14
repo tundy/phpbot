@@ -1,5 +1,4 @@
 <?php
-
 function dumpuser($id) {
 	global $clients;
 	if(!$dump = rcon("dumpuser $id"))
@@ -21,9 +20,6 @@ function dumpuser($id) {
 			echo("\r\n");
 			echo("\$LINE: ");
 			echo($line);
-			echo("\r\n");
-			echo("\$TEMP: ");
-			print_r($temp);
 			echo("\r\n");
 		} else {
 			$clients[$id]->info["$temp[0]"] = $temp[1];
@@ -61,7 +57,6 @@ function status_update() {
 			$clients_team[$id] = TEAM_BLUE;
 		}
 	}
-
 	$g_redteamlist = get_cvar("g_redteamlist");
 	if ( !empty($g_redteamlist) ) {
 		$g_redteamlist = str_split($g_redteamlist);
@@ -105,7 +100,6 @@ function status_update() {
 			$clients[$id]->info["rate"] = $rate;
 			debug();
 		}
-
 	unset($clients_team);
 	unset($status);
 	unset($temp);
@@ -169,7 +163,7 @@ function out($cmd) {
 	$cycles = 5;
 	$cycle = 0;
 	$input = '';
-	while ( empty($input) ):
+	while ( empty($input) ) {
 		if ( $cycle++ == $cycles )
 			break;
 
@@ -179,7 +173,7 @@ function out($cmd) {
 			$input .= $temp;
 		if ( empty($input) )
 			sleep(1);
-	endwhile;
+	}
 	fclose ($server);
 
 	if( empty($input) )
@@ -194,13 +188,13 @@ function out($cmd) {
 	unset($pattern);
 
 	echo("Answer from server: ");
-	if( empty($input) ):
+	if( empty($input) ) {
 		$temp = preg_replace("/\r\n|\r|\n/", "\0".'\r\n'."\0", $temp);
 		echo("$temp");
 		echo("\r\n");
 		unset($temp);
 		return $input;
-	endif;
+	}
     $temp = preg_replace("/\r\n|\r|\n/", "\0".'\r\n'."\0", $input);
 	echo($temp);
 	echo("\r\n");
@@ -217,10 +211,10 @@ function get_cvar ($cvar) {
 	$subject = $temp;
 	unset($temp);
 	preg_match($pattern, $subject, $temp);
-	if ( count($temp) < 2 ):
+	if ( count($temp) < 2 ) {
 		$pattern = "/\".+\"\s+is:\"(.*)\^7\"/";
 		preg_match($pattern, $subject, $temp);
-	endif;
+	}
 
 	if ( isset($temp[1]) )
 		return trim($temp[1]);
@@ -424,5 +418,4 @@ function search ($arg, $lower = 0, $color = 0, $id = null) {
 		}
 	}
 }
-
 ?>

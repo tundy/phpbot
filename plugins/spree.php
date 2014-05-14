@@ -29,7 +29,6 @@ if( !function_exists('higest_spree') ) {
 		elseif ($clients[$target]->spree->dead->last > $clients[$target]->spree->dead->high)
 			$clients[$target]->spree->dead->high = $clients[$target]->spree->dead->last;
 	}
-
 	function spree($args) {
 		global $clients, $spree_start, $spree_tk, $alt_color, $text_color;
 		global $WEAPON_KILL;
@@ -70,7 +69,7 @@ if( !function_exists('higest_spree') ) {
 			// TeamKill
 			else {
 				echo("Team Kill, SPECIAL.\r\n");
-				switch($spree_tk):
+				switch($spree_tk) {
 					case 1:		$clients[$killer]->spree->kill->last++;
 								$clients[$target]->spree->dead->last++;
 								higest_spree($killer, $target);
@@ -90,7 +89,7 @@ if( !function_exists('higest_spree') ) {
 								higest_spree($killer, $target);
 								break;
 					default:	break;
-				endswitch;
+				}
 			}
 
 			if ($clients[$killer]->spree->kill->last >= $spree_start)
@@ -101,8 +100,10 @@ if( !function_exists('higest_spree') ) {
 		}
 	}
 }
+?>
 
-switch($cmd):
+<?php
+switch($cmd) {
 	case "ClientConnect:":
 		$clients[$args]->spree = (new spree);
 		break;
@@ -113,5 +114,5 @@ switch($cmd):
 		$clients[$args]->spree->kill->last	= 0;
 		$clients[$args]->spree->dead->last	= 0;
 		break;
-endswitch;
+}
 ?>
