@@ -145,9 +145,7 @@ if( !function_exists('c_connect') ) {
 		}
 	}
 }
-?>
 
-<?php
 switch($cmd) {
 	case "ClientConnect:":
 		// 0:06 ClientConnect: 4

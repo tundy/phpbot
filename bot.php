@@ -153,9 +153,9 @@ debug();
 
 bot_initialize();
 bot_loop();
-?>
 
-<?php
+## FUNCTIONS ##
+
 // write STDOUT to $logfile
 function debug($arg = null) {
 	global $logfile;

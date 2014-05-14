@@ -100,9 +100,7 @@ if( !function_exists('higest_spree') ) {
 		}
 	}
 }
-?>
 
-<?php
 switch($cmd) {
 	case "ClientConnect:":
 		$clients[$args]->spree = (new spree);

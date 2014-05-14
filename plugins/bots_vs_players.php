@@ -9,7 +9,7 @@ if( !function_exists('bots_vs_players_forceteam') ) {
 		debug('show');
 	unset($file);
 
-	function bots_vs_players_forceteam($id) {
+	function bots_vs_players_forceteam($arg) {
 		global $BOT_TEAM, $PLAYER_TEAM;
 		global $clients;
 
@@ -29,6 +29,7 @@ if( !function_exists('bots_vs_players_forceteam') ) {
 		if($grep = grep_user($arg)) {
 			$id = $grep["id"];
 			unset($grep);
+			unset($arg);
 		}
 
 		if ( isset($clients[$id]) ) {
@@ -45,9 +46,7 @@ if( !function_exists('bots_vs_players_forceteam') ) {
 		}
 	}
 }
-?>
 
-<?php
 switch($cmd) {
 	case "ClientUserinfoChanged:":
 		bots_vs_players_forceteam($args);

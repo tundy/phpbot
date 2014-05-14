@@ -11,9 +11,7 @@ if( !function_exists('cmd_chat') ) {
 		}
 	}
 }
-?>
 
-<?php
 switch($cmd) {
 	case "say:":
 		if($grep = grep_say($args))

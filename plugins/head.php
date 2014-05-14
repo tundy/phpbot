@@ -89,9 +89,7 @@ if( !function_exists('headshot') ) {
 		}
 	}
 }
-?>
 
-<?php
 switch($cmd) {
 	case "ClientConnect:":
 		$clients[$args]->headshots = 0;
