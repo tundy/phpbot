@@ -20,10 +20,8 @@ if( !isset($logfile) or empty($logfile) ) {
 	$logfile = 'bot.log';
 	echo("\$logfile adress is not set.\r\n");
 	echo("'bot.log' used instead.\r\n");
-	debug('show');
 } else {
 	echo("All output transferred to $logfile.\r\n");
-	debug('show');
 }
 
 // Rename old log files START
@@ -47,6 +45,7 @@ if(file_exists($logfile))
 	rename($logfile, $logfile.".".$num);
 file_put_contents($logfile, '');
 // Rename old log files STOP
+debug('show');
 
 $file = "cmd.php";
 echo("Including ${file}.\r\n");
