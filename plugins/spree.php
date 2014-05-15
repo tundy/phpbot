@@ -52,7 +52,7 @@ if( !function_exists('higest_spree') ) {
 			} // Self Kill
 			elseif($killer == $target) {
 				if ( $clients[$target]->spree->kill->last >= $spree_start)
-					say($alt_color.$clients[$target]->info["name"].$text_color." stopped his/her killing spree.");
+					say($alt_color.$clients[$target]->info["name"].$text_color." stopped ".hisher($target)." killing spree.");
 				$clients[$target]->spree->dead->last++;
 				echo("Self Kill, RESET.\r\n");
 				higest_spree($killer, $target);
@@ -76,14 +76,14 @@ if( !function_exists('higest_spree') ) {
 								break;
 					case 2:		if ( $clients[$killer]->spree->kill->last > 0) {
 									$clients[$killer]->spree->kill->last--;
-									say($alt_color.$clients[$killer]->info["name"].$text_color." lower his/her killing spree after teamkill.");
+									say($alt_color.$clients[$killer]->info["name"].$text_color." lower ".hisher($killer)." killing spree after teamkill.");
 								}
 								$clients[$target]->spree->dead->last++;
 								higest_spree($killer, $target);
 								break;
 					case 3:		if ( $clients[$killer]->spree->kill->last > 0) {
 									$clients[$killer]->spree->kill->last = 0;
-									say($alt_color.$clients[$killer]->info["name"].$text_color." reset his/her killing spree after teamkill.");
+									say($alt_color.$clients[$killer]->info["name"].$text_color." reset lower ".hisher($killer)." killing spree after teamkill.");
 								}
 								$clients[$target]->spree->dead->last++;
 								higest_spree($killer, $target);

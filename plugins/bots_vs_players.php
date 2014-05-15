@@ -35,12 +35,12 @@ if( !function_exists('bots_vs_players_forceteam') ) {
 		if ( isset($clients[$id]) ) {
 			if ($clients[$id]->info["team"] == $PLAYER_TEAM) {
 				if (is_bot($id)) {
-					rcon("forceteam $id $BOT_TEAM");
+					forceteam($id, $BOT_TEAM);
 				}
 			}
 			if ($clients[$id]->info["team"] == $BOT_TEAM) {
 				if (is_player($id)) {
-					rcon("forceteam $id $PLAYER_TEAM");
+					forceteam($id, $PLAYER_TEAM);
 				}
 			}
 		}

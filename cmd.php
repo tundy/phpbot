@@ -1,4 +1,26 @@
 <?php
+function forceteam($id, $team) {
+	return rcon("forceteam $id $team");
+	// *$temp = rcon("forceteam $id $team");
+	// $temp = preg_split('/\n|\r/', $temp, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
+	// foreach ($temp as $line)
+		// decode ($line);
+	// return true;
+}
+
+function hisher($id) {
+	global $clients;
+	
+	if (!isset($clients[$id]))
+		return "his/her"; // should be FALSE but whatever.
+	if ($clients[$id]->info["sex"] == "male")
+		return "his";
+	elseif ($clients[$id]->info["sex"] == "female")
+		return "her";
+	else
+		return "his/her";
+}
+
 function dumpuser($id) {
 	global $clients;
 	if(!$dump = rcon("dumpuser $id"))
