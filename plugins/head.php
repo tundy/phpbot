@@ -10,12 +10,10 @@ if( !function_exists('headshot') ) {
 		global $clients;
 
 		if($grep = grep_hit($args)) {
-			unset($args);
 			$target		= $grep['target'];
 			$shooter	= $grep['shooter'];
 			$part		= $grep['part'];
 			$weapon		= $grep['weapon'];
-			unset($grep);
 
 			// Enemy hit
 			if ($clients[$shooter]->info["team"] == TEAM_FFA or $clients[$shooter]->info["team"] == TEAM_SPEC or $clients[$shooter]->info["team"] != $clients[$target]->info["team"]) {

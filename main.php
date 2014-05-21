@@ -33,59 +33,30 @@ if( !function_exists('c_connect') ) {
 				c_disconnect($id);*/
 	}
 	function c_changed($arg) {
-		global $clients;
-
-		if($grep = grep_user($arg)) {
-			unset($arg);
-			$id = $grep[1];
-			echo("client[${id}] info changed.\r\n");
-			$var = explode("\\", $grep[2]);
-			$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
-			unset($grep);
-			$i = 0;
-			while ($i < $vars) {										// new $var's "KEY" is equal to old $var[$i]
-				$clients[$id]->info["$var[$i]"] = $var[$i + 1];			// new info["KEY"]'s VALUE is equal to old $var[$i+1]
-				unset($var[$i]);										// After setting new KEY old one will be unset
-				unset($var[$i + 1]);									// After setting new VALUE old one will be unset
-				$i += 2;
-			}
-			unset($i);
-			unset($vars);
-			unset($var);
-		}
+		c_info($arg, 0);
 	}
-	function c_info($args) {
+	function c_info($args, $i = 1) {
 		global $clients;
 
 		if($grep = grep_user($args)) {
-			unset($arg);
 			$id = $grep[1];
 			echo("client[${id}] info made.\r\n");
 			$var = explode("\\", $grep[2]);
 			$vars = (substr_count("$grep[2]","\\"));					// Get number of Vars
-			unset($grep);
-			$i = 1;
 			while ($i < $vars) {										// new $var's "KEY" is equal to old $var[$i]
 				$clients[$id]->info["$var[$i]"] = $var[$i + 1];			// new info["KEY"]'s VALUE is equal to old $var[$i+1]
-				unset($var[$i]);										// After setting new KEY old one will be unset
-				unset($var[$i + 1]);									// After setting new VALUE old one will be unset
 				$i += 2;
 			}
-			unset($i);
-			unset($vars);
-			unset($var);
 		}
 	}
 	function c_hit($args) {
 		global $clients, $WEAPON_DAMAGE, $WEAPON_HIT, $BODY_PART, $TEAM;
 
 		if($grep = grep_hit($args)) {
-			unset($args);
 			$target		= $grep['target'];
 			$shooter	= $grep['shooter'];
 			$part		= $grep['part'];
 			$weapon		= $grep['weapon'];
-			unset($grep);
 
 			echo("client[${shooter}] (");
 			echo($TEAM[$clients[$shooter]->info["team"]]);
@@ -111,11 +82,9 @@ if( !function_exists('c_connect') ) {
 		global $clients, $WEAPON_KILL, $TEAM;
 
 		if($grep = grep_kill($args)) {
-			unset($args);
 			$killer = $grep['killer'];
 			$target = $grep['target'];
 			$weapon = $grep['weapon'];
-			unset($grep);
 
 			// Change World feature to SelfKill
 			if (is_kill_client($killer, $weapon)) {

@@ -7,7 +7,6 @@ if( !function_exists('bots_vs_players_forceteam') ) {
 	echo("Including ${file}.\r\n");
 	if( (include_once $file) === false )
 		debug('show');
-	unset($file);
 
 	function bots_vs_players_forceteam($arg) {
 		global $BOT_TEAM, $PLAYER_TEAM;
@@ -28,8 +27,6 @@ if( !function_exists('bots_vs_players_forceteam') ) {
 
 		if($grep = grep_user($arg)) {
 			$id = $grep["id"];
-			unset($grep);
-			unset($arg);
 		}
 
 		if ( isset($clients[$id]) ) {

@@ -9,7 +9,6 @@ if( !function_exists('higest_spree') ) {
 	echo("Including ${file}.\r\n");
 	if( (include_once $file) === false )
 		debug('die');
-	unset($file);
 
 	global $clients;
 	if ( isset($clients) && is_array($clients) )
@@ -36,11 +35,9 @@ if( !function_exists('higest_spree') ) {
 		echo("Counting Killing Spree. | ");
 
 		if($grep = grep_kill($args)) {
-			unset($args);
 			$killer = $grep['killer'];
 			$target = $grep['target'];
 			$weapon = $grep['weapon'];
-			unset($grep);
 
 			// Change World feature to SelfKill
 			if (!is_kill_client($killer, $weapon))

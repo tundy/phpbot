@@ -10,7 +10,7 @@ function forceteam($id, $team) {
 
 function hisher($id) {
 	global $clients;
-	
+
 	if (!isset($clients[$id]))
 		return "his/her"; // should be FALSE but whatever.
 	if ($clients[$id]->info["sex"] == "male")
@@ -23,6 +23,7 @@ function hisher($id) {
 
 function dumpuser($id) {
 	global $clients;
+
 	if(!$dump = rcon("dumpuser $id"))
 		return false;
 	$dump = preg_split('/\n|\r/', $dump, 0, PREG_SPLIT_NO_EMPTY);					// Change lines to array
@@ -32,26 +33,19 @@ function dumpuser($id) {
 		unset($dump[0]);
 	else
 		return false;
-	unset($pattern);
 
 	unset($dump[1]);		// Why the hell are you not working ?!?
+	if ( isset($dump[0]) )
+		unset($dump[0]);
 	if ( isset($dump[1]) )
 		unset($dump[1]);
 
 	$pattern=("/([^\s]+)\s+(.*)/");
 	foreach ($dump as $line) {
 		$temp = preg_split('/\s+/', $line);
-		if(!isset($temp[1])) {
-			echo("Notice: Undefined offset: 1 in /home/aniki/phpbot/cmd.php in function dumpuser()");
-			echo("\r\n");
-			echo("\$LINE: ");
-			echo($line);
-			echo("\r\n");
-		} else {
+		if(isset($temp[1]))
 			$clients[$id]->info["$temp[0]"] = $temp[1];
-		}
 	}
-	unset($dump);
 	return true;
 }
 
@@ -97,18 +91,18 @@ function status_update() {
 	foreach ($status as $client)
 		if(preg_match($pattern, $client, $temp)) {
 			$id = trim($temp[1]);
-			$score = trim($temp[2]);
-			$ping = trim($temp[3]);
-			$name = trim($temp[4]);
-			$lastmsg = trim($temp[5]);
-			$address = trim($temp[6]);
-			$qport = trim($temp[7]);
-			$rate = trim($temp[8]);
+			$temp[2] = trim($temp[2]);	// score
+			$temp[3] = trim($temp[3]);	// ping
+			$temp[4] = trim($temp[4]);	// name
+			$temp[5] = trim($temp[5]);	// lastmsg
+			$temp[6] = trim($temp[6]);	// address
+			$temp[7] = trim($temp[7]);	// qport
+			$temp[8] = trim($temp[8]);	// rate
+
 			if ( !isset($clients_team[$id]) )
 				$team = TEAM_SPEC;
 			else
 				$team = $clients_team[$id];
-			unset($clients_team[$id]);
 
 			if ( !isset($clients[$id]) ) {
 				$clients[$id] = (new client);
@@ -118,17 +112,15 @@ function status_update() {
 					dumpuser($id);
 			}
 			$clients[$id]->info["team"] = $team;
-			$clients[$id]->info["name"] = $name;
-			$clients[$id]->info["score"] = $score;
-			$clients[$id]->info["lastmsg"] = $lastmsg;
-			$clients[$id]->info["address"] = $address;
-			$clients[$id]->info["qport"] = $qport;
-			$clients[$id]->info["rate"] = $rate;
+			$clients[$id]->info["score"] = $temp[2];
+			$clients[$id]->info["ping"] = $temp[3];
+			$clients[$id]->info["name"] = $temp[4];
+			$clients[$id]->info["lastmsg"] = $temp[5];
+			$clients[$id]->info["address"] = $temp[6];
+			$clients[$id]->info["qport"] = $temp[7];
+			$clients[$id]->info["rate"] = $temp[8];
 			debug();
 		}
-	unset($clients_team);
-	unset($status);
-	unset($temp);
 	return true;
 }
 
@@ -210,21 +202,17 @@ function out($cmd) {
 	$pattern = "/\xFF\xFF\xFF\xFF.*(\n|\r)/";
 	$replacement = "";
 	$input = preg_replace($pattern, $replacement, $input);
-	unset($replacement);
-	unset($pattern);
 
 	echo("Answer from server: ");
 	if( empty($input) ) {
 		$temp = preg_replace("/\r\n|\r|\n/", "\0".'\r\n'."\0", $temp);
 		echo("$temp");
 		echo("\r\n");
-		unset($temp);
 		return $input;
 	}
     $temp = preg_replace("/\r\n|\r|\n/", "\0".'\r\n'."\0", $input);
 	echo($temp);
 	echo("\r\n");
-	unset($temp);
 	return $input;
 }
 
@@ -306,7 +294,6 @@ function grep_logline_extra($line) {
 		$grep[2] = $exp_temp[0];						// First word should be command
 		unset($exp_temp[0]);							// remove first word from temp array
 		$grep[3] = array_merge(array(), $exp_temp);		// Other words are agruments
-		unset($exp_temp);								// remove temp array
 
 		$grep['time'] = &$grep[1];
 		$grep['cmd'] = &$grep[2];
@@ -319,13 +306,9 @@ function grep_logline_extra($line) {
 function grep_kill($line) {
 	$pattern=("/([0-9]+) ([0-9]+) ([0-9]+):(.*)/");
 	if(preg_match($pattern, $line, $temp)) {
-		unset($line);
-
 		$grep[1] = $temp[1];
 		$grep[2] = $temp[2];
 		$grep[3] = $temp[3];
-		unset($temp);
-
 		$grep['killer'] = &$grep[1];
 		$grep['target'] = &$grep[2];
 		$grep['weapon'] = &$grep[3];
@@ -338,14 +321,10 @@ function grep_kill($line) {
 function grep_hit ($line) {
 	$pattern=("/([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+):(.*)/");
 	if(preg_match($pattern, $line, $temp)) {
-		unset($line);
-
 		$grep[1] = $temp[1];
 		$grep[2] = $temp[2];
 		$grep[3] = $temp[3];
 		$grep[4] = $temp[4];
-		unset($temp);
-
 		$grep['target'] = &$grep[1];
 		$grep['shooter'] = &$grep[2];
 		$grep['part'] =&$grep[3];
@@ -359,27 +338,20 @@ function grep_hit ($line) {
 function grep_say($line) {
 	$pattern=("/([0-9]+) (.*): (.*)/");
 	if(preg_match($pattern, $line, $temp)) {
-		unset($line);
 		$grep['id'] = $temp[1];
 		$grep['name'] = $temp[2];
 		$grep['msg'] = $temp[3];
-		unset($temp);
-
 		$exp_temp = explode(' ', trim($grep['msg']));		// split words into temp array
 		$word_temp = $exp_temp[0];							// First word should be command
 		unset($exp_temp[0]);								// remove first word from temp array
 		$grep['args'] = array_merge(array(), $exp_temp);	// Other words are agruments
-		unset($exp_temp);									// remove temp array
 
 		if(preg_match("/!(.+)/", $word_temp, $temp)) {		// If first word is !<something>
 			$grep['cmd'] = $temp[1];						// set it as command
-			unset($temp);
-			unset($word_temp);
-		} else {											// else is only message and set cmd & args to empty
+		} else {											// else it's only message and set cmd & args to empty
 			$grep['cmd'] = null;
 			$grep['args'] = null;
 		}
-
 		return $grep;
 	}
 	return false;
