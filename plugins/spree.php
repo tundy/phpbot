@@ -40,7 +40,7 @@ if( !function_exists('higest_spree') ) {
 			$weapon = $grep['weapon'];
 
 			// Change World feature to SelfKill
-			if (!is_kill_client($killer, $weapon))
+			if (!is_kill_client_grep($grep))
 				$killer = $target;
 
 			// Not Kill

@@ -142,26 +142,40 @@ function is_bot($id) {
 	return false;
 }
 
-function is_kill_client($id, $mode) {
+function is_kill_client_grep($grep) {
+	return is_kill_client($grep['killer'], $grep['weapon'], $grep['info']);
+}
+
+function is_kill_client($id, $mode, $info) {
 	if ($id == WORLD)
 		return false;
+
+	// <non-client> has ID = 0 and client can use this ID as well.
+	$pattern=("/([\s,]+).*/");
 	if ($id == NON_CLIENT)
-		switch ($mode) {
-			case MOD_UNKNOWN:
-			case MOD_WATER:
-			case MOD_SLIMED:
-			case MOD_LAVA:
-			case MOD_CRUSHED:
-			case MOD_FALLING:
-			case MOD_SUICIDE:
-			case MOD_LASER_TARGET:
-			case MOD_TRIGGER_HURT:
-			case MOD_CHANGE_TEAM:
-			case UT_MOD_SUICIDE:
-			case UT_MOD_SLAPPED:
+		if(preg_match($pattern, $temp, $info)) {
+			if($temp[1] == '<non-client>')
 				return false;
-			default:
+			else
 				return true;
+		} else {
+			switch ($mode) {
+				case MOD_UNKNOWN:
+				case MOD_WATER:
+				case MOD_SLIMED:
+				case MOD_LAVA:
+				case MOD_CRUSHED:
+				case MOD_FALLING:
+				case MOD_SUICIDE:
+				case MOD_LASER_TARGET:
+				case MOD_TRIGGER_HURT:
+				case MOD_CHANGE_TEAM:
+				case UT_MOD_SUICIDE:
+				case UT_MOD_SLAPPED:
+					return false;
+				default:
+					return true;
+			}
 		}
 	return true;
 }
@@ -302,16 +316,18 @@ function grep_logline_extra($line) {
 	}
 }
 
-// ['killer'], ['target'], ['weapon']
+// ['killer'], ['target'], ['weapon'], ['info']
 function grep_kill($line) {
 	$pattern=("/([0-9]+) ([0-9]+) ([0-9]+):(.*)/");
 	if(preg_match($pattern, $line, $temp)) {
 		$grep[1] = $temp[1];
 		$grep[2] = $temp[2];
 		$grep[3] = $temp[3];
+		$grep[4] = trim($temp[4]);
 		$grep['killer'] = &$grep[1];
 		$grep['target'] = &$grep[2];
 		$grep['weapon'] = &$grep[3];
+		$grep['info'] = &$grep[4];
 		return $grep;
 	}
 	return false;
@@ -325,6 +341,7 @@ function grep_hit ($line) {
 		$grep[2] = $temp[2];
 		$grep[3] = $temp[3];
 		$grep[4] = $temp[4];
+		$grep[5] = $temp[5];
 		$grep['target'] = &$grep[1];
 		$grep['shooter'] = &$grep[2];
 		$grep['part'] =&$grep[3];

@@ -87,7 +87,7 @@ if( !function_exists('c_connect') ) {
 			$weapon = $grep['weapon'];
 
 			// Change World feature to SelfKill
-			if (is_kill_client($killer, $weapon)) {
+			if (is_kill_client_grep($grep)) {
 				echo("client[$killer] (");
 				echo($TEAM[$clients[$killer]->info["team"]]);
 				echo(") > ");
