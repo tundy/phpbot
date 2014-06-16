@@ -413,7 +413,7 @@ function search ($arg, $lower = 0, $color = 0, $id = null) {
 				$msg .= " [".$alt_color.$id.$text_color."] ".$found[$id];
 			}
 			if(isset($id) && $clients[$id]->info["team"] == TEAM_SPEC)
-				tell($msg);
+				tell($id, $msg);
 			else
 				say($msg);
 		}
@@ -422,14 +422,19 @@ function search ($arg, $lower = 0, $color = 0, $id = null) {
 			return $id;
 		}
 		elseif( count($found) == 0 ) {
-			if ( !$lower && !$color)
+			if ( !$lower && !$color) {
 				return search($arg, 1, 0, $id);
-			elseif ( $lower && !$color)
+			} elseif ( $lower && !$color) {
 				return search($arg, 0, 1, $id);
-			elseif ( !$lower && $color)
+			} elseif ( !$lower && $color) {
 				return search($arg, 1, 1, $id);
-			else
-				say("client not found.");
+			} else {
+				$msg = "client not found.";
+				if(isset($id) && $clients[$id]->info["team"] == TEAM_SPEC)
+					tell($id, $msg);
+				else
+					say($msg);
+			}
 		}
 	}
 }
