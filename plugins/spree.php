@@ -105,6 +105,9 @@ switch($cmd) {
 	case "Kill:":
 		spree($args);
 		break;
+	case "Freeze:":
+		spree($args);
+		break;
 	case "ClientBegin:":
 		$clients[$args]->spree->kill->last	= 0;
 		$clients[$args]->spree->dead->last	= 0;

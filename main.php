@@ -113,6 +113,41 @@ if( !function_exists('c_connect') ) {
 			}
 		}
 	}
+	function c_freeze($args) {
+		global $clients, $WEAPON_KILL, $TEAM;
+
+		if($grep = grep_kill($args)) {
+			$killer = $grep['killer'];
+			$target = $grep['target'];
+			$weapon = $grep['weapon'];
+
+			// Change World feature to SelfKill
+			if (is_kill_client_grep($grep)) {
+				echo("client[$killer] (");
+				echo($TEAM[$clients[$killer]->info["team"]]);
+				echo(") > ");
+			} else {
+				$killer = $target;
+			}
+
+			echo($WEAPON_KILL[$weapon]." > client[$target] (");
+			echo($TEAM[$clients[$target]->info["team"]]);
+			echo(")\r\n");
+
+			if($weapon == UT_MOD_FLAG) {	// Not Kill
+				// do nothing
+			} elseif($killer == $target) {	// Self Kill
+				$clients[$killer]->kills->self++;
+				$clients[$target]->deads->self++;
+			} elseif($clients[$killer]->info["team"] == TEAM_FFA or $clients[$killer]->info["team"] == TEAM_SPEC or $clients[$killer]->info["team"] != $clients[$target]->info["team"]) {		// Normal Kill
+				$clients[$killer]->kills->enemy++;
+				$clients[$target]->deads->enemy++;
+			} else {						// Team Kill
+				$clients[$killer]->kills->team++;
+				$clients[$target]->deads->team++;
+			}
+		}
+	}
 }
 
 switch($cmd) {
@@ -189,6 +224,23 @@ switch($cmd) {
 		// 1:58 Kill: 5 4 19: Freza killed -ANIKI-PaRaMeSHWaR by UT_MOD_LR300
 		echo("$time: Kill.\r\n");
 		c_kill($args);
+		break;
+	case "Freeze:":
+		// 60:37 Freeze: <killer> <victim> <meansOfDeathID>: <killerName> froze <victimName> by <meansOfDeath>
+		echo("$time: Freeze.\r\n");
+		c_freeze($args);
+		break;
+	case "ClientMelted:":
+		// 60:37 ClientMelted: <clientID>
+		echo("$time: Freeze.\r\n");
+		break;
+	case "ThawOutStarted:":
+		// 60:37 ThawOutStarted: <client1> <client2>: <client1Name> started thawing out <client2Name>
+		echo("$time: Freeze.\r\n");
+		break;
+	case "ThawOutFinished:":
+		// 60:37 ThawOutFinished: <client1> <client2>: <client1Name> thawed out <client2Name>
+		echo("$time: Freeze.\r\n");
 		break;
 	case "Exit:":
 		// 60:23 Exit: Timelimit hit.
