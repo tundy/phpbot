@@ -185,11 +185,11 @@ function bot_initialize() {
 	echo("Seeking to end of Log File.");
 	$file->seek($lines);
 	while (!$file->eof()) {
-		$lines = $file->key();
-		$file->current();
+		$line = $file->current();
 		if($file->valid())
 			$file->next();
 	}
+	$lines = $file->key();
 	echo(" | Last line is $lines.\r\n");
 	debug();
 
